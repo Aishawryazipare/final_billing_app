@@ -16,7 +16,7 @@ class EnquiryStatus extends Model
     public $table = "tbl_enquiry_status";
      public $timestamps=false;
      protected $fillable = [
-        'status_name','created_at' ,'modify_at','is_active'
+        'status_name','created_at' ,'modify_at','is_active','lid','cid','emp_id'
     ];
 
     /**

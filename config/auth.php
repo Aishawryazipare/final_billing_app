@@ -50,9 +50,14 @@ return [
             'driver' => 'session',
             'provider' => 'admins',
         ],
-        'writer' => [
+        
+        'employee' => [
             'driver' => 'session',
-            'provider' => 'writers',
+            'provider' => 'employees',
+        ],
+        'dealer' => [
+            'driver' => 'session',
+            'provider' => 'dealers',
         ],
     ],
 
@@ -74,6 +79,7 @@ return [
     */
 
     'providers' => [
+        
         'users' => [
             'driver' => 'eloquent',
             'model' => App\User::class,
@@ -82,9 +88,13 @@ return [
             'driver' => 'eloquent',
             'model' => App\Admin::class,
         ],
-        'writers' => [
+        'employees' => [
             'driver' => 'eloquent',
-            'model' => App\Writer::class,
+            'model' => App\Employee::class,
+        ],
+        'dealers' => [
+            'driver' => 'eloquent',
+            'model' => App\Dealer::class,
         ],
         // 'users' => [
         //     'driver' => 'database',

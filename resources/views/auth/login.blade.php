@@ -7,12 +7,8 @@
 </style>
 <div class="login-box">
   <div class="login-logo">
-    <a href="/" style="color:white;"><b>Enquiry</b> App</a>
+    <a href="/" style="color:white;"><b>One Care</b> App</a>
   </div>
-<!--    <div class="" style="text-align: center;">
-        <img src="dist/img/logo3_new.png" class="img-circle" alt="User Image">
-    </div>-->
-  <!-- /.login-logo -->
   <div class="login-box-body">
     <p class="login-box-msg">Log in to start your session</p>
                         @isset($url)
@@ -47,14 +43,6 @@
           <button type="submit" class="btn btn-primary btn-block btn-flat">Log In</button>
         </div>
         </div>
-<!--<div class="form-group row mb-0">
-                            <div class="col-md-8 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
-                                    {{ __('Login') }}
-                                </button>
-                                <a href="{{ url('login/google') }}" class="btn btn-danger"><i class="fa fa-google-plus"></i> Login With Google</a>
-                            </div>
-                        </div>-->
     </form>
   </div>
 </div>

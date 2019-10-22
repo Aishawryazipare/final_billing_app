@@ -17,33 +17,71 @@ class UserController extends Controller
      */
     public function __construct()
     {
-         $this->middleware('auth');
+       $this->middleware(function ($request, $next) {
+            $this->user= Auth::user();
+            $this->admin = Auth::guard('admin')->user();
+            $this->employee = Auth::guard('employee')->user();
+            return $next($request);
+        });
     }
     
     public function validateEmail($id) {
         $id = trim($id);
-        if (\App\User::where('email', $id)->exists()) {
-            echo "Email Already exists!";
+        if (\App\Employee::where('mobile_no', $id)->exists()) {
+            echo "Mobile No Already exists!";
         }
     }
-   
-   protected function saveUser(Request $request)
+    
+    public function addEmployee(){
+        $city = \App\City::select('city_id','city_name')->get();
+//        echo "<pre>";print_r($location);exit;
+        return view('auth.register',['city'=>$city]);
+    }
+
+    public function saveUser(Request $request)
     {
+//        echo "<pre>";print_r($request->all());exit;
         $requestData = $request->all();
+        if(Auth::guard('admin')->check()){
+            $requestData['cid'] = $this->admin->rid;
+//            if($requestData['role']==2)
+//            {
+//                    $requestData['lid'] = NULL;
+//            }
+//            else
+//            {
+//                    $requestData['lid'] = $this->employee->lid;
+//            }
+        }else if(Auth::guard('employee')->check()){
+            $requestData['cid'] = $this->employee->cid;
+            $requestData['lid'] = $this->employee->lid;
+//            print_r("hi");
+//            exit;
+            $requestData['sub_emp_id'] = $this->employee->id;
+        }
         $requestData['password'] = bcrypt($requestData['password']);
-        User::create($requestData);
+        \App\Employee::create($requestData);
         
         return redirect('user-list');
     }
     
     public function userList(){
-        $userData = User::where(['is_active'=>0])->get();
+        if(Auth::guard('admin')->check()){
+            $cid = $this->admin->rid;
+            $userData = \App\Employee::where(['is_active'=>0,'cid'=>$cid])->get();
+        }else if(Auth::guard('employee')->check()){
+            $cid = $this->employee->cid;
+            $lid = $this->employee->lid;
+            $emp_id = $this->employee->id;
+//            $sub_emp_id = $this->employee->sub_emp_id;
+            $userData = \App\Employee::where(['is_active'=>0,'cid'=>$cid,'lid'=>$lid,'sub_emp_id'=>$emp_id])->get();
+        }
         return view('auth.user_list',['userData'=>$userData]);
     }
   
     public function userEdit(){
         $id = $_GET['id'];
-        $userData = User::findorfail($id);
+        $userData = \App\Employee::findorfail($id);
         return view('auth.edit_user',['userData'=>$userData]);
     }
     
@@ -53,7 +91,7 @@ class UserController extends Controller
 //        echo "<pre>";print_r($requestData);exit;
         if ($request->password)
             $requestData['password'] = bcrypt($request->password);
-        $users = \App\User::findorfail($id);
+        $users = \App\Employee::findorfail($id);
         $users->update($requestData);
         Session::flash('alert-success', 'Updated Successfully.');
         return redirect('user-list');

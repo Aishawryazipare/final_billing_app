@@ -2,15 +2,17 @@
 @section('title', 'Edit Owner')
 @section('content')
 <?php 
-$logeed_id = Auth::user()->id;
-$role = Auth::user()->role; ?>
+if(Auth::guard('employee')->check()){
+   $logeed_id = Auth::guard('employee')->user()->id; 
+   $role = Auth::guard('employee')->user()->role;
+} ?>
 <style>
-    @media screen and (max-device-width:640px), screen and (max-width:640px) {
+    @media only screen and (max-width: 600px) {
     .mobile_date {
-    Width: 60px;
+        width: 160px;
+     //   height:10px;
     }
 }
-
     .error{
         color:red;
     }
@@ -40,52 +42,34 @@ $role = Auth::user()->role; ?>
                 {{ csrf_field() }}
                 <div class="box-body">
                         <div class="form-group">
-                            <label for="userName" class="col-sm-2 control-label">Enquiry No</label>
-                            <div class="col-sm-4">
-                                <input type="text" class="form-control" id="user" placeholder="Enquiry No" value="{{$enquiry_data->enquiry_no}}" name="enquiry_no" readonly >
-                            </div>
                             <label for="userName" class="col-sm-2 control-label">Mobile No<span style="color:red"> * </span></label>
                             <div class="col-sm-4">
                                 <input type="text" class="form-control" onkeypress="return phoneno(event)" id="mobile_no" onkeyup="check();"  placeholder="Mobile No" value="{{$enquiry_data->mobile_no}}" name="mobile_no"  required >
                             </div>
-                        </div>
-                    <div class="form-group">
-                            <label for="company" class="col-sm-2 control-label">Customer Name <span style="color:red"> * </span></label>
+							<label for="company" class="col-sm-2 control-label">Customer Name <span style="color:red"> * </span></label>
                             <div class="col-sm-4">
                                 <input type="text" class="form-control" id="customer_name" placeholder="Customer Name" value="{{$enquiry_data->mobile_no}}" name="customer_name"  required>
                             </div>
+                        </div>
+                    <div class="form-group">
+                            
                             <label for="company" class="col-sm-2 control-label">Email</label>
                             <div class="col-sm-4">
                                 <input type="text" class="form-control" id="email" placeholder="Email" value="{{$enquiry_data->email}}" name="email"  >
                             </div>
                             <span id="message"></span>
-                        </div>
-                        <div class="form-group">
-                            <label for="company" class="col-sm-2 control-label">Address</label>
+							<label for="userName" class="col-sm-2 control-label">Product Name</label>
                             <div class="col-sm-4">
-                                <input type="text" class="form-control" id="address" placeholder="Address" value="{{$enquiry_data->address}}" name="address"  >
-                            </div>
-                            <label for="company" class="col-sm-2 control-label">City</label>
-                            <div class="col-sm-4">
-                                <!--<input type="text" class="form-control" id="user" placeholder="City" value="" name="city_id"  >-->
-                                <select class="form-control select2" style="width: 100%;" name="city_id" id="city_id">
-                                    <option value="">-- Select City -- </option>
-                                    @foreach($city as $c)
-                                    <option value="{{$c->city_name}}" <?php if($c->city_name == $enquiry_data->city_id) echo "selected"; ?>>{{$c->city_name}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="userName" class="col-sm-2 control-label">Product Name</label>
-                            <div class="col-sm-4">
-                                <select class="form-control select2" style="width: 100%;" name="product_id" >
+                                <select class="form-control " style="width: 100%;" name="product_id" id="product_id">
                                     <option value="">-- Select Product -- </option>
                                     @foreach($product_data as $prod)
                                     <option value="{{$prod->item_id}}" <?php if($prod->item_id == $enquiry_data->product_id) echo "selected"; ?>>{{$prod->item_name}}</option>
                                     @endforeach
                                 </select>
                             </div>
+                        </div>
+						<div class="form-group">
+                            
                             <label for="gst" class="col-sm-2 control-label">Enquiry Status</label>
                             <div class="col-sm-4">
                                 <select class="form-control select2" style="width: 100%;" name="status_id" >
@@ -95,52 +79,9 @@ $role = Auth::user()->role; ?>
                                     @endforeach
                                 </select>
                             </div>
-                        </div>
-                        <div class="form-group">  
-                            <label for="gst" class="col-sm-2 control-label">Source</label>
-                            <div class="col-sm-4">
-                                <select class="form-control select2" style="width: 100%;" id="source" name="source" >
-                                    <option value="">-- Select Status -- </option>
-                                    <option value="Other" selected>Other</option>
-                                    @foreach($source as $su)
-                                    <option value="{{$su->name}}" <?php if($su->name == $enquiry_data->source) echo "selected"; ?>>{{$su->name}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <label for="gst" class="col-sm-2 control-label">Status</label>
-                            <div class="col-sm-4">
-                                <select class="form-control select2" style="width: 100%;" id="active_inactive_status" name="active_inactive_status" >
-                                    @foreach($status as $su)
-                                    <option value="{{$su->id}}" <?php if($su->id == $enquiry_data->active_inactive_status) echo "selected"; ?> required>{{$su->status}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
                             
                         </div>
-                    <div class="form-group">   
-                            
-                            <?php if($role == 1){ ?>                            
-                            <label for="gst" class="col-sm-2 control-label">Assign To Employee</label>
-                            <div class="col-sm-4">
-                                <select class="form-control select2" style="width: 100%;" name="assign_to_emp_id" >
-                                    <option value="">-- Select Employee -- </option>
-                                    @foreach($employee_data as $emp)
-                                    <option value="{{$emp->id}}" <?php if($emp->id == $enquiry_data->assign_to_emp_id) echo "selected"; ?>>{{$emp->name}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <a href="{{url('register')}}" class="col-sm-1">Add</a>
-                            <?php } ?>
-                        </div>
-                        <div class="form-group" id="source_text" style="display: none;">                  
-                            <label for="gst" class="col-sm-2 control-label"></label>
-                            <div class="col-sm-4"></div>
-                            <label for="gst" class="col-sm-2 control-label"></label>
-                            <div class="col-sm-4">
-                                <input type="text" name="source_val" class="form-control" id="source_val" value="" />
-                            </div>
-                        </div>
-                        <div class="form-group">
+						<div class="form-group">
                             <label for="company" class="col-sm-2 control-label">Follow Up</label>
                         </div>
                         <table style="margin: 10px 10px 10px 10px;" class="table" >
@@ -153,14 +94,14 @@ $role = Auth::user()->role; ?>
                                 ?>
                                 <tr class="first">
                                     <td>
-                                        <textarea class="form-control" rows="3" placeholder="Enter Here..." name="follow_up[{{$k}}][0]" readonly >{{$json[0]}}</textarea>   
+                                        <textarea class="form-control mobile_date" rows="3" placeholder="Enter Here..." name="follow_up[{{$k}}][0]" readonly >{{$json[0]}}</textarea>   
                                     </td>
                                     <td>
                                         <div class="input-group date">
                                             <div class="input-group-addon">
                                               <i class="fa fa-calendar"></i>
                                             </div>
-                                            <input type="text" name="follow_up[{{$k}}][1]" class="form-control mobile_date" value="{{$json[1]}}" readonly  />
+                                            <input type="text" name="follow_up[{{$k}}][1]" class="form-control " value="{{$json[1]}}" readonly  />
                                         </div>
                                     </td>
                                     <input type="hidden" name="follow_up[{{$k}}][2]" value="{{$json[2]}}" />
@@ -172,14 +113,14 @@ $role = Auth::user()->role; ?>
                                 <?php $x++;$k++; }}else{ ?>
                                 <tr class="first">
                                     <td>
-                                        <textarea class="form-control" rows="3" placeholder="Enter Here..." name="follow_up[0][0]" required ></textarea>   
+                                        <textarea class="form-control mobile_date" rows="3" placeholder="Enter Here..." name="follow_up[0][0]" required ></textarea>   
                                     </td>
                                     <td>
                                         <div class="input-group date">
                                             <div class="input-group-addon">
                                               <i class="fa fa-calendar"></i>
                                             </div>
-                                            <input type="text" name="follow_up[0][1]" class="form-control mobile_date datepicker" value="" />
+                                            <input type="text" name="follow_up[0][1]" class="form-control  datepicker" value="" />
                                         </div>
                                     </td>
                                     <td><i class="fa fa-plus-circle btn-success add_field_button"></i></td>
@@ -188,6 +129,92 @@ $role = Auth::user()->role; ?>
                                 <?php } ?>
                             </tbody>
                         </table>
+						<div class="form-group">  
+                            <label for="gst" class="col-sm-2 control-label">Source</label>
+                            <div class="col-sm-4">
+                                <select class="form-control select2" style="width: 100%;" id="source" name="source" >
+                                    <option value="">-- Select Status -- </option>
+                                    <option value="Other" selected>Other</option>
+                                    @foreach($source as $su)
+                                    <option value="{{$su->name}}">{{$su->name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+							</div>
+                        <div class="form-group">
+                            <label for="company" class="col-sm-2 control-label">Address</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="address" placeholder="Address" value="{{$enquiry_data->address}}" name="address"  >
+                            </div>
+                            <label for="company" class="col-sm-2 control-label">City</label>
+                            <div class="col-sm-4">
+                                <!--<input type="text" class="form-control" id="user" placeholder="City" value="" name="city_id"  >-->
+								<input list="browsers" name="city_id" class="form-control  " id="city_id">
+									<datalist id="browsers">
+										@foreach($city as $c)
+										<option value="{{$c->city_name}}" <?php if($c->city_name == $enquiry_data->city_id) echo "selected"; ?>>{{$c->city_name}}</option>
+                                       @endforeach
+									</datalist>
+								
+                             <!--   <select class="form-control select2" style="width: 100%;" name="city_id" id="city_id">
+                                    <option value="">-- Select City -- </option>
+                                    @foreach($city as $c)
+                                    <option value="{{$c->city_name}}" <?php //if($c->city_name == $enquiry_data->city_id) echo "selected"; ?>>{{$c->city_name}}</option>
+                                    @endforeach
+                                </select>-->
+                            </div>
+                        </div>
+                    <div class="form-group">
+					 <label for="userName" class="col-sm-2 control-label">Brand Name</label>
+                            <div class="col-sm-4">
+                                <select class="form-control " style="width: 100%;" name="brand_id" id="brand_id">
+                                    <option value="">-- Select Brand -- </option>
+                                   @foreach($brand_list as $prod)
+                                    <option value="{{$prod->brand_id}}" <?php if($prod->brand_id == $enquiry_data->brand_id) echo "selected"; ?>>{{$prod->brand_name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <label for="userName" class="col-sm-2 control-label">Category</label>
+                            <div class="col-sm-4">
+                                <select class="form-control " style="width: 100%;" name="cat_id" id="cat_id">
+                                    <option value="">-- Select Category -- </option>
+                                    @foreach($category as $prod)
+                                    <option value="{{$prod->cat_id}}" <?php if($prod->cat_id == $enquiry_data->cat_id) echo "selected"; ?>>{{$prod->cat_name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                         <div class="form-group">
+                            <label for="userName" class="col-sm-2 control-label">Enquiry No</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="user" placeholder="Enquiry No" value="{{$enquiry_data->enquiry_no}}" name="enquiry_no" readonly >
+                            </div>
+							</div>
+                        
+                    <div class="form-group">  
+                            <?php if(Auth::guard('admin')->check()){  ?>                            
+                            <label for="gst" class="col-sm-2 control-label">Assign To Employee</label>
+                            <div class="col-sm-4">
+                                <select class="form-control select2" style="width: 100%;" name="assign_to_emp_id" >
+                                    <option value="">-- Select Employee -- </option>
+                                    @foreach($employee_data as $emp)
+                                    <option value="{{$emp->id}}" <?php if($emp->id == $enquiry_data->assign_to_emp_id) echo "selected"; ?>>{{$emp->name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <!--<a href="{{url('register')}}" class="col-sm-1">Add</a>-->
+                            <?php } ?>
+                        </div>
+                    
+                        <div class="form-group" id="source_text" style="display: none;">                  
+                            <label for="gst" class="col-sm-2 control-label"></label>
+                            <div class="col-sm-4"></div>
+                            <label for="gst" class="col-sm-2 control-label"></label>
+                            <div class="col-sm-4">
+                                <input type="text" name="source_val" class="form-control" id="source_val" value="" />
+                            </div>
+                        </div>
+                        
                         </div>
             <div class="box-footer">
                 <button type="submit" class="btn btn-success">Update</button>
@@ -208,6 +235,21 @@ $(document).ready(function () {
 //    $('.select2').select2();
     $('div.alert').delay(3000).slideUp(300);
 
+    $("#cat_id").on("change",function () {
+    var cat_id = $(this).val();
+        $.ajax({
+            url: 'product_val/' + cat_id,
+            type: "GET",
+            success: function (response) {
+                console.log(response);
+                var data = JSON.parse(response);
+                console.log(data);
+                $("#brand_id").html(data.brand);
+                $("#product_id").html(data.product);
+            }
+        });
+    });
+
     var wrapper = $(".input_fields_wrap"); //Fields wrapper
     var add_button = $(".add_field_button"); //Add button ID
     var i = 0;
@@ -220,7 +262,7 @@ $(document).ready(function () {
         var date = $("#cop_date").val();
         var message = $('.input_fields_wrap tr').length;
         
-        $("#h_lost").append('<tr class="first"><td><textarea class="form-control" rows="3" placeholder="Enter Here..." name="follow_up['+x+'][0]" required ></textarea></td><td><div class="input-group date"><div class="input-group-addon"><i class="fa fa-calendar"></i></div><input type="text" name="follow_up['+ x +'][1]" id="datepicker"  class="form-control mobile_date datepicker" value="" /></div></td><input type="hidden" class="form-control" name="follow_up['+x+'][2]" value="<?php echo date('Y-m-d h:m:s'); ?>" readonly /><td><i class="fa fa-minus-circle btn-danger remove_field"></i></td></tr>')
+        $("#h_lost").append('<tr class="first"><td><textarea class="form-control mobile_date" rows="3" placeholder="Enter Here..." name="follow_up['+x+'][0]" required ></textarea></td><td><div class="input-group date"><div class="input-group-addon"><i class="fa fa-calendar"></i></div><input type="text" name="follow_up['+ x +'][1]" id="datepicker"  class="form-control datepicker" value="" /></div></td><input type="hidden" class="form-control" name="follow_up['+x+'][2]" value="<?php echo date('Y-m-d h:m:s'); ?>" readonly /><td><i class="fa fa-minus-circle btn-danger remove_field"></i></td></tr>')
         $('.datepicker').datepicker({
                 format: "yyyy-mm-dd",
             autoclose: true,

@@ -8,7 +8,7 @@
                 <?php
 $color_array=array("bg-aqua","bg-green","bg-yellow","bg-red");
 $a=0;
-$status = App\EnquiryStatus::where(['is_active'=>0])->get();
+
 ?>
 @foreach($status as $row)
 <?php
@@ -25,10 +25,9 @@ if($a > 3){$a=0;}?>
 <!--            <div class="icon">
               <i class="ion ion-person-add"></i>
             </div>-->
-            <a href="{{ url('dashboard_enq_list?status_id='.$row->status_id)}}" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+            <a href="{{ url('dashboard_enq_list?status_id='.$row->id)}}" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
           </div>
         </div>
-
 
 <?php $a++;?>
 @endforeach
