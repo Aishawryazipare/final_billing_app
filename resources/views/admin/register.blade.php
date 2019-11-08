@@ -76,11 +76,11 @@
           </div>
         </label>
 		
-        <label class="">
+<!--        <label class="">
           <div class="icheckbox_minimal-blue" aria-checked="false" aria-disabled="false" style="position: relative;">
               <input type="checkbox" class="minimal" name="permission[]" id="enquiry" value="2" style="position: absolute; opacity: 0;" required> Enquiry App
           </div>
-        </label>
+        </label>-->
       </div>
       <div class="row">
         <div class="col-xs-8">

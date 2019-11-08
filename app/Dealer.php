@@ -9,7 +9,7 @@
     {
         use Notifiable;
         
-        protected $table = 'tbl_dealer';
+        protected $table = 'bil_dealer';
         protected $guard = 'dealer';
         
         protected $primaryKey = "dealer_id";

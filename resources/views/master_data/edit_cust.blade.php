@@ -7,7 +7,7 @@
         Edit Customer
       </h1>
       <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li><a href="#"><i class="fa fa-dashboard"></i>  Master Data</a></li>
         <li class="active">Edit Customer</li>
       </ol>
     @if (Session::has('alert-success'))
@@ -29,26 +29,26 @@
                {{ csrf_field() }}
                <div class="box-body">
                    <div class="form-group">
-                        <label for="lbl_type_name" class="col-sm-2 control-label">Customer Name</label>
+                        <label for="lbl_type_name" class="col-sm-2 control-label">Customer Name<span style="color:#ff0000;">*</span></label>
                         <div class="col-sm-6">
                             <input type="text" class="form-control" id="item_id" placeholder="Type" name="cust_id" value="{{$cust_data->cust_id}}" style="display:none;">
                             <input type="text" class="form-control" id="type_name" placeholder="Customer Name" name="cust_name" value="{{$cust_data->cust_name}}">
                         </div>
                     </div>
                    <div class="form-group">
-                        <label for="lbl_type_name" class="col-sm-2 control-label">Contact Person</label>
+                        <label for="lbl_type_name" class="col-sm-2 control-label">Contact Person<span style="color:#ff0000;">*</span></label>
                         <div class="col-sm-6">
                             <input type="text" class="form-control" id="contact_person" value="{{$cust_data->contact_person}}" placeholder="Contact Person" name="contact_person" required>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="lbl_type_name" class="col-sm-2 control-label">Mobile No.</label>
+                        <label for="lbl_type_name" class="col-sm-2 control-label">Mobile No.<span style="color:#ff0000;">*</span></label>
                         <div class="col-sm-6">
                             <input type="text" class="form-control" id="type_name" placeholder="Mobile No." name="mob_no" value="{{$cust_data->mob_no}}">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="lbl_type_name" class="col-sm-2 control-label">Email ID</label>
+                        <label for="lbl_type_name" class="col-sm-2 control-label">Email ID<span style="color:#ff0000;">*</span></label>
                         <div class="col-sm-6">
                             <input type="text" class="form-control" id="type_name" placeholder="Email ID" name="email_id" value="{{$cust_data->email_id}}">
                         </div>

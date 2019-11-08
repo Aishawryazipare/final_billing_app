@@ -28,7 +28,7 @@
 <section class="content">
     <div class="row">
         <div class="col-md-12">
-            <div class="box" style="border-top: 3px solid #ffffff;">
+            <div class="box" style="border-top: 3px solid #ffffff;border: 2px solid #00ffc3;">
                 <div class="box-header">
                     <h3 class="box-title"></h3>
                 </div>
@@ -41,22 +41,46 @@
                         <div class="col-sm-4">
                             <div class="input-group date">
                                             <div class="input-group-addon">
-                                              <i class="fa fa-calendar"></i>
+                                              <i class="fa fa-calendar calendar1"></i>
                                             </div>
-                                <input type="text" name="from_date" class="form-control mobile_date datepicker"id="from_date" autocomplete="off" required/>
+                                <input type="text" name="from_date" class="form-control mobile_date datepicker from_date"id="from_date" style="background-color: #ffffff;" autocomplete="off" required/>
                                         </div>
                         </div>
                          <label for="lbl_cat_name" class="col-sm-2 control-label">To Date</label>
                         <div class="col-sm-4">
                             <div class="input-group date">
                                             <div class="input-group-addon">
-                                              <i class="fa fa-calendar"></i>
+                                              <i class="fa fa-calendar calendar2"></i>
                                             </div>
-                                <input type="text" name="to_date" class="form-control mobile_date datepicker" value=""  autocomplete="off"/>
+                                <input type="text" name="to_date" class="form-control mobile_date datepicker to_date" value="" style="background-color: #ffffff;" autocomplete="off"/>
                                         </div>
                         </div>
                     </div>
-                       
+                                             <?php if($location_data!=''){ ?>
+                        <div class="form-group">
+                         <label for="lbl_cat_name" class="col-sm-2 control-label">Location</label>
+                        <div class="col-sm-4">
+                  <select class="form-control select2" style="width: 100%;" name="location" id="location">
+                         <option value="">-- Select Location -- </option> 
+                         <option value="all">All</option> 
+                        @foreach($location_data as $u)
+                        <option value="{{$u->loc_id}}">{{$u->loc_name}}</option>
+                        @endforeach
+                    </select>
+                        </div>   
+                        <?php } ?>
+                          <?php if($employee_data!=''){ ?>
+                       <label for="lbl_cat_name" class="col-sm-2 control-label">Employee</label>
+                        <div class="col-sm-4">
+                  <select class="form-control select2" style="width: 100%;" name="employee" id="employee">
+                         <option value="">-- Select Employee -- </option> 
+                        @foreach($employee_data as $u)
+                        <option value="{{$u->id}}">{{$u->name}}</option>
+                        @endforeach
+                    </select>
+                        </div>  
+                          <?php } ?>
+                        </div>
                         </div>
                     <div class="box-footer">
                         <button type="button"  id="btnsubmit" class="btn btn-success"><i class="fa fa-fw fa-eye"></i>View</button>
@@ -67,7 +91,7 @@
             </div>
         </div>   
     </div>
-    <div class="row result" style="display:none;">
+    <div class="row result">
         <div class="col-md-12">
              <div class="box">
             <div class="box-body">
@@ -75,10 +99,12 @@
                 <thead>
                 <tr>
                   <th style="width:50px;">Sr.No</th>
-                  <th>Supervisior Id</th>
+                  <th>Supplier Name</th>
                   <th>Item</th>
                   <th>Quantity</th>
                   <th>Status</th>
+                  <th>Location</th>
+                  <th>User</th>
                 </tr>
                 </thead>
                 <tbody id="table_data">
@@ -99,13 +125,21 @@
 <script src="js/sweetalert.min.js"></script>
 <script>
 $(document).ready(function () {
-//    $('.select2').select2();
+    $('.select2').select2();
     $('#example1').DataTable();
- $('.datepicker').datepicker({
+  $('.datepicker').datepicker({
                 format: "yyyy-mm-dd",
             autoclose: true,
-            todayHighlight: true
-    })
+            todayHighlight: true,
+            disableTouchKeyboard: true,
+            Readonly: true
+    }).attr("readonly", "readonly");
+     $('.calendar1').click(function() {
+    $(".from_date").focus();
+  });
+  $('.calendar2').click(function() {
+    $(".to_date").focus();
+  });
         $('.datepicker-autoclose').datepicker();  
         $("#btnsubmit").click(function(){
             var from_date=$('#from_date').val();
@@ -128,6 +162,20 @@ $(document).ready(function () {
             }
             
         }); 
+                $('#location').change(function() {
+            
+          var location=$(this).val();
+            $.ajax({
+                            url: 'get_employees',
+                            type: "GET",
+                            data: {location:location},
+                            success: function(data) {
+                            console.log(data);
+                             $('#employee').html('');
+                            $('#employee').html(data);
+                            }
+                    });  
+});
     });
 </script>
 @endsection

@@ -17,7 +17,7 @@
       Main Setting
     </h1>
     <ol class="breadcrumb">
-      <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+      <li><a href="#"><i class="fa fa-dashboard"></i> Settings</a></li>
       <li class="active">Main Setting</li>
     </ol> 
 </section>
@@ -27,9 +27,12 @@
           <div class="box box-default">
             <div class="box-header with-border">
               <h3 class="box-title">Main Setting</h3>
-            </div>
+			  <?php if($flag==1) {?>
+			  <button type="button" class="btn btn-success" id="sync_btn" name="sync_btn" style="margin-left:83%"><i class="fa fa-fw fa-cloud-upload"></i>Sync</button>
+			<?php } ?>
+		   </div>
               <form action="{{ url('main-setting') }}" method="POST" id="type_form" class="form-horizontal" enctype="multipart/form-data">
-                {{ csrf_field() }}
+                {{ csrf_field() }} 
                 <div class="box-body">
                     <div class="form-group" id="div1">
                         <label for="lbl_cat_name" class="col-sm-2 control-label">Page size</label>
@@ -43,13 +46,103 @@
                                 <option value="">Select</option>
                             @endif
                             
-                            <option value="A5">A5</option>
-                            <option value="2 inch">2 inch</option>
                             <option value="3 inch">3 inch</option>
+                            <option value="2 inch">2 inch</option>
+                            <option value="A5">A5</option>
                             <option value="other">other</option>
                         </select>
                         </div>
                     </div>
+                    <div class="form-group">
+                        <label for="lbl_cat_name" class="col-sm-2 control-label">Bill GST Setting</label>
+                        @if(@$hf_setting->gst_setting=="Yes")
+                            <div class="col-sm-4">
+                                <label class="radio-inline">
+                                    <input type="radio" name="gst_setting" value="Yes" checked>GST Enable
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="gst_setting" value="No">GST Disable
+                                </label>
+                            </div> 
+                        @else
+                            <div class="col-sm-4">
+                                <label class="radio-inline">
+                                    <input type="radio" name="gst_setting" value="Yes">GST Enable
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="gst_setting" value="No" checked>GST Disable
+                                </label>
+                            </div> 
+                        @endif
+                    </div>
+                    <div class="form-group">
+                        <label for="lbl_cat_name" class="col-sm-2 control-label">Bill Printing</label>
+						@if(@$hf_setting->bill_printing=="Yes")
+							<div class="col-sm-4">
+                            <label class="radio-inline">
+                                <input type="radio" name="bill_printing" value="Yes" checked>Yes
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="bill_printing" value="No">No
+                            </label>
+                        </div> 
+						@else
+							<div class="col-sm-4">
+                            <label class="radio-inline">
+                                <input type="radio" name="bill_printing" value="Yes">Yes
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="bill_printing" value="No" checked>No
+                            </label>
+                        </div> 
+						@endif
+                        
+                    </div>
+                    <div class="form-group">
+                        <label for="lbl_cat_name" class="col-sm-2 control-label">Multiple Print</label>
+						@if(@$hf_setting->multiple_print=="Yes")
+							<div class="col-sm-4">
+                            <label class="radio-inline">
+                                <input type="radio" name="multiple_print" value="Yes" checked>Yes
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="multiple_print" value="No">No
+                            </label>
+                        </div> 
+						@else
+							<div class="col-sm-4">
+                            <label class="radio-inline">
+                                <input type="radio" name="multiple_print" value="Yes">Yes
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="multiple_print" value="No" checked>No
+                            </label>
+                        </div> 
+						@endif
+                    </div>
+                    <div class="form-group">
+                        <label for="lbl_cat_name" class="col-sm-2 control-label">Reset Bill Number</label>
+						@if(@$hf_setting->reset_bill=="Yes")
+							<div class="col-sm-4">
+                            <label class="radio-inline">
+                                <input type="radio" name="reset_bill" value="Yes" checked>Yes
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="reset_bill" value="No">No
+                            </label>
+                        </div>
+						@else
+							<div class="col-sm-4">
+                            <label class="radio-inline">
+                                <input type="radio" name="reset_bill" value="Yes">Yes
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="reset_bill" value="No" checked>No
+                            </label>
+                        </div>
+						@endif
+                    </div>
+                    
                 </div>
               <div class="box-footer">
                 <button type="submit" class="btn btn-success" id="btn_submit" name="btn_submit">Submit</button>
@@ -143,6 +236,19 @@
                 }
                 });  
                 });
+				$( "#sync_btn" ).click(function() {
+        var msg="Inventory";
+        $.ajax({
+                url: 'sync_category',
+                type: "GET",
+                data: {data:msg},
+                success: function(result) 
+                {
+                    var res=JSON.parse(result);
+                    console.log(res); 
+                }
+            });
+    });
                 
                 
 });

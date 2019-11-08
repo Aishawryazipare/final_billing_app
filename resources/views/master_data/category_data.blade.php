@@ -15,7 +15,7 @@
       </h1>
     
       <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li><a href="#"><i class="fa fa-dashboard"></i>Master Data</a></li>
         <li class="active">Category List</li>
       </ol>
     </section>
@@ -23,6 +23,9 @@
   <section class="content">
    <div class="box">
             <div class="box-header">
+			<?php if($flag==1) {?>
+			  <button type="button" class="btn btn-success" id="sync_btn" name="sync_btn" style="margin-left:91%"><i class="fa fa-fw fa-cloud-upload"></i>Sync</button>
+			<?php } ?>
               <h3 class="box-title">CATEGORY LIST</h3><a href="{{url('add_category')}}" class="panel-title" style="margin-left: 73%;color: #dc3d59;"><span class="fa fa-plus-square"></span> Add New Category</a>
             </div>
             <!-- /.box-header -->
@@ -64,7 +67,19 @@ $(document).ready(function(){
     $(".delete").on("click",function(){
         return confirm('Are you sure to delete');
     });
-    
+$( "#sync_btn" ).click(function() {
+        var msg="Master Data";
+        $.ajax({
+                url: 'sync_category',
+                type: "GET",
+                data: {data:msg},
+                success: function(result) 
+                {
+                    var res=JSON.parse(result);
+                    console.log(res); 
+                }
+            });
+    });
 });
 $(function () {
     $('#example1').DataTable()

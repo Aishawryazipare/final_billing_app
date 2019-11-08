@@ -7,7 +7,7 @@
           Add Dealer
       </h1>
       <ol class="breadcrumb">
-        <li><a href="{{url('home')}}"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li><a href="{{url('home')}}"><i class="fa fa-dashboard"></i> Dealer Registration</a></li>
         <li class="active">Add Dealer</li>
       </ol>
     </section>
@@ -22,58 +22,58 @@
                 {{ csrf_field() }}
               <div class="box-body">
                 <div class="form-group">
-                  <label for="userName" class="col-sm-2 control-label">Dealer Name</label>
+                    <label for="userName" class="col-sm-2 control-label">Dealer Name<span style="color:#ff0000;">*</span></label>
 
                   <div class="col-sm-4">
-                      <input type="text" class="form-control" id="dealer_name" placeholder="Name" name="dealer_name" required>
+                      <input type="text" class="form-control check-req" id="dealer_name" placeholder="Name" name="dealer_name">
                   </div>
-                  <label for="userName" class="col-sm-2 control-label">Owner Name</label>
+                  <label for="userName" class="col-sm-2 control-label">Owner Name<span style="color:#ff0000;">*</span></label>
 
                   <div class="col-sm-4">
-                      <input type="text" class="form-control" id="owner_name" placeholder="Name" name="owner_name" required>
+                      <input type="text" class="form-control check-req" id="owner_name" placeholder="Name" name="owner_name" required>
                   </div>
                   
                 </div>
                 <div class="form-group">
-                   <label for="company" class="col-sm-2 control-label">Mobile No.</label>
+                   <label for="company" class="col-sm-2 control-label">Mobile No.<span style="color:#ff0000;">*</span></label>
 
                   <div class="col-sm-4">
-                      <input type="text" class="form-control" id="dealer_mobile_no" placeholder="Mobile No." name="dealer_mobile_no" required maxlength="10" onkeypress="return isNumberKey(event)">
+                      <input type="text" class="form-control check-req" id="dealer_mobile_no" placeholder="Mobile No." name="dealer_mobile_no" required maxlength="10" onkeypress="return isNumberKey(event)">
                   </div>
-                   <label for="gst" class="col-sm-2 control-label">Email ID</label>
+                   <label for="gst" class="col-sm-2 control-label">Email ID<span style="color:#ff0000;">*</span></label>
 
                   <div class="col-sm-4">
-                    <input type="email" class="form-control" id="email" placeholder="Email ID" name="email" required>
+                    <input type="email" class="form-control check-req" id="email" placeholder="Email ID" name="email" required>
                   </div>
                 </div>
                 <div class="form-group">  
-                  <label class="col-sm-2 control-label">Address</label>  
+                  <label class="col-sm-2 control-label">Address<span style="color:#ff0000;">*</span></label>  
                     <div class="col-sm-4">
-                    <textarea class="form-control" rows="3" placeholder="Enter Address..." name="dealer_address"></textarea>   
+                    <textarea class="form-control check-req" rows="3" placeholder="Enter Address..." name="dealer_address"></textarea>   
                     </div>
-                   <label for="gst" class="col-sm-2 control-label">Password</label>
+                   <label for="gst" class="col-sm-2 control-label">Password<span style="color:#ff0000;">*</span></label>
 
                   <div class="col-sm-4">
-                    <input type="password" class="form-control" id="password" placeholder="Password" name="password" required>
+                    <input type="password" class="form-control check-req" id="password" placeholder="Password" name="password" required>
                   </div>
                   
                 </div>
                  <div class="form-group">
                   
-                   <label for="gst" class="col-sm-2 control-label">State</label>
+                   <label for="gst" class="col-sm-2 control-label">State<span style="color:#ff0000;">*</span></label>
                   <div class="col-sm-4">
                     <!--<input type="text" class="form-control" id="dealer_state" placeholder="State" name="dealer_state" required>-->
-                    <select class="form-control select2" style="width: 100%;" id="dealer_state" name="dealer_state" required>
+                    <select class="form-control select2 check-req" style="width: 100%;" id="dealer_state" name="dealer_state" required>
                      <option value="">-- Select State -- </option>
                       @foreach($state_list as $st)
                         <option value="{{$st->state_name}}">{{$st->state_name}}</option>
                       @endforeach
                     </select>
                   </div>
-                   <label for="gst" class="col-sm-2 control-label">City</label>
+                   <label for="gst" class="col-sm-2 control-label">City<span style="color:#ff0000;">*</span></label>
                   <div class="col-sm-4">
                     <!--<input type="text" class="form-control" id="dealer_city" placeholder="City" name="dealer_city" required>-->
-                    <select class="form-control select2" style="width: 100%;" name="dealer_city" id="dealer_city" required>
+                    <select class="form-control select2 check-req" style="width: 100%;" name="dealer_city" id="dealer_city" required>
                     <option value="">-- Select City -- </option>
                     @foreach($city_list as $ct)
                         <option value="{{$ct->city_name}}">{{$ct->city_name}}</option>
@@ -83,11 +83,11 @@
                   </div> 
                 </div>
                   <div class="form-group">
-                      <label for="gst" class="col-sm-2 control-label">GST No.</label>
+                      <label for="gst" class="col-sm-2 control-label">GST No.<span style="color:#ff0000;">*</span></label>
                   <div class="col-sm-4">
-                    <input type="text" class="form-control" id="dealer_gst_no" placeholder="GST No." name="dealer_gst_no" required>
+                    <input type="text" class="form-control check-req" id="dealer_gst_no" placeholder="GST No." name="dealer_gst_no" required>
                   </div>
-                       <label for="gst" class="col-sm-2 control-label">Dealer Code</label>
+                       <label for="gst" class="col-sm-2 control-label">Dealer Code<span style="color:#ff0000;">*</span></label>
                   <div class="col-sm-4">
                       <input type="text" class="form-control" id="dealer_code" placeholder="Dealer Code" name="dealer_code" required maxlength="4">
                   </div>
@@ -119,6 +119,33 @@ function isNumberKey(evt) {
    
     
     $("#btn_submit").click(function(){
+        var flag=false;
+        $('.check-req').each(function() {
+            var val=$(this).val();
+//            alert(val);
+            if(val=="")
+            {
+//                alert("in if");
+                flag=true;
+                return false;
+            } 
+        });
+//        alert(flag);
+        if(flag == true)
+        {
+//           alert("if true");
+            swal({
+                position: 'top-end',
+                type: 'warning',
+                title: 'Please enter all required fields',
+                showConfirmButton: true,
+            }); 
+           return false;
+        }
+        else
+        {
+       
+//        alert("after each");
         var dealer_code=$("#dealer_code").val();
         if(dealer_code!="")
         {
@@ -139,7 +166,6 @@ function isNumberKey(evt) {
 //                        alert(data3);
                         if(data3 =="present")
                         {
-//                             alert(data3);
                              swal({
                                 position: 'top-end',
                                 type: 'warning',
@@ -176,6 +202,7 @@ function isNumberKey(evt) {
             }); 
         }
 //        alert(dealer_code);
+        }
     });
     
  });

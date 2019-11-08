@@ -64,6 +64,7 @@
 <script src="js/sweetalert.min.js"></script>
 <script>
 $(document).ready(function(){
+    
     $(".delete").on("click",function(){
         return confirm('Are you sure to delete');
     });

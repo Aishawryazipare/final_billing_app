@@ -26,9 +26,9 @@ class MasterController extends Controller
     public function getTypeData() {
         if(Auth::guard('admin')->check()){
             $id = $this->admin->rid;
-            $type = DB::table('tbl_AddIUnits')->where(['is_active' => '0','cid'=>$id])->get();
+            $type = DB::table('bil_AddIUnits')->where(['is_active' => '0','cid'=>$id])->get();
         }else if(Auth::guard('web')->check()){
-            $type = DB::table('tbl_AddIUnits')->where(['is_active' => '0'])->get();
+            $type = DB::table('bil_AddIUnits')->where(['is_active' => '0'])->get();
         }
         else if(Auth::guard('employee')->check()){
             $cid = $this->employee->cid;
@@ -41,14 +41,14 @@ class MasterController extends Controller
             
             if($client_data->location == "single" && $role == 2)
             {
-                $type = DB::table('tbl_AddIUnits')->where(['is_active' => '0','cid'=>$cid])->get();
+                $type = DB::table('bil_AddIUnits')->where(['is_active' => '0','cid'=>$cid])->get();
             }
             else if($client_data->location == "multiple" && $role == 2)
             {
                
                 if($sub_emp_id != "")
                 {
-                    $type = DB::table('tbl_AddIUnits')
+                    $type = DB::table('bil_AddIUnits')
                             ->where(['is_active' => '0','cid'=>$cid,'lid'=>$lid])
                             ->orWhere(['emp_id'=>$sub_emp_id])
                             ->orWhere(['emp_id'=>$emp_id])
@@ -56,13 +56,13 @@ class MasterController extends Controller
                 }
                 else
                 {
-                    $type = DB::table('tbl_AddIUnits')->where(['is_active' => '0','cid'=>$cid,'lid'=>$lid])->get();
+                    $type = DB::table('bil_AddIUnits')->where(['is_active' => '0','cid'=>$cid,'lid'=>$lid])->get();
                 }
                 
             }
             else if($client_data->location == "multiple" && $role == 1)
             {
-                $type = DB::table('tbl_AddIUnits')->where(['is_active' => '0','cid'=>$cid,'lid'=>$lid])->get();
+                $type = DB::table('bil_AddIUnits')->where(['is_active' => '0','cid'=>$cid,'lid'=>$lid])->get();
             }
         }
         return view('master_data.type_data',['type' => $type]);
@@ -120,6 +120,7 @@ class MasterController extends Controller
     {
         $requestData = $request->all();
         $type_id=$requestData['Unit_Id'];
+		$requestData['sync_flag']=0;
         $query =Type::findorfail($type_id);
         $query->update($requestData);
         Session::flash('alert-success','Updated Successfully.');
@@ -129,7 +130,7 @@ class MasterController extends Controller
     public function deleteType($unit_id)
     {
         $status = 1;
-        $query = Type::where('Unit_Id', $unit_id)->update(['is_active' => $status]);
+        $query = Type::where('Unit_Id', $unit_id)->update(['is_active' => $status,'sync_flag' => 0]);
         return redirect('type_data');
     }
     
@@ -137,20 +138,22 @@ class MasterController extends Controller
     //Category
     
     public function getCategoryData() {
+		$flag=0;
         if(Auth::guard('admin')->check()){
             $id = $this->admin->rid;
-            $category = DB::table('tbl_category')
-                ->select('tbl_category.*','tbl_type.type_name')
-                ->leftjoin('tbl_type','tbl_type.type_id','=','tbl_category.type_id')
-                ->where(['tbl_category.is_active' => '1','tbl_category.cid'=>$id])
-                ->orderBy('tbl_category.cat_name', 'asc')
+			$flag=1;
+            $category = DB::table('bil_category')
+                ->select('bil_category.*','bil_type.type_name')
+                ->leftjoin('bil_type','bil_type.type_id','=','bil_category.type_id')
+                ->where(['bil_category.is_active' => '1','bil_category.cid'=>$id])
+                ->orderBy('bil_category.cat_name', 'asc')
                 ->get();
         }else if(Auth::guard('web')->check()){
-             $category = DB::table('tbl_category')
-                ->select('tbl_category.*','tbl_type.type_name')
-                ->leftjoin('tbl_type','tbl_type.type_id','=','tbl_category.type_id')
-                ->where(['tbl_category.is_active' => '1'])
-                ->orderBy('tbl_category.cat_name', 'asc')
+             $category = DB::table('bil_category')
+                ->select('bil_category.*','bil_type.type_name')
+                ->leftjoin('bil_type','bil_type.type_id','=','bil_category.type_id')
+                ->where(['bil_category.is_active' => '1'])
+                ->orderBy('bil_category.cat_name', 'asc')
                 ->get();
         }
         else if(Auth::guard('employee')->check()){
@@ -163,44 +166,44 @@ class MasterController extends Controller
             if($client_data->location == "single" && $role == 2)
             {
 			
-                $category = DB::table('tbl_category')
-                ->select('tbl_category.*','tbl_type.type_name')
-                ->leftjoin('tbl_type','tbl_type.type_id','=','tbl_category.type_id')
-                ->where(['tbl_category.is_active' => '1','tbl_category.cid'=>$cid])
-                ->orderBy('tbl_category.cat_name', 'asc')
+                $category = DB::table('bil_category')
+                ->select('bil_category.*','bil_type.type_name')
+                ->leftjoin('bil_type','bil_type.type_id','=','bil_category.type_id')
+                ->where(['bil_category.is_active' => '1','bil_category.cid'=>$cid])
+                ->orderBy('bil_category.cat_name', 'asc')
                 ->get();
             }
             else if($client_data->location == "multiple" && $role == 2)
             {
                 if($sub_emp_id != ""){
-                $category = DB::table('tbl_category')
-                ->select('tbl_category.*','tbl_type.type_name')
-                ->leftjoin('tbl_type','tbl_type.type_id','=','tbl_category.type_id')
-                ->where(['tbl_category.is_active' => '1','tbl_category.cid'=>$cid,'tbl_category.lid'=>$lid])
-                ->orderBy('tbl_category.cat_name', 'asc')
+                $category = DB::table('bil_category')
+                ->select('bil_category.*','bil_type.type_name')
+                ->leftjoin('bil_type','bil_type.type_id','=','bil_category.type_id')
+                ->where(['bil_category.is_active' => '1','bil_category.cid'=>$cid,'bil_category.lid'=>$lid])
+                ->orderBy('bil_category.cat_name', 'asc')
                 ->get();
                 }
                 else
                 {
-                    $category = DB::table('tbl_category')
-                    ->select('tbl_category.*','tbl_type.type_name')
-                    ->leftjoin('tbl_type','tbl_type.type_id','=','tbl_category.type_id')
-                    ->where(['tbl_category.is_active' => '1','tbl_category.cid'=>$cid,'tbl_category.lid'=>$lid,'emp_id'=>$emp_id])
-                    ->orderBy('tbl_category.cat_name', 'asc')
+                    $category = DB::table('bil_category')
+                    ->select('bil_category.*','bil_type.type_name')
+                    ->leftjoin('bil_type','bil_type.type_id','=','bil_category.type_id')
+                    ->where(['bil_category.is_active' => '1','bil_category.cid'=>$cid,'bil_category.lid'=>$lid,'emp_id'=>$emp_id])
+                    ->orderBy('bil_category.cat_name', 'asc')
                     ->get();
                 }
             }
             else if($client_data->location == "multiple" && $role == 1){
-				
-             $category = DB::table('tbl_category')
-                ->select('tbl_category.*','tbl_type.type_name')
-                ->leftjoin('tbl_type','tbl_type.type_id','=','tbl_category.type_id')
-                ->where(['tbl_category.is_active' => '1','tbl_category.cid'=>$cid,'tbl_category.lid'=>$lid])
-                ->orderBy('tbl_category.cat_name', 'asc')
+			 $flag=1;	
+             $category = DB::table('bil_category')
+                ->select('bil_category.*','bil_type.type_name')
+                ->leftjoin('bil_type','bil_type.type_id','=','bil_category.type_id')
+                ->where(['bil_category.is_active' => '1','bil_category.cid'=>$cid,'bil_category.lid'=>$lid])
+                ->orderBy('bil_category.cat_name', 'asc')
                 ->get();
             }
         }
-        return view('master_data.category_data',['category' => $category]);
+        return view('master_data.category_data',['category' => $category,'flag'=>$flag]);
     }
     
     public function getCategory() {
@@ -241,16 +244,16 @@ class MasterController extends Controller
 //        exit;
         if(Auth::guard('admin')->check()){
             $id = $this->admin->rid;
-            $query = DB::table('tbl_category')
-                ->select('tbl_category.*')
-                ->where(['cat_id'=>$cat_id,'tbl_category.is_active' => '1','cid'=>$id])
-                ->orderBy('tbl_category.cat_name', 'asc')
+            $query = DB::table('bil_category')
+                ->select('bil_category.*')
+                ->where(['cat_id'=>$cat_id,'bil_category.is_active' => '1','cid'=>$id])
+                ->orderBy('bil_category.cat_name', 'asc')
                 ->first();
         }else if(Auth::guard('web')->check()){
-            $query = DB::table('tbl_category')
-                ->select('tbl_category.*')
-                ->where(['cat_id'=>$cat_id,'tbl_category.is_active' => '1'])
-                ->orderBy('tbl_category.cat_name', 'asc')
+            $query = DB::table('bil_category')
+                ->select('bil_category.*')
+                ->where(['cat_id'=>$cat_id,'bil_category.is_active' => '1'])
+                ->orderBy('bil_category.cat_name', 'asc')
                 ->first();
         }
         else if(Auth::guard('employee')->check()){
@@ -262,19 +265,19 @@ class MasterController extends Controller
             $client_data = \App\Admin::select('location')->where(['rid'=>$cid])->first();
             if($client_data->location == "single" && $role == 2){ 
 			
-            $query = DB::table('tbl_category')
-                ->select('tbl_category.*')
-                ->where(['cat_id'=>$cat_id,'tbl_category.is_active' => '1','cid'=>$cid,'lid'=>$lid])
-                ->orderBy('tbl_category.cat_name', 'asc')
+            $query = DB::table('bil_category')
+                ->select('bil_category.*')
+                ->where(['cat_id'=>$cat_id,'bil_category.is_active' => '1','cid'=>$cid,'lid'=>$lid])
+                ->orderBy('bil_category.cat_name', 'asc')
                 ->first();
             }
             else
             {
                 
-                $query = DB::table('tbl_category')
-                ->select('tbl_category.*')
-                ->where(['cat_id'=>$cat_id,'tbl_category.is_active' => '1','cid'=>$cid,'lid'=>$lid])
-                ->orderBy('tbl_category.cat_name', 'asc')
+                $query = DB::table('bil_category')
+                ->select('bil_category.*')
+                ->where(['cat_id'=>$cat_id,'bil_category.is_active' => '1','cid'=>$cid,'lid'=>$lid])
+                ->orderBy('bil_category.cat_name', 'asc')
                 ->first();
 //                     echo "in else";
 //                echo $cat_id;
@@ -294,7 +297,7 @@ class MasterController extends Controller
 //        exit;
         $cat_id=$requestData['cat_id'];
         $cat_name=$requestData['cat_name'];
-   
+		$requestData['sync_flag']=0;
         $query =Category::findorfail($cat_id);
         $query->update($requestData);
         Session::flash('alert-success','Updated Successfully.');
@@ -304,7 +307,7 @@ class MasterController extends Controller
      public function deleteCategory($cat_id)
     {
         $status = 0;
-        $query = Category::where('cat_id', $cat_id)->update(['is_active' => $status]);
+        $query = Category::where('cat_id', $cat_id)->update(['is_active' => $status,'sync_flag' => 0]);
         return redirect('category_data');
     }
     
@@ -491,6 +494,7 @@ class MasterController extends Controller
     {
         $requestData = $request->all();
         $cust_id=$requestData['cust_id'];
+		$requestData['sync_flag']=0;
          $users = \App\Customer::findorfail($cust_id);
         $users->update($requestData);
         Session::flash('alert-success','Updated Successfully.');
@@ -501,7 +505,7 @@ class MasterController extends Controller
     {
         $status = 1;
         $query = \App\Customer::where('cust_id', $cust_id)
-                ->update(['is_active' => $status]);
+                ->update(['is_active' => $status,'sync_flag' => 0]);
         return redirect('customer_data');
     }
     
@@ -555,21 +559,21 @@ class MasterController extends Controller
     public function getItem() {
         if(Auth::guard('admin')->check()){
             $id = $this->admin->rid;
-             $category = DB::table('tbl_category')
-                ->select('tbl_category.*','tbl_type.type_name')
-                ->leftjoin('tbl_type','tbl_type.type_id','=','tbl_category.type_id')
-                ->where(['tbl_category.is_active' => '1','tbl_category.cid'=>$id])
-                ->orderBy('tbl_category.cat_name', 'asc')
+             $category = DB::table('bil_category')
+                ->select('bil_category.*','bil_type.type_name')
+                ->leftjoin('bil_type','bil_type.type_id','=','bil_category.type_id')
+                ->where(['bil_category.is_active' => '1','bil_category.cid'=>$id])
+                ->orderBy('bil_category.cat_name', 'asc')
                 ->get();
-         $unit_data = DB::table('tbl_AddIUnits')->where(['is_active' => '0','cid'=>$id])->get();
+         $unit_data = DB::table('bil_AddIUnits')->where(['is_active' => '0','cid'=>$id])->get();
         }else if(Auth::guard('web')->check()){
-            $category = DB::table('tbl_category')
-                ->select('tbl_category.*','tbl_type.type_name')
-                ->leftjoin('tbl_type','tbl_type.type_id','=','tbl_category.type_id')
-                ->where(['tbl_category.is_active' => '1'])
-                ->orderBy('tbl_category.cat_name', 'asc')
+            $category = DB::table('bil_category')
+                ->select('bil_category.*','bil_type.type_name')
+                ->leftjoin('bil_type','bil_type.type_id','=','bil_category.type_id')
+                ->where(['bil_category.is_active' => '1'])
+                ->orderBy('bil_category.cat_name', 'asc')
                 ->get();
-            $unit_data = DB::table('tbl_AddIUnits')->where(['is_active' => '0'])->get();
+            $unit_data = DB::table('bil_AddIUnits')->where(['is_active' => '0'])->get();
         }
         else if(Auth::guard('employee')->check()){
             $cid = $this->employee->cid;
@@ -580,33 +584,33 @@ class MasterController extends Controller
             $client_data = \App\Admin::select('location')->where(['rid'=>$cid])->first();
             if($client_data->location == "single" && $role == 2)
             {   
-                $category = DB::table('tbl_category')
-                    ->select('tbl_category.*','tbl_type.type_name')
-                    ->leftjoin('tbl_type','tbl_type.type_id','=','tbl_category.type_id')
-                    ->where(['tbl_category.is_active' => '1','tbl_category.cid'=>$cid,'tbl_category.lid'=>$lid])
-                    ->orderBy('tbl_category.cat_name', 'asc')
+                $category = DB::table('bil_category')
+                    ->select('bil_category.*','bil_type.type_name')
+                    ->leftjoin('bil_type','bil_type.type_id','=','bil_category.type_id')
+                    ->where(['bil_category.is_active' => '1','bil_category.cid'=>$cid,'bil_category.lid'=>$lid])
+                    ->orderBy('bil_category.cat_name', 'asc')
                     ->get();
-                $unit_data = DB::table('tbl_AddIUnits')->where(['is_active' => '0','cid'=>$cid,'lid'=>$lid])->get();
+                $unit_data = DB::table('bil_AddIUnits')->where(['is_active' => '0','cid'=>$cid,'lid'=>$lid])->get();
             }
             else if($client_data->location == "multiple" && $role == 2)
             {
-                $category = DB::table('tbl_category')
-                    ->select('tbl_category.*','tbl_type.type_name')
-                    ->leftjoin('tbl_type','tbl_type.type_id','=','tbl_category.type_id')
-                    ->where(['tbl_category.is_active' => '1','tbl_category.cid'=>$cid,'tbl_category.lid'=>$lid])
-                    ->orderBy('tbl_category.cat_name', 'asc')
+                $category = DB::table('bil_category')
+                    ->select('bil_category.*','bil_type.type_name')
+                    ->leftjoin('bil_type','bil_type.type_id','=','bil_category.type_id')
+                    ->where(['bil_category.is_active' => '1','bil_category.cid'=>$cid,'bil_category.lid'=>$lid])
+                    ->orderBy('bil_category.cat_name', 'asc')
                     ->get();
-                $unit_data = DB::table('tbl_AddIUnits')->where(['is_active' => '0','cid'=>$cid,'lid'=>$lid])->get();
+                $unit_data = DB::table('bil_AddIUnits')->where(['is_active' => '0','cid'=>$cid,'lid'=>$lid])->get();
             }
             else if($client_data->location == "multiple" && $role == 1)
             {
-                $category = DB::table('tbl_category')
-                    ->select('tbl_category.*','tbl_type.type_name')
-                    ->leftjoin('tbl_type','tbl_type.type_id','=','tbl_category.type_id')
-                    ->where(['tbl_category.is_active' => '1','tbl_category.cid'=>$cid,'tbl_category.lid'=>$lid])
-                    ->orderBy('tbl_category.cat_name', 'asc')
+                $category = DB::table('bil_category')
+                    ->select('bil_category.*','bil_type.type_name')
+                    ->leftjoin('bil_type','bil_type.type_id','=','bil_category.type_id')
+                    ->where(['bil_category.is_active' => '1','bil_category.cid'=>$cid,'bil_category.lid'=>$lid])
+                    ->orderBy('bil_category.cat_name', 'asc')
                     ->get();
-                $unit_data = DB::table('tbl_AddIUnits')->where(['is_active' => '0','cid'=>$cid,'lid'=>$lid])->get();
+                $unit_data = DB::table('bil_AddIUnits')->where(['is_active' => '0','cid'=>$cid,'lid'=>$lid])->get();
             }
         } 
         
@@ -635,7 +639,7 @@ class MasterController extends Controller
     {
         $status = 1;
         $query = \App\Item::where('item_id', $item_id)
-                ->update(['is_active' => $status]);
+                ->update(['is_active' => $status,'sync_flag' => 0]);
         return redirect('item_data');
     }
      public function editItem()
@@ -643,22 +647,22 @@ class MasterController extends Controller
         $item_id=$_GET['item_id'];
         if(Auth::guard('admin')->check()){
             $id = $this->admin->rid;
-            $category = DB::table('tbl_category')
-                ->select('tbl_category.*','tbl_type.type_name')
-                ->leftjoin('tbl_type','tbl_type.type_id','=','tbl_category.type_id')
-                ->where(['tbl_category.is_active' => '1','tbl_category.cid'=>$id])
-                ->orderBy('tbl_category.cat_name', 'asc')
+            $category = DB::table('bil_category')
+                ->select('bil_category.*','bil_type.type_name')
+                ->leftjoin('bil_type','bil_type.type_id','=','bil_category.type_id')
+                ->where(['bil_category.is_active' => '1','bil_category.cid'=>$id])
+                ->orderBy('bil_category.cat_name', 'asc')
                 ->get();
-            $unit_data = DB::table('tbl_AddIUnits')->where(['is_active' => '0','cid'=>$id])->get();
+            $unit_data = DB::table('bil_AddIUnits')->where(['is_active' => '0','cid'=>$id])->get();
             $query = \App\Item::where('item_id', $item_id)->where(['is_active' => '0','cid'=>$id])->first();
         }else if(Auth::guard('web')->check()){
-            $category = DB::table('tbl_category')
-                ->select('tbl_category.*','tbl_type.type_name')
-                ->leftjoin('tbl_type','tbl_type.type_id','=','tbl_category.type_id')
-                ->where(['tbl_category.is_active' => '1'])
-                ->orderBy('tbl_category.cat_name', 'asc')
+            $category = DB::table('bil_category')
+                ->select('bil_category.*','bil_type.type_name')
+                ->leftjoin('bil_type','bil_type.type_id','=','bil_category.type_id')
+                ->where(['bil_category.is_active' => '1'])
+                ->orderBy('bil_category.cat_name', 'asc')
                 ->get();
-            $unit_data = DB::table('tbl_AddIUnits')->where(['is_active' => '0'])->get();
+            $unit_data = DB::table('bil_AddIUnits')->where(['is_active' => '0'])->get();
             $query = \App\Item::where('item_id', $item_id)->where(['is_active' => '0'])->first();
         }
         else if(Auth::guard('employee')->check()){
@@ -670,29 +674,29 @@ class MasterController extends Controller
             
             $client_data = \App\Admin::select('location')->where(['rid'=>$cid])->first();
             if($client_data->location == "single" && $role == 2){
-                $category = DB::table('tbl_category')
-                    ->select('tbl_category.*','tbl_type.type_name')
-                    ->leftjoin('tbl_type','tbl_type.type_id','=','tbl_category.type_id')
-                    ->where(['tbl_category.is_active' => '1','tbl_category.cid'=>$cid])
-                    ->orderBy('tbl_category.cat_name', 'asc')
+                $category = DB::table('bil_category')
+                    ->select('bil_category.*','bil_type.type_name')
+                    ->leftjoin('bil_type','bil_type.type_id','=','bil_category.type_id')
+                    ->where(['bil_category.is_active' => '1','bil_category.cid'=>$cid])
+                    ->orderBy('bil_category.cat_name', 'asc')
                     ->get();
                
                 
-                $unit_data = DB::table('tbl_AddIUnits')->where(['is_active' => '0','cid'=>$cid])->get();
+                $unit_data = DB::table('bil_AddIUnits')->where(['is_active' => '0','cid'=>$cid])->get();
                 $query = \App\Item::where('item_id', $item_id)
                         ->where(['is_active' => '0','cid'=>$cid])->first();
             }
             else
             {
-                $category = DB::table('tbl_category')
-                ->select('tbl_category.*','tbl_type.type_name')
-                ->leftjoin('tbl_type','tbl_type.type_id','=','tbl_category.type_id')
-                ->where(['tbl_category.is_active' => '1','tbl_category.cid'=>$cid,'tbl_category.lid'=>$lid])
-                ->orWhere(['tbl_category.emp_id'=>$emp_id])
-                ->orWhere(['tbl_category.emp_id'=>$sub_emp_id])
-                ->orderBy('tbl_category.cat_name', 'asc')
+                $category = DB::table('bil_category')
+                ->select('bil_category.*','bil_type.type_name')
+                ->leftjoin('bil_type','bil_type.type_id','=','bil_category.type_id')
+                ->where(['bil_category.is_active' => '1','bil_category.cid'=>$cid,'bil_category.lid'=>$lid])
+                ->orWhere(['bil_category.emp_id'=>$emp_id])
+                ->orWhere(['bil_category.emp_id'=>$sub_emp_id])
+                ->orderBy('bil_category.cat_name', 'asc')
                 ->get();
-                $unit_data = DB::table('tbl_AddIUnits')
+                $unit_data = DB::table('bil_AddIUnits')
                         ->where(['is_active' => '0','cid'=>$cid,'lid'=>$lid])
                         ->orWhere(['emp_id'=>$emp_id])
                         ->orWhere(['emp_id'=>$sub_emp_id])
@@ -709,6 +713,7 @@ class MasterController extends Controller
         $requestData = $request->all();
 //        echo "<pre/>";print_r($requestData);exit;
         $item_id=$requestData['item_id'];
+		$requestData['sync_flag']=0;
          $users = \App\Item::findorfail($item_id);
         $users->update($requestData);
         Session::flash('alert-success','Updated Successfully.');
@@ -752,8 +757,9 @@ class MasterController extends Controller
     public function deleteSupplier($sup_id)
     {
         $status = 1;
+		$requestData['sync_flag']=0;
         $query = \App\Supplier::where('sup_id', $sup_id)
-                ->update(['is_active' => $status]);
+                ->update(['is_active' => $status,'sync_flag' => 0]);
         return redirect('supplier_data');
     }
     
@@ -828,6 +834,7 @@ class MasterController extends Controller
     {
         $requestData = $request->all();
 //        echo "<pre/>";print_r($requestData);exit;
+		$requestData['sync_flag']=0;
         $sup_id=$requestData['sup_id'];
          $users = \App\Supplier::findorfail($sup_id);
         $users->update($requestData);

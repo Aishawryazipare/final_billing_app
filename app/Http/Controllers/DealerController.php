@@ -44,12 +44,12 @@ class DealerController extends Controller
     }
    
     public function getDealerData() {
-        $dealer_data = DB::table('tbl_dealer')->where(['is_active' => '1'])->orderBy('dealer_name', 'asc')->get();
+        $dealer_data = DB::table('bil_dealer')->where(['is_active' => '1'])->orderBy('dealer_name', 'asc')->get();
         return view('master_data.dealer_data',['dealer_data' => $dealer_data]);
     }
     
     public function getMachineData() {
-        $machine_data = DB::table('tbl_machine_data')->where(['is_active' => '1'])->orderBy('machine_model_no', 'asc')->get();
+        $machine_data = DB::table('bil_machine_data')->where(['is_active' => '1'])->orderBy('machine_model_no', 'asc')->get();
         return view('master_data.machine_data',['machine_data' => $machine_data]);
     }
     
@@ -82,8 +82,8 @@ class DealerController extends Controller
 //        $pin = generatePIN(6);
 //        echo $pin;
 //        exit;
-        $state_list=DB::table('tbl_states')->get();
-        $city_list=DB::table('tbl_cities')->get();
+        $state_list=DB::table('bil_states')->get();
+        $city_list=DB::table('bil_cities')->get();
         return view('master_data.add_dealer',['state_list'=>$state_list,'city_list'=>$city_list]);
     }
     
@@ -128,8 +128,8 @@ class DealerController extends Controller
     {
         $dealer_id=$_GET['dealer_id'];
         $query = Dealer::where('dealer_id', $dealer_id)->where(['is_active' => '1'])->first();
-        $state_list=DB::table('tbl_states')->get();
-        $city_list=DB::table('tbl_cities')->get();
+        $state_list=DB::table('bil_states')->get();
+        $city_list=DB::table('bil_cities')->get();
         return view('master_data.edit_dealer',['dealer_data' => $query,'state_list'=>$state_list,'city_list'=>$city_list]);
     }
     
@@ -156,7 +156,7 @@ class DealerController extends Controller
         $query =Dealer::findorfail($dealer_id);
         if(!empty($query))
         {
-            $res=DB::table('tbl_dealer')
+            $res=DB::table('bil_dealer')
                 ->where('dealer_id', '=',$dealer_id)
                 ->update([
                     'owner_name'=>$owner_name,
@@ -195,7 +195,7 @@ class DealerController extends Controller
         $query =Dealer::findorfail($machine_id);
         if(!empty($query))
         {
-            $res=DB::table('tbl_machine_data')
+            $res=DB::table('bil_machine_data')
                 ->where('machine_id', '=',$machine_id)
                 ->update(['machine_model_no'=>$machine_model_no,
                     'machine_ser_no'=>$machine_ser_no,
@@ -229,6 +229,20 @@ class DealerController extends Controller
         $status = 0;
         $query = Machine::where('machine_id', $machine_id)->update(['is_active' => $status]);
         return redirect('machine_data');
+    }
+
+    public function getSerialNo(Request $request) 
+    {
+       $machine_ser_no=$request['machine_ser_no'];
+       $result= Machine::select('machine_ser_no')->where('machine_ser_no','=',$machine_ser_no)->first();
+       if(!empty($result))
+       {
+            echo json_encode("present");
+       }
+       else
+       {
+           echo json_encode("not present");
+       }
     }
 
 }

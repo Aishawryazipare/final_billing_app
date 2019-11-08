@@ -21,8 +21,8 @@
       </h1>
     
       <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Subscription List</li>
+        <li><a href="#"><i class="fa fa-dashboard"></i>  Master Data</a></li>
+        <li class="active">Item List</li>
       </ol>
     </section>
    
@@ -36,7 +36,7 @@
               <table id="example1" class="table table-bordered table-striped" border="1">
                 <thead>
                 <tr>
-                  <th style="width:50px;">Sr.No</th>
+                  <th style="width:50px;">Code</th>
                   <th>Item Name</th>
                   <th>Rate</th>
                   <th>Discount Rate</th>
@@ -49,13 +49,18 @@
                 <tbody>
                     @foreach($item_data as $s)
                         <tr>
-                            <td>{{$x++}}</td>
+                            <td>{{$s->item_id}}</td>
                             <td>{{$s->item_name}}</td>
                             <td>{{$s->item_rate}}</td>
                             <td>{{$s->item_dis}}</td>
                             <td>{{$s->item_final_rate}}</td>
-                            <td>{{$s->item_category}}</td>
-                            <td>{{$s->item_unit}}</td>
+                            <?php
+                            $category_data= \App\Category::select('*')->where(['cat_id'=>$s->item_category])->first();
+                            $unit_data= \App\Type::select('*')->where(['Unit_id'=>$s->item_units])->first();
+                            //echo "<pre/>";print_r($s->item_unit);exit;
+                            ?>
+                            <td>{{$category_data->cat_name}}</td>
+                            <td>{{@$unit_data->Unit_name}}</td>
                             <td>
                                 <a href="{{ url('edit-item?item_id='.$s->item_id)}}"><span class="fa fa-edit"></span></a>
                                 <a href="{{ url('delete-item')}}/{{$s->item_id}}" style="color:red" class="delete"><span class="fa fa-trash"></span></a>

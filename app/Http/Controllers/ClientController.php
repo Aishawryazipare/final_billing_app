@@ -23,7 +23,7 @@ class ClientController extends Controller
     }
     
     public function getClientData() {
-        $client_data = DB::table('tbl_Registration')->orderBy('rid', 'asc')->get();
+        $client_data = DB::table('bil_Registration')->orderBy('rid', 'asc')->get();
         return view('master_data.client_data',['client_data' => $client_data]);
     }   
     

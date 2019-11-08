@@ -5,7 +5,7 @@
       Edit Item
     </h1>
     <ol class="breadcrumb">
-      <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+      <li><a href="#"><i class="fa fa-dashboard"></i>  Master Data</a></li>
       <li class="active">Edit Item</li>
     </ol> 
 </section>
@@ -21,17 +21,17 @@
                 {{ csrf_field() }}
                 <div class="box-body">
                     <div class="form-group">
-                        <label for="lbl_cat_name" class="col-sm-2 control-label">Item Name</label>
+                        <label for="lbl_cat_name" class="col-sm-2 control-label">Item Name<span style="color:#ff0000;">*</span></label>
                         <div class="col-sm-4">
                             <input type="text" class="form-control" id="cat_name" placeholder="Item" name="item_name" value="{{$item_data->item_name}}" required>
                         </div>
-                        <label for="lbl_cat_name" class="col-sm-2 control-label">Rate</label>
+                        <label for="lbl_cat_name" class="col-sm-2 control-label">Rate<span style="color:#ff0000;">*</span></label>
                         <div class="col-sm-4">
                             <input type="text" class="form-control rate_cal" id="rate" placeholder="Item Rate" name="item_rate" value="{{$item_data->item_rate}}" required>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="lbl_cat_desc" class="col-sm-2 control-label">Discount %</label>
+                        <label for="lbl_cat_desc" class="col-sm-2 control-label">Discount %<span style="color:#ff0000;">*</span></label>
                         <div class="col-sm-4">
                             <input type="text" class="form-control rate_cal" id="disc" placeholder="Item Disc" name="item_dis" value="{{$item_data->item_dis}}" required>
                         </div>
@@ -41,7 +41,7 @@
                         </div>
                     </div>
                      <div class="form-group">
-                        <label for="lbl_cat_desc" class="col-sm-2 control-label">Tax</label>
+                        <label for="lbl_cat_desc" class="col-sm-2 control-label">Tax<span style="color:#ff0000;">*</span></label>
                         <div class="col-sm-4">
                             <input type="text" class="form-control" id="tax" placeholder="Tax" name="item_tax" value="{{$item_data->item_tax}}" required>
                         </div>
@@ -67,7 +67,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="lbl_cat_desc" class="col-sm-2 control-label">Category</label>
+                        <label for="lbl_cat_desc" class="col-sm-2 control-label">Category<span style="color:#ff0000;">*</span></label>
                         <div class="col-sm-4">
                            <select class="form-control select2" style="width: 100%;" name="item_category"  required>
                          <option value="">-- Select Category -- </option>
@@ -76,14 +76,14 @@
                         @endforeach
                     </select>
                     </div>
-                        <label for="lbl_cat_desc" class="col-sm-2 control-label">Stock</label>
+                        <label for="lbl_cat_desc" class="col-sm-2 control-label">Stock<span style="color:#ff0000;">*</span></label>
                         <div class="col-sm-4">
                             <input type="text" class="form-control" id="cat_name" placeholder="Tax" name="item_stock" value="{{$item_data->item_stock}}" required>
                         </div>
                     </div>
                          <div class="form-group">
                         
-                         <label for="lbl_cat_desc" class="col-sm-2 control-label">Bar Code</label>
+                         <label for="lbl_cat_desc" class="col-sm-2 control-label">Bar Code<span style="color:#ff0000;">*</span></label>
                         <div class="col-sm-4">
                             <input type="text" class="form-control" id="cat_name" placeholder="Tax value" name="item_barcode" value="{{$item_data->item_barcode}}" required>
                         </div>

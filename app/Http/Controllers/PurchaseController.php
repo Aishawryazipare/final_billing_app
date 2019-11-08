@@ -28,10 +28,20 @@ class PurchaseController extends Controller
     
      public function getInventory()
     {
+		$flag=0;
         if(Auth::guard('admin')->check()){
             $id = $this->admin->rid;
+			$flag=1;
             $supplier_data= \App\Supplier::select('sup_id','sup_name')->where(['is_active'=>0,'cid'=>$id])->get();
             $product_data = \App\Item::select('item_id','item_name')->where(['is_active'=>0,'cid'=>$id])->get();
+            $inventory_data = DB::table('bil_inventory')
+                     ->select('bil_inventory.*','bil_AddItems.item_name as inventoryitemid','bil_AddSupplier.sup_name as inventorysupid')
+                     ->leftjoin('bil_AddItems','bil_AddItems.item_id','=','bil_inventory.inventoryitemid')
+                     ->leftjoin('bil_AddSupplier','bil_AddSupplier.sup_id','=','bil_inventory.inventorysupid')
+                     ->where(['bil_inventory.cid'=>$id])
+                     ->orderby('bil_AddSupplier.sup_id','desc')
+                     ->get();
+//            $inventory_data= Inventory::leftjoin('tbl_')->select('*')->where(['cid'=>$id])->get();
         }else if(Auth::guard('web')->check()){
             $supplier_data= \App\Supplier::select('sup_id','sup_name')->get();
             $product_data = \App\Item::select('item_id','item_name')->where(['is_active'=>0])->get();
@@ -47,23 +57,45 @@ class PurchaseController extends Controller
             {   
                 $product_data = \App\Item::select('item_id','item_name')->where(['is_active'=>0,'cid'=>$cid])->get();
                 $supplier_data= \App\Supplier::select('sup_id','sup_name')->where(['is_active'=>0,'cid'=>$cid])->get();
+                 $inventory_data = DB::table('bil_inventory')
+                     ->select('bil_inventory.*','bil_AddItems.item_name as inventoryitemid','bil_AddSupplier.sup_name as inventorysupid')
+                     ->leftjoin('bil_AddItems','bil_AddItems.item_id','=','bil_inventory.inventoryitemid')
+                     ->leftjoin('bil_AddSupplier','bil_AddSupplier.sup_id','=','bil_inventory.inventorysupid')
+                     ->where(['bil_inventory.cid'=>$cid])
+                     ->orderby('bil_AddSupplier.sup_id','desc')
+                     ->get();
             }
             else if($client_data->location == "multiple" && $role == 2)
             {
                 $product_data = \App\Item::select('item_id','item_name')->where(['is_active'=>0,'cid'=>$cid,'lid'=>$lid])->get();
                 $supplier_data= \App\Supplier::select('sup_id','sup_name')->where(['is_active'=>0,'cid'=>$cid,'lid'=>$lid])->get();
+                 $inventory_data = DB::table('bil_inventory')
+                     ->select('bil_inventory.*','bil_AddItems.item_name as inventoryitemid','bil_AddSupplier.sup_name as inventorysupid')
+                     ->leftjoin('bil_AddItems','bil_AddItems.item_id','=','bil_inventory.inventoryitemid')
+                     ->leftjoin('bil_AddSupplier','bil_AddSupplier.sup_id','=','bil_inventory.inventorysupid')
+                     ->where(['bil_inventory.cid'=>$cid,'bil_inventory.lid'=>$lid])
+                     ->orderby('bil_AddSupplier.sup_id','desc')
+                     ->get();
             }
             else if($client_data->location == "multiple" && $role == 1)
             {
+				$flag=1;
                 $product_data = \App\Item::select('item_id','item_name')->where(['is_active'=>0,'cid'=>$cid,'lid'=>$lid])->get();
                 $supplier_data= \App\Supplier::select('sup_id','sup_name')->where(['is_active'=>0,'cid'=>$cid,'lid'=>$lid])->get();
+                 $inventory_data = DB::table('bil_inventory')
+                     ->select('bil_inventory.*','bil_AddItems.item_name as inventoryitemid','bil_AddSupplier.sup_name as inventorysupid')
+                     ->leftjoin('bil_AddItems','bil_AddItems.item_id','=','bil_inventory.inventoryitemid')
+                     ->leftjoin('bil_AddSupplier','bil_AddSupplier.sup_id','=','bil_inventory.inventorysupid')
+                     ->where(['bil_inventory.cid'=>$cid,'bil_inventory.lid'=>$lid])
+                     ->orderby('bil_AddSupplier.sup_id','desc')
+                     ->get();
             }
         }
 //        echo "<pre>";
 //        print_r($product_data);
 //        exit;
 //        $supplier_data= \App\Supplier::select('sup_id','sup_name')->get();
-        return view('purchase.add_inventory',['supplier_data'=>$supplier_data,'product_data'=>$product_data]);
+        return view('purchase.add_inventory',['supplier_data'=>$supplier_data,'product_data'=>$product_data,'flag'=>$flag,'inventory_data'=>$inventory_data]);
     }
     
     public function getItemid(Request $request) {
@@ -96,6 +128,7 @@ class PurchaseController extends Controller
         $requestData = $request->all();
         $item_id=$requestData['inventoryitemid'];
         $status=$requestData['inventorystatus'];
+		$requestData['sync_flag']=0;
         $item_quantity=$requestData['inventoryitemquantity'];
         if(Auth::guard('admin')->check()){
             $requestData['cid'] = $this->admin->rid;
@@ -123,7 +156,7 @@ class PurchaseController extends Controller
                 $item_stock=$item_quantity;
             }
         }
-        Item::find($item_id)->update(['item_stock' => $item_stock]);
+        Item::find($item_id)->update(['item_stock' => $item_stock,'sync_flag' => 0]);
         Session::flash('alert-success','Added Successfully.');
         return redirect('inventory');
     }  

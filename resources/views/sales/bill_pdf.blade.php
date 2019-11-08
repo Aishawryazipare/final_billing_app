@@ -1,3 +1,8 @@
+<style>
+    @page {
+                margin:20px 25px 20px 25px;
+            }
+</style>
 <?php
 //echo "<pre>";
 ////print_r($setting_details);
@@ -29,8 +34,8 @@ if($page_size=="A5")
 <hr>
 <table width="100%">
     <tr>
-        <td>Bill No: {{$bill_details[0]->bill_no}}</td>
-        <td style="text-align: right;">Date: <?php echo date('Y-m-d');?></td>
+        <td><b>Bill No: {{$bill_details[0]->bill_no}}</b></td>
+        <td style="text-align: right;"><b>Date: <?php echo date('Y-m-d');?></b></td>
     </tr>
 </table>
 <table align="center">
@@ -87,7 +92,7 @@ if($page_size=="A5")
 {?>
 @if(!empty($setting_details))
     @if($setting_details->h1!=null)
-        <h5><center>{{$setting_details->h1}}</center></h5>
+        <center><h5>{{$setting_details->h1}}</h5></center>
     @endif
     @if($setting_details->h2!=null)
         <h5><center>{{$setting_details->h2}}</center></h5>
@@ -102,14 +107,13 @@ if($page_size=="A5")
         <h5><center>{{$setting_details->h5}}</center></h5>
     @endif
 @endif
-
-<table align="center">
+<table align="center" width="100%">
     <tr>
-        <td style="font-size:12px;"><b>Bill No: {{$bill_details[0]->bill_no}}</b></td>
-        <td style="font-size:12px;"><b>Date: <?php echo date('Y-m-d');?></b></td>
+        <td style="font-size:12px;width:70px;"><b>Bill No: {{$bill_details[0]->bill_no}}</b></td>
+        <td style="font-size:12px;text-align:right;width:100px"><b>Date: <?php echo date('Y-m-d');?></b></td>
     </tr>
 </table>
-<b align="center">--------------------------------</b>
+<b align="center">----------------------------------</b>
 <table align="center">
     <thead>
         <th style="font-size:12px;">No.</th>
@@ -141,7 +145,7 @@ if($page_size=="A5")
 </tr>
 </tbody>
 </table>
-<b align="center">--------------------------------</b>
+<b align="center">----------------------------------</b>
 @if(!empty($setting_details))
     @if($setting_details->f1!=null)
         <h5><center>{{$setting_details->f1}}</center></h5>
@@ -180,12 +184,13 @@ if($page_size=="A5")
     @endif
 @endif
 
-<table align="center">
+<table align="center" width="100%">
     <tr>
         <td style="font-size:12px;"><b>Bill No: {{$bill_details[0]->bill_no}}</b></td>
         <td style="text-align: right;font-size:12px;"><b>Date: <?php echo date('Y-m-d');?></b></td>
     </tr>
 </table>
+<hr>
 <table align="center">
     <thead>
         <th style="font-size:12px;">No.</th>
@@ -237,7 +242,6 @@ if($page_size=="A5")
 @endif
 <?php
 }?>
-
 <?php
 //exit;
 ?>

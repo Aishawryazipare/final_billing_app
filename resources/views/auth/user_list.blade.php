@@ -4,11 +4,11 @@
   <link rel="stylesheet" href="bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
     <section class="content-header">
       <h1>
-        Employee List
+        User List
       </h1>
       <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Employee List</li>
+        <li class="active">User List</li>
       </ol>
     </section>
   @if (Session::has('alert-success'))
@@ -20,7 +20,7 @@
   <section class="content">
    <div class="box">
             <div class="box-header">
-              <h3 class="box-title">EMPLOYEE LIST</h3><a href="{{url('register')}}" class="panel-title" style="margin-left: 70%;color: #dc3d59;"><span class="fa fa-plus-square"></span> Add New Employee</a>
+              <h3 class="box-title">USER LIST</h3><a href="{{url('register')}}" class="panel-title" style="margin-left: 81%;color: #dc3d59;"><span class="fa fa-plus-square"></span> Add New User</a>
             </div>
             <!-- /.box-header -->
              <?php $x = 1; ?>

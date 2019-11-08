@@ -7,7 +7,7 @@
 </style>
 <div class="login-box">
   <div class="login-logo">
-    <a href="/" style="color:white;"><b>One Care</b> App</a>
+    <a href="/" style="color:white;"><b>airBill Plus</b> App</a>
   </div>
   <div class="login-box-body">
     <p class="login-box-msg">Log in to start your session</p>

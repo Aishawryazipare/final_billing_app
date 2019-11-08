@@ -22,11 +22,11 @@ if(Auth::guard('employee')->check()){
 ?>
 <section class="content-header">
     <h1>
-        Employee Register
+        User Register
     </h1>
     <ol class="breadcrumb">
-        <li><a href="{{url('user_mgt')}}"><i class="fa fa-dashboard"></i>Employee</a></li>
-        <li class="active">Add Employee</li>
+        <li><a href="{{url('user_mgt')}}"><i class="fa fa-dashboard"></i>Users</a></li>
+        <li class="active">Add User</li>
     </ol>
 </section>
 
@@ -55,7 +55,7 @@ if(Auth::guard('employee')->check()){
                                         if(Auth::guard('admin')->check()){ ?>
                                             <option value="1">Admin</option>
                                     <?php } }?>
-                                    <option value="2">Employee</option>
+                                    <option value="2">User</option>
                                 </select>
                             </div>
                         </div>
@@ -98,7 +98,7 @@ if(Auth::guard('employee')->check()){
                                 <select class="form-control select2" style="width: 100%;" name="lid" required>
                                     <option value="">-- Select Location -- </option>
                                     @foreach($city as $c)
-                                    <option value="{{$c->city_id}}">{{$c->city_name}}</option>
+                                    <option value="{{$c->loc_id}}">{{$c->loc_name}}</option>
                                     @endforeach
                                 </select>
                             </div>

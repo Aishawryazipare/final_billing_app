@@ -28,7 +28,7 @@
 <section class="content">
     <div class="row">
         <div class="col-md-12">
-            <div class="box" style="border-top: 3px solid #ffffff;">
+            <div class="box" style="border-top: 3px solid #ffffff;border: 2px solid #00ffc3;">
                 <div class="box-header">
                     <h3 class="box-title"></h3>
                 </div>
@@ -37,26 +37,51 @@
                     <div class="box-body">
                         <input type="hidden" name="en_id" id="en_id" value="" />
                        <div class="form-group">
-                        <label for="lbl_cat_name" class="col-sm-2 control-label">From Date</label>
+                        <label for="lbl_cat_name" class="col-sm-2 control-label ">From Date</label>
                         <div class="col-sm-4">
                             <div class="input-group date">
                                             <div class="input-group-addon">
-                                              <i class="fa fa-calendar"></i>
+                                              <i class="fa fa-calendar  calendar1"></i>
                                             </div>
-                                <input type="text" name="from_date" class="form-control mobile_date datepicker"id="from_date" autocomplete="off" required/>
+                                <input type="text" name="from_date" class="form-control mobile_date datepicker from_date"id="from_date" style="background-color: #ffffff;" autocomplete="off" required/>
                                         </div>
                         </div>
                          <label for="lbl_cat_name" class="col-sm-2 control-label">To Date</label>
                         <div class="col-sm-4">
                             <div class="input-group date">
                                             <div class="input-group-addon">
-                                              <i class="fa fa-calendar"></i>
+                                              <i class="fa fa-calendar  calendar2"></i>
                                             </div>
-                                <input type="text" name="to_date" class="form-control mobile_date datepicker" value=""  autocomplete="off"/>
+                                <input type="text" name="to_date" class="form-control mobile_date datepicker to_date" value="" style="background-color: #ffffff;" autocomplete="off"/>
                                         </div>
                         </div>
                     </div>
-                      
+                       
+                        <div class="form-group">
+                          <?php if($location_data!=''){ ?>
+                         <label for="lbl_cat_name" class="col-sm-2 control-label">Location</label>
+                        <div class="col-sm-4">
+                  <select class="form-control select2" style="width: 100%;" name="location" id="location">
+                         <option value="">-- Select Location -- </option> 
+                         <option value="all">All</option> 
+                        @foreach($location_data as $u)
+                        <option value="{{$u->loc_id}}">{{$u->loc_name}}</option>
+                        @endforeach
+                    </select>
+                        </div>   
+                        <?php } ?>
+                          <?php if($employee_data!=''){ ?>
+                                        <label for="lbl_cat_name" class="col-sm-2 control-label">Employee</label>
+                        <div class="col-sm-4">
+                  <select class="form-control select2 employee" style="width: 100%;" name="employee" id="employee">
+                         <option value="">-- Select Employee -- </option> 
+                        @foreach($employee_data as $u)
+                        <option value="{{$u->id}}">{{$u->name}}</option>
+                        @endforeach
+                    </select>
+                        </div>  
+                          <?php } ?>
+                                                </div>
                         </div>
                     <div class="box-footer">
                         <button type="button"  id="btnsubmit" class="btn btn-success"><i class="fa fa-fw fa-eye"></i>View</button>
@@ -67,17 +92,24 @@
             </div>
         </div>   
     </div>
+     @auth('admin')
+     @endauth
+
+
     <div class="row result" style="display:none;">
         <div class="col-md-12">
              <div class="box">
             <div class="box-body">
+                <span id="amt"></span>
               <table id="example1" class="table table-bordered table-striped" border="1">
-                <thead>
+                <thead id="header_data">
                 <tr>
-                  <th style="width:50px;">Sr.No</th>
+                  <th style="width:50px;">No</th>
                   <th>Bill No</th>
+                  <th>Customer Name</th>
                   <th>Total Amount</th>
                   <th>Cash/Credit</th>
+                  <th>Location</th>
                 </tr>
                 </thead>
                 <tbody id="table_data">
@@ -98,13 +130,39 @@
 <script src="js/sweetalert.min.js"></script>
 <script>
 $(document).ready(function () {
-//    $('.select2').select2();
+    var fullDate = new Date();
+    var month = fullDate.getMonth() + 1;
+    var currentDate = fullDate.getFullYear() + "-" + month + "-" + fullDate.getDate();
+     $.ajax({
+                            url: 'sale_report',
+                            type: "POST",
+                            data: {from_date:currentDate,to_date:currentDate},
+                            success: function(data) {
+                            console.log(data);
+                            var a=JSON.parse(data);
+                            $('#amt').html("<h3>Total Amount: "+a.amount+"</h3>");
+                            $("#header_data").html(a.head);
+                            $("#table_data").html(a.other_data);
+                             $('#example1').DataTable();
+                            if(a.amount>0)
+                            $(".result").show();
+                            }
+                    });  
+    $('.select2').select2();
     $('#example1').DataTable();
  $('.datepicker').datepicker({
                 format: "yyyy-mm-dd",
             autoclose: true,
-            todayHighlight: true
-    })
+            todayHighlight: true,
+            disableTouchKeyboard: true,
+            Readonly: true
+}).attr("readonly", "readonly");
+$('.calendar1').click(function() {
+    $(".from_date").focus();
+  });
+  $('.calendar2').click(function() {
+    $(".to_date").focus();
+  });
         $('.datepicker-autoclose').datepicker();  
         $("#btnsubmit").click(function(){
             var from_date=$('#from_date').val();
@@ -120,13 +178,31 @@ $(document).ready(function () {
                             data: $("#userForm").serialize(),
                             success: function(data) {
                             console.log(data);
-                            $("#table_data").html(data);
+                            var a=JSON.parse(data);
+                            $('#amt').html("<h3>Total Amount: "+a.amount+"</h3>");
+                            $("#header_data").html(a.head);
+                            $("#table_data").html(a.other_data);
+                             $('#example1').DataTable();
                             $(".result").show();
                             }
                     });  
             }
             
         }); 
+        $('#location').change(function() {
+            
+          var location=$(this).val();
+            $.ajax({
+                            url: 'get_employees',
+                            type: "GET",
+                            data: {location:location},
+                            success: function(data) {
+                            console.log(data);
+                             $('#employee').html('');
+                            $('.employee').html(data);
+                            }
+                    });  
+});
     });
 </script>
 @endsection

@@ -174,6 +174,7 @@ Route::get('check_location','UserController@checkLocation');
 
 //Report
 Route::get('sale_report','ReportController@getSale');
+Route::get('get_employees','ReportController@getEmployee');
 Route::post('sale_report','ReportController@fetchSale');
 
 //Route::prefix('admin')->group(function () {
@@ -202,6 +203,7 @@ Route::post('add_machine','DealerController@addMachine');
 Route::get('delete-machine/{machine_id}','DealerController@deleteMachine');
 Route::get('edit-machine','DealerController@editMachine');
 Route::post('edit-machine','DealerController@updateMachine');
+Route::get('get_serial_no','DealerController@getSerialNo');
 
 //customer data
 //Route::get('customer_data','CustomerController@getCustomerData');
@@ -279,5 +281,21 @@ Route::post('main-setting','SettingController@addMainSetting');
 //download bill
 Route::get('download_bill','SalesController@downloadBill');
 
+//Add Location
+Route::get('bil_location_list','BillingLocationController@listLocation');
+Route::get('bil_location_add','BillingLocationController@addLocation');
+Route::post('bil_location_save','BillingLocationController@saveLocation');
+Route::get('bil-location-edit','BillingLocationController@editLocation');
+Route::post('bil_location_update','BillingLocationController@updateLocation');
+Route::get('bil-location-delete/{loc_id}','BillingLocationController@deleteLocation');
+Route::get('check-exist-location','BillingLocationController@check');
+
+//notification
+Route::get('sync_category','HomeController@send');
+Route::get('autocomplete', 'SalesController@search');
+
+//delete bill_no
+Route::get('delete_bill','SalesController@delete_sales');
+Route::post('cancel_bill','SalesController@delete_bill');
 
 

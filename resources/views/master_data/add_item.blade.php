@@ -5,7 +5,7 @@
       Add Item
     </h1>
     <ol class="breadcrumb">
-      <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+      <li><a href="#"><i class="fa fa-dashboard"></i>  Master Data</a></li>
       <li class="active">Add Item</li>
     </ol> 
 </section>
@@ -21,17 +21,17 @@
                 {{ csrf_field() }}
                 <div class="box-body">
                     <div class="form-group">
-                        <label for="lbl_cat_name" class="col-sm-2 control-label">Item Name</label>
+                        <label for="lbl_cat_name" class="col-sm-2 control-label">Item Name<span style="color:#ff0000;">*</span></label>
                         <div class="col-sm-4">
                             <input type="text" class="form-control" id="cat_name" placeholder="Item" name="item_name" required>
                         </div>
-                        <label for="lbl_cat_name" class="col-sm-2 control-label">Rate</label>
+                        <label for="lbl_cat_name" class="col-sm-2 control-label">Rate<span style="color:#ff0000;">*</span></label>
                         <div class="col-sm-4">
                             <input type="text" class="form-control rate_cal" id="rate" placeholder="Item Rate" name="item_rate" required>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="lbl_cat_desc" class="col-sm-2 control-label">Discount %</label>
+                        <label for="lbl_cat_desc" class="col-sm-2 control-label">Discount %<span style="color:#ff0000;">*</span></label>
                         <div class="col-sm-4">
                             <input type="text" class="form-control rate_cal" id="disc" placeholder="Item Disc" name="item_dis" required>
                         </div>
@@ -41,7 +41,7 @@
                         </div>
                     </div>
                      <div class="form-group">
-                        <label for="lbl_cat_desc" class="col-sm-2 control-label">Tax</label>
+                        <label for="lbl_cat_desc" class="col-sm-2 control-label">Tax<span style="color:#ff0000;">*</span></label>
                         <div class="col-sm-4">
                             <input type="text" class="form-control rate_cal" id="tax" placeholder="Tax" name="item_tax" required>
                         </div>
@@ -53,7 +53,7 @@
                     <div class="form-group">
                         <label for="lbl_cat_desc" class="col-sm-2 control-label">Final Rate</label>
                         <div class="col-sm-4">
-                            <input type="text" class="form-control" id="final_rate" placeholder="Final Rate" name="item_final_rate" required>
+                            <input type="text" class="form-control" id="final_rate" placeholder="Final Rate" name="item_final_rate" readonly>
                         </div>
                          <label for="lbl_cat_desc" class="col-sm-2 control-label">Unit</label>
                         <div class="col-sm-4">
@@ -66,7 +66,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="lbl_cat_desc" class="col-sm-2 control-label">Category</label>
+                        <label for="lbl_cat_desc" class="col-sm-2 control-label">Category<span style="color:#ff0000;">*</span></label>
                         <div class="col-sm-4">
                         <select class="form-control select2" style="width: 100%;" name="item_category" required>
                         <option value="">-- Select Category -- </option>
@@ -75,14 +75,14 @@
                         @endforeach
                     </select>
                     </div>
-                        <label for="lbl_cat_desc" class="col-sm-2 control-label">Stock</label>
+                        <label for="lbl_cat_desc" class="col-sm-2 control-label">Stock<span style="color:#ff0000;">*</span></label>
                         <div class="col-sm-4">
                             <input type="text" class="form-control" id="cat_name" placeholder="Stock" name="item_stock" required>
                         </div>
                     </div>
                          <div class="form-group">
                         
-                         <label for="lbl_cat_desc" class="col-sm-2 control-label">Bar Code</label>
+                         <label for="lbl_cat_desc" class="col-sm-2 control-label">Bar Code<span style="color:#ff0000;">*</span></label>
                         <div class="col-sm-4">
                             <input type="text" class="form-control" id="cat_name" placeholder="Bar Code" name="item_barcode" required>
                         </div>
@@ -124,7 +124,7 @@
     var final_rate=(tax_value+disc_rate);
     $('#disc_rate').val(disc_rate);
     $('#tax_value').val(tax_value);
-    $('#final_rate').val(final_rate);
+    $('#final_rate').val(final_rate.toFixed(2));
     
 });
 });

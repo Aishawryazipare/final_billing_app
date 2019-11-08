@@ -45,7 +45,7 @@
   <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
   <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
   <![endif]-->
-
+      <link href="css/sweetalert.css" rel="stylesheet">
   <!-- Google Font -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -95,7 +95,10 @@
   <div class="control-sidebar-bg"></div>
     </div>
 </body>
+<script src="js/sweetalert.min.js"></script>
+
 <script>
+    $(document.body).addClass('skin-blue sidebar-mini sidebar-collapse');
      $(document).ready(function() {
             $('div.alert').delay(3000).slideUp(300);
             $('.datepicker').datepicker({
@@ -103,6 +106,44 @@
             autoclose: true,
             todayHighlight: true
     })
+//        var mouseY = 0;
+//       var topValue = 0;
+//       window.addEventListener("mouseout",function(e){
+//           mouseY = e.clientY;
+//           if(mouseY<topValue) {
+//               swal({
+//               title: "Please Confirm?",
+//               text: "Sync Data",
+//               type: "warning",
+//               showCancelButton: true,
+//               confirmButtonColor: "#e74c3c",
+//               confirmButtonText: "Yes",
+//               cancelButtonText: "No",
+//               closeOnConfirm: true,
+//               closeOnCancel: true,
+//               showLoaderOnConfirm: true,
+//               showLoaderOnCancel: true,
+//             }, function(isConfirm){
+//                 if (isConfirm) {
+//                    var msg="Master Data";
+//                    $.ajax({
+//                            url: 'sync_category',
+//                            type: "GET",
+//                            data: {data:msg},
+//                            success: function(result) 
+//                            {
+//                                var res=JSON.parse(result);
+//                                console.log(res); 
+//                            }
+//                        });
+//                 }
+//                 else {
+//                     swal("Cancelled");
+//                 }
+//           });
+//           }
+//       },
+//       false);
         });
     </script>
 

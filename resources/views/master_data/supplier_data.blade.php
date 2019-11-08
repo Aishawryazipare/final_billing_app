@@ -15,7 +15,7 @@
       </h1>
     
       <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li><a href="#"><i class="fa fa-dashboard"></i>  Master Data</a></li>
         <li class="active">Supplier List</li>
       </ol>
     </section>

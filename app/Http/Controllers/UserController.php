@@ -34,8 +34,42 @@ class UserController extends Controller
     
     public function addEmployee(){
         $city = \App\City::select('city_id','city_name')->get();
+        if(Auth::guard('admin')->check())
+        {
+            $cid = $this->admin->rid;
+            $location= \App\EnquiryLocation::select('loc_id','loc_name')
+                    ->where(['is_active'=>1,'cid'=>$cid])
+                    ->get();
+        }
+        else if(Auth::guard('employee')->check())
+        {
+            $cid = $this->employee->cid;
+            $lid = $this->employee->lid;
+            $emp_id = $this->employee->id;
+            $role = $this->employee->role;
+            $sub_emp_id = $this->employee->sub_emp_id;
+            $client_data = \App\Admin::select('location')->where(['rid'=>$cid])->first();
+            if($client_data->location == "single" && $role == 2)
+            {
+                $location= \App\EnquiryLocation::select('loc_id','loc_name')
+                    ->where(['is_active'=>1,'cid'=>$cid])
+                    ->get();
+            }
+            else if($client_data->location == "multiple" && $role == 2)
+            {
+                $location= \App\EnquiryLocation::select('loc_id','loc_name')
+                    ->where(['is_active'=>1,'cid'=>$cid,'loc_id'=>$lid])
+                    ->get();
+            }
+            else if($client_data->location == "multiple" && $role == 1)
+            {
+                $location= \App\EnquiryLocation::select('loc_id','loc_name')
+                    ->where(['is_active'=>1,'cid'=>$cid,'loc_id'=>$lid])
+                    ->get();
+            }
+        }
 //        echo "<pre>";print_r($location);exit;
-        return view('auth.register',['city'=>$city]);
+        return view('auth.register',['city'=>$location]);
     }
 
     public function saveUser(Request $request)
@@ -59,6 +93,7 @@ class UserController extends Controller
 //            exit;
             $requestData['sub_emp_id'] = $this->employee->id;
         }
+		 $requestData['android_password'] =$requestData['password'];
         $requestData['password'] = bcrypt($requestData['password']);
         \App\Employee::create($requestData);
         

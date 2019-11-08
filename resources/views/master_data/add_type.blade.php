@@ -6,7 +6,7 @@
       Add Unit
     </h1>
     <ol class="breadcrumb">
-      <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+      <li><a href="#"><i class="fa fa-dashboard"></i>  Master Data</a></li>
       <li class="active">Add Units</li>
     </ol> 
 </section>
@@ -22,13 +22,13 @@
                 {{ csrf_field() }}
                 <div class="box-body">
                     <div class="form-group">
-                        <label for="lbl_type_name" class="col-sm-2 control-label">Unit Name</label>
+                        <label for="lbl_type_name" class="col-sm-2 control-label">Unit Name<span style="color:#ff0000;">*</span></label>
                         <div class="col-sm-6">
                             <input type="text" class="form-control unit_name" id="Unit_name" placeholder="Unit Value" name="Unit_name" required>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="lbl_type_desc" class="col-sm-2 control-label">Unit Code</label>
+                        <label for="lbl_type_desc" class="col-sm-2 control-label">Unit Code<span style="color:#ff0000;">*</span></label>
                         <div class="col-sm-6">
                             <input type="text" class="form-control" id="Unit_Taxvalue" placeholder="Unit Code" name="Unit_Taxvalue" required>
                         </div>

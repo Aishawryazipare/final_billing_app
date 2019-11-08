@@ -13,7 +13,7 @@ class City extends Model
      * @var array
      */
     protected $primaryKey = "city_id";
-    public $table = "tbl_cities";
+    public $table = "bil_cities";
      public $timestamps=false;
      protected $fillable = [
         'city_id','city_name', 'city_code', 'state_code'

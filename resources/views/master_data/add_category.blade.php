@@ -6,7 +6,7 @@
       Add Category
     </h1>
     <ol class="breadcrumb">
-      <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+      <li><a href="#"><i class="fa fa-dashboard"></i> Master Data</a></li>
       <li class="active">Add Category</li>
     </ol> 
 </section>
@@ -22,7 +22,7 @@
                 {{ csrf_field() }}
                 <div class="box-body">
                     <div class="form-group">
-                        <label for="lbl_cat_name" class="col-sm-2 control-label">Category</label>
+                        <label for="lbl_cat_name" class="col-sm-2 control-label">Category<span style="color:#ff0000;">*</span></label>
                         <div class="col-sm-4">
                             <input type="text" class="form-control category" id="cat_name" placeholder="Category" name="cat_name" required>
                         </div>

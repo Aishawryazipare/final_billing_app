@@ -6,7 +6,7 @@
           Edit Supplier
       </h1>
       <ol class="breadcrumb">
-        <li><a href="{{url('home')}}"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li><a href="{{url('home')}}"><i class="fa fa-dashboard"></i>  Master Data</a></li>
         <li class="active">Edit Supplier</li>
       </ol>
     </section>

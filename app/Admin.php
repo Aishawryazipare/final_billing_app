@@ -11,7 +11,7 @@
         
         
         protected $primaryKey = "rid";
-        public $table = "tbl_Registration";
+        public $table = "bil_Registration";
         public $timestamps=false;
 
 //        protected $guard = 'admin';

@@ -2,7 +2,7 @@
 @section('content')
 <div class="login-box">
   <div class="login-logo">
-    <a href="/" style="color:white;"><b>Employee Billing</b> App</a>
+    <a href="/" style="color:white;"><b>Employee airBill Plus</b> App</a>
   </div>
 <!--    <div class="" style="text-align: center;">
         <img src="dist/img/logo3_new.png" class="img-circle" alt="User Image">

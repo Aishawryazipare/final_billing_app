@@ -8,7 +8,7 @@
         Edit Unit
       </h1>
       <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li><a href="#"><i class="fa fa-dashboard"></i>  Master Data</a></li>
         <li class="active">Edit Unit</li>
       </ol>
     @if (Session::has('alert-success'))
@@ -30,14 +30,14 @@
                {{ csrf_field() }}
                <div class="box-body">
                    <div class="form-group">
-                       <label for="lbl_type_name" class="col-sm-2 control-label">Unit Name</label>
+                       <label for="lbl_type_name" class="col-sm-2 control-label">Unit Name<span style="color:#ff0000;">*</span></label>
                        <div class="col-sm-6">
                            <input type="text" class="form-control" id="type_name" placeholder="Unit Name" name="Unit_name" value="{{$type_data->Unit_name}}">
                            <input type="hidden" class="form-control" id="type_id" placeholder="Type" name="Unit_Id" value="{{$type_data->Unit_Id}}">
                        </div>
                    </div>
                    <div class="form-group">
-                        <label for="lbl_type_desc" class="col-sm-2 control-label">Unit Code</label>
+                        <label for="lbl_type_desc" class="col-sm-2 control-label">Unit Code<span style="color:#ff0000;">*</span></label>
                         <div class="col-sm-6">
                             <input type="text" class="form-control" id="type_name" placeholder="Unit Name" name="Unit_Taxvalue" value="{{$type_data->Unit_Taxvalue}}">
                         </div>

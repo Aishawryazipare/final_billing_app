@@ -1,7 +1,11 @@
 @extends('layouts.app')
 @section('content')
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <style>
 /* The container */
+
 .container {
   display: block;
   position: relative;
@@ -64,6 +68,8 @@
 	border-radius: 50%;
 	background: white;
 }
+
+
 </style>
 <link href="css/sweetalert.css" rel="stylesheet">
 @if (Session::has('alert-success'))
@@ -78,36 +84,42 @@
         {{ Session::get('alert-error') }}
     </div>
     @endif
-<section class="content-header">
+<section class="content-header" style="padding-top: 0px;">
     <h1>
-      Thumbnail Form
+      Sales Form
     </h1>
-    <ol class="breadcrumb">
-      <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+<!--    <ol class="breadcrumb">
+      <li><a href="#"><i class="fa fa-dashboard"></i>Sales</a></li>
       <li class="active">Thumbnail Form</li>
-    </ol> 
+    </ol> -->
 </section>
     <section class="content">
         <div class="row">
-            <div class="col-md-5">
-                <input type="text" name="search_code" id="search_code" class="form-control input-lg" onblur="get_code(this.value)" placeholder="Search By Name/Code/Barcode" />
+            <div class="col-md-6">
+                <input type="text" name="search_code" id="search_code" class="form-control" onblur="get_code(this.value)" placeholder="Search By Name/Code/Barcode" />
                 <!--<input type="text" name="search_code" id="search_code" class="form-control" onblur="get_code(this.value)" placeholder="Search By Name/Code/Barcode"/>-->
                  <div id="countryList">
     </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <input type="text" name="cust_name"  class="form-control"  onkeyup="assign_name(this.value)" placeholder="Client Name"/>
             </div>
             <div class="col-md-3">
                 <div class="form-group">
-                    <label class="container">
+                    <label class="radio-inline">
+      <input type="radio" name="cash_or_credit1" value="cash" checked>Card
+    </label>
+    <label class="radio-inline">
+      <input type="radio" name="cash_or_credit1" value="cash">Cash
+    </label>
+<!--                    <label class="container">
                         <div class="iradio_minimal-blue checked" aria-checked="true" aria-disabled="false">Card<input name="cash_or_credit1" type="radio" value="card" checked/><span class="checkmark"></span></div>
                           
                     </label>
                      <label class="container">
                         <div class="iradio_minimal-blue checked" aria-checked="true" aria-disabled="false">Cash<input name="cash_or_credit1" type="radio" value="cash" /><span class="checkmark"></span></div>
                           
-                    </label>
+                    </label>-->
                     <!--
                     <label class="">
                         <div class="iradio_minimal-blue" aria-checked="false" aria-disabled="false"><input name="cash_or_credit" type="radio" value="cash" checked/> Cash</div>
@@ -125,36 +137,41 @@
             </div>
         </div>
         <div class="row">
-             <div class="col-md-5">
-             <div class="box box-default">
+             <div class="col-md-6">
+             <div class="box box-default" style="max-height:500px;overflow:auto;">
 <!--            <div class="box-header with-border">
               <h3 class="box-title">Bill No:1</h3>
             </div>-->
            
               <div class="box-body">
                   <?php  foreach($category_data as $data){?>
-                    <button type="submit" class="btn btn-success btn-lg cat" id="btn_submit" name="btn_submit" style="background-color:#FFFF80;color:black;" onclick="get_items(<?php echo $data->cat_id;?>)">{{$data->cat_name}}</button>
+                    <button type="submit" class="btn btn-success btn-lg cat" id="btn_submit_<?php echo $data->cat_id;?>" name="btn_submit" style="background-color:#00ffc3;color:black;margin-bottom:5px;font-weight:bold;width:96px;overflow: hidden;text-overflow: ellipsis;white-space:normal;margin-right:-4px;height:50px;font-size:14px;" onclick="get_items(<?php echo $data->cat_id;?>,0)">{{$data->cat_name}}</button>
                     <span class="info-box-number cat_id" style="display:none;"><h2>{{$data->cat_id}}</h2></span>
                   
                   <?php }$all=0; ?>
-                    <button type="submit" class="btn btn-success btn-lg cat" id="btn_submit" name="btn_submit" style="background-color:#FFFF80;color:black;" onclick="get_items(<?php echo $all;?>)">All Items</button>
+                    <button type="submit" class="btn btn-success btn-lg" id="btn_submit1" name="btn_submit" style="background-color:#00ffc3;color:black;margin-top: -5px;font-weight:bold;height:50px;font-size:14px;" onclick="get_items(<?php echo $all;?>),0">All Items</button>
                     <br/>
                     <br/>
+                    @if(!empty($hf_setting))
+                    <input type="hidden" id="gst_sett" value="{{$hf_setting->gst_setting}}">
+                    @else
+                    <input type="hidden" id="gst_sett" value="">
+                    @endif
                     <div id="item_data">
                         
                     </div>
                 </div>  
                  </div>
         </div>
-             <div class="col-md-7 table-responsive" id="print_content">
+             <div class="col-md-6 table-responsive" id="print_content">
                  <form action="{{ url('add_bill') }}" method="POST" id="bill_form" class="form-horizontal" enctype="multipart/form-data">
                 {{ csrf_field() }}
-                 <div class="box box-default">
+                 <div class="box box-default" style="max-height:500px;overflow:auto;">
                      <div class="box-body">
                       <div id="set_header">
                     @if(!empty($hf_setting))
                         @if($hf_setting->h1!=null)
-                          <h4><center>{{$hf_setting->h1}}</center></h4>
+                          <h2><center>{{$hf_setting->h1}}</center></h2>
                         @endif
                         @if($hf_setting->h2!=null)
                             <h4><center>{{$hf_setting->h2}}</center></h4>
@@ -168,24 +185,88 @@
                         @if($hf_setting->h5!=null)
                             <h4><center>{{$hf_setting->h5}}</center></h4>
                         @endif
+                        
+                        
                     @endif
                         <hr>
                         <table width="100%">
                             <tr>
-                                <td>Bill No: {{@$bill_data->bill_no}}</td>
-                                <td style="text-align: right;">Date: <?php echo date('Y-m-d');?></td>
+                                <td class='print_1'><b>Bill No: {{@$bill_data->bill_no+1}}</b></td>
+                                <td class='print_1' style="text-align: right;"><b>Date: <?php echo date('Y-m-d');?>    <?php
+                                date_default_timezone_set("Asia/Kolkata");
+                                echo date("h:i:sa");
+                                ?></b></td>
                             </tr>
                         </table>
                     </div>
-                      <input type="text" id="bil_no" name="bil_no" value="<?php if(isset($bill_data->bill_no)) echo $bill_data->bill_no; else echo "1"; ?>">
-                      <h4 align="center" id="bill_no">Bill No: <?php if(isset($bill_data->bill_no)) echo $bill_data->bill_no; else echo "1"; ?></h4>
+                      <input type="hidden" id="bil_no" name="bil_no" value="<?php if(isset($bill_data->bill_no)) echo $bill_data->bill_no; else echo "1"; ?>">
+                      <h4 align="center" id="bill_no">Bill No: <?php if(isset($bill_data->bill_no)) echo ($bill_data->bill_no+1); else echo "1"; ?></h4>
                       <div class="row">
                           <div class="col-md-6"><span id="cust_data"></span><input type="hidden" name="cust_name" id="cust_name" class="form-control"/></div>
                           <div class="col-md-6"><span id="date" style="margin-left: 100px;"></span></div>
                           <input type="hidden" name="cash_or_credit" id="cash_or_cerdit" value="cash"/>
                       </div>
                       <br/>
-                       <table class="table table-striped" align="center" cellspacing="0">
+                      <table border="0" width="100%" id="h_lost">
+                         <thead>
+            <tr>
+              <th>      No</th>
+              <th style="width:200px;">Item Name</th>
+              <th>Qty</th>
+              <th>Rate</th>
+            @if(!empty($hf_setting))
+                @if($hf_setting->gst_setting=="Yes")
+                    <th class="gst">Dis</th>
+                    <th class="gst">Tax</th>
+                @endif
+            @endif
+              <th class="gst">Dis</th>
+              <th class="gst">Tax</th>
+              <th>Amt</th>
+            </tr>
+            </thead> 
+             <tbody id="bill_tbl">
+                         <tr class="row1">
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    
+                    @if(!empty($hf_setting))
+                @if($hf_setting->gst_setting=="Yes")
+                     <td></td>
+                     <td></td>
+                    <!--<th class="gst">Tax</th>-->
+                @endif
+            @endif
+                    <td style="font-weight: bold;" class="print">Total</td>
+                    <td style="font-weight: bold;"> <input type="text" class="print" name="bill_totalamt" class="bill_totalamt" id="bill_totalamt" style="border:none;width:70px;text-align:center;" value="0" readonly/></td>
+                </tr>  
+            </tbody>
+                          
+                      </table>
+<!--                      <table cellpadding="10" border="1" class="table"  cellspacing="0" align="center">
+ <thead>
+            <tr>
+              <th>No</th>
+              <th>Item Name</th>
+              <th>Qty</th>
+              <th>Rate</th>
+              <th>Discount</th>
+              <th>Tax</th>
+              <th>Amount</th>
+            </tr>
+            </thead>-->
+<!--            <tbody id="bill_tbl">
+                         <tr class="row1">
+                    <td></td>
+                    <td></td>
+                    <td></td><td></td><td></td>
+                    <td style="font-weight: bold;">Total</td>
+                    <td style="font-weight: bold;"> <input type="text" name="bill_totalamt" class="bill_totalamt" id="bill_totalamt" style="border:none;width:50px;text-align:center;" value="0"/></td>
+                </tr>  
+            </tbody>-->
+<!--</table>-->
+<!--                       <table class="table table-striped" align="center"  border="1">
             <thead>
             <tr>
               <th>No</th>
@@ -206,12 +287,12 @@
                     <td style="font-weight: bold;"> <input type="text" name="bill_totalamt" class="bill_totalamt" id="bill_totalamt" style="border:none;width:50px;text-align:center;" value="0"/></td>
                 </tr>  
             </tbody>
-          </table>  
+          </table>  -->
                       <div id="set_footer">
              <hr>
               @if(!empty($hf_setting))
             @if($hf_setting->f1!=null)
-                <h4><center>{{$hf_setting->f1}}</center></h4>
+                <h2><center>{{$hf_setting->f1}}</center></h2>
             @endif
             @if($hf_setting->f2!=null)
                 <h4><center>{{$hf_setting->f2}}</center></h4>
@@ -228,17 +309,19 @@
              @endif
             </div> 
                       
-                     </div>   
-                     <div class="box-footer">
-                         <button type="button" style="" class="btn btn-success pull-right" id="print_bill"><i class="fa fa-credit-card"></i> Print Bill
-          </button>
-<!--                          <button type="button" class="btn btn-primary pull-right" id="download_bill" style="margin-right: 5px;">
-            <i class="fa fa-download"></i> Download Bill
-          </button>-->
+                     </div>  
+            <div class="box-footer">         
+            @if(@$hf_setting->bill_printing=="Yes") 
+                <button type="button" style="" class="btn btn-success pull-right" id="print_bill"><i class="fa fa-credit-card"></i> Print Bill
+                </button>
+            @else
+                <button type="button" style="display:none;" class="btn btn-success pull-right" id="print_bill"><i class="fa fa-credit-card"></i> Print Bill
+                </button>
+            @endif  
             <?php if(isset($bill_data->bill_no)) $b_no=$bill_data->bill_no; else $b_no="1";?>
-          <a href="{{ url('download_bill?bill_no='.$b_no)}}"><button type="button" id="dwn_pdf" class="btn btn-primary pull-right" style="margin-right: 5px;">
+<!--          <a href="{{ url('download_bill?bill_no='.$b_no)}}"><button type="button" id="dwn_pdf" class="btn btn-success pull-right" style="margin-right: 5px;">
             <i class="fa fa-download"></i> Download Bill
-          </button></a>
+          </button></a>-->
           <button type="button" class="btn btn-primary pull-right" id="save_bill" style="margin-right: 5px;">
             <i class="fa fa-download"></i> Generate Bill
           </button>
@@ -251,7 +334,7 @@
         </div>
         </div>
         <div class="row">
-            <div class="col-md-6" id="item_data">
+            <div  id="item_data" >
             
             </div>  
             </div>
@@ -364,11 +447,13 @@
                </form>
         </div>-->
     </section>
-<script src="bower_components/jquery/dist/jquery.min.js"></script>
-<script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<!--<script src="bower_components/jquery/dist/jquery.min.js"></script>-->
+<!--<script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>-->
 <script src="bower_components/select2/dist/js/select2.full.min.js"></script>
 <script src="js/sweetalert.min.js"></script>
 <script>
+$(document.body).addClass('skin-blue sidebar-mini sidebar-collapse');
+var gst=$("#gst_sett").val();
 $(document).ready(function(){
     $(function () {
 //    $('input').iCheck({
@@ -378,25 +463,22 @@ $(document).ready(function(){
 //    });
 
   });
+  var gst=$("#gst_sett").val();
+//alert(gst);
+if(gst=="No")
+{
+    $(".gst").hide();
+}
+else
+{
+    $(".gst").show();
+}
   $("#dwn_pdf").attr("disabled", true);
-  $("#print_bill").attr("disabled", true);
-  
-  $('#search_code').keyup(function(){ 
-        var query = $(this).val();
-        if(query != '')
-        {
-         var _token = $('input[name="_token"]').val();
-         $.ajax({
-          url:"get-list",
-          method:"GET",
-          data:{query:query},
-          success:function(data){
-           $('#countryList').fadeIn();  
-                    $('#countryList').html(data);
-          }
-         });
-        }
-    });
+//  $("#print_bill").attr("disabled", true);
+     $(document).on('click', 'li', function(){  
+        $('#search_code').val($(this).text());  
+        $('#countryList').fadeOut();  
+    });  
   $('input[type=radio]').change( function() {
    //alert($(this).val());   
    $('#cash_or_cerdit').val($(this).val());
@@ -467,9 +549,15 @@ $(document).ready(function(){
  
  $("#set_header").hide(); 
  $("#set_footer").hide(); 
+  $("#print_bill").hide();
  $("#print_bill").click(function(){
-	   
+     
+//     window.print();
+ 
 	  // window.print();
+        var multi_print="<?php echo $hf_setting->multiple_print;?>";
+       
+        
         $("#set_header").show(); 
         $("#set_footer").show(); 
         $("#save_bill").hide(); 
@@ -489,22 +577,24 @@ $(document).ready(function(){
         var windowName = 'Print' + uniqueName.getTime();
         var printWindow = window.open(windowUrl, windowName, 'left=50000,top=50000,width=800,height=600');
         printWindow.document.write(printContent.innerHTML);
+        printWindow.document.write('<html><head><style>th { font-size: 20px }.print{ font-size: 20px }.print_1{ font-size: 18px }.print{border:none} .remove_field{display:none;}<style></head><body>');
         printWindow.document.close();
         printWindow.focus();
         printWindow.print();
         printWindow.close();
         $("#save_bill").show(); 
-        $("#print_bill").show(); 
+        $("#print_bill").hide(); 
         $("#set_header").hide(); 
         $("#set_footer").hide(); 
         $("#date").show(); 
         $("#bill_no").show(); 
+        
     });
  $( "#save_bill" ).click(function() {
         var cust_name=$('#cust_name').val();
         var payment_type=$('#cash_or_credit').val();
         var total=$('#bill_totalamt').val();
-        if(cust_name == "" || payment_type == "" || total == 0)
+        if(payment_type == "" || total == 0)
         {
             //alert("Required");
             swal({
@@ -526,6 +616,7 @@ $(document).ready(function(){
                             
                             var res=JSON.parse(result);
                             console.log(res);
+                            $("#print_bill").click();
                             swal({ type: "success", title: "Good Job!", confirmButtonColor: "#292929", text: "Bill Generated Successfully", confirmButtonText: "Ok" });
                             $('#print_bill').attr("display","block");
                             $("#new_bill_no").val(res.bill_no);
@@ -534,7 +625,36 @@ $(document).ready(function(){
     }
                     });
         }
+		
+		var multi_print="<?php echo $hf_setting->multiple_print;?>";
+		//alert(multi_print);
+		if(multi_print=="No")
+        {
+             //alert(multi_print);
+             $("#print_bill").hide(); 
+			 location.reload();
+        }
+        else
+        {
+//             alert(multi_print);
+             //$("#print_bill").show(); 
+        }
+		
     });
+     $("#h_lost").on('click','.remove_field',function(){
+           // alert(sub_id);
+            var amt=$(this).closest('tr').find('.item_amt').val();
+            var total_amt=$('#bill_totalamt').val();
+            var new_amt = total_amt-amt;
+            $('#bill_totalamt').val(new_amt.toFixed(2));
+            $(this).parent().parent().remove();
+            var i=1;
+             $(".serial_no").each(function() {
+                 //alert(i);
+                 $(this).val(i);
+                 i++;
+             });
+        });
  $( "#download_bill" ).click(function() {
     
     var bill_no=$('#bil_no').val();
@@ -552,12 +672,13 @@ $(document).ready(function(){
     });  
     
  });
-  function get_items(cat_id){
+  function get_items(cat_id,x){
 //         var cat_id=$(this).find('.cat_id').text();
-         if(cat_id==0)
-         {
+       //  if(cat_id==0)
+       //  {
              $('#item_data').html("");
-         }
+         //    $('.cat').css("pointer-events", "none");
+        // }
          $.ajax({
                             url: 'get-item',
                             type: "GET",
@@ -568,7 +689,8 @@ $(document).ready(function(){
                             $('#item_data').append(result);
                         }
                     });
-                    $(this).attr("disabled", true);
+                  //   $('#btn_submit_'+cat_id).css("pointer-events", "none");
+//                    $('#btn_submit_'+cat_id).attr("disabled", true);
     }
  var total=0;
  var flag=0;
@@ -583,7 +705,7 @@ $(document).ready(function(){
      result_arr.push(item_id);
      result_arr.push(x);
      $('#bill_data').val(result_arr);
-     $('#bill_totalamt').val(total);
+     $('#bill_totalamt').val(total.toFixed(2));
      $('#total_bill').text("Total Amount: "+total);
 //     alert(result_arr);
 $('.item_name').each(function() {
@@ -594,7 +716,7 @@ $('.item_name').each(function() {
         prev_qty=$(this).closest('tr').find('.item_qty').val();
         var rate=$(this).closest('tr').find('.item_rate').val();
         new_qty=parseFloat(prev_qty)+1;
-        var amt=parseFloat(new_qty)*parseFloat(rate);
+        var amt=(parseFloat(new_qty)*parseFloat(rate)).toFixed(2);
         $(this).closest('tr').find('.item_qty').val(new_qty);
         $(this).closest('tr').find('.item_amt').val(amt);
         flag=1;
@@ -607,15 +729,33 @@ if(flag==0)
     qty=1;
     rate=x;
     amt=qty*rate;
-    $(".row1:last").before("<tr class='input_fields_wrap'>\n\
-                    <td style='text-align:center;'>" + i + "</td>\n\
-                    <td style='text-align:center;'><input type='text' name='stoppage[" + i + "][1]' class='form-control item_name' value='" + item + "' style='border:none;width:100px;text-align:center;' readonly/></td>\n\
-                    <td style='text-align:center;'><input type='text' name='stoppage[" + i + "][2]' class='form-control item_qty' id='item_qty_" + i + "'  value='" + qty + "' style='border:none;width:50px;text-align:center;' onkeyup='table_cal("+i+")'/></td>\n\
-                    <td style='text-align:center;'><input type='text' name='stoppage[" + i + "][3]' class='form-control item_rate' id='item_rate_" + i + "' value='" + rate + "' style='border:none;width:50px;text-align:center;' onkeyup='table_cal("+i+")'/></td>\n\
-                    <td style='text-align:center;'><input type='text' name='stoppage[" + i + "][4]' class='form-control item_disc' id='item_disc_" + i + "' value='" + disc + "' style='border:none;width:50px;text-align:center;'/></td>\n\
-                    <td style='text-align:center;'><input type='text' name='stoppage[" + i + "][5]' class='form-control item_tax' id='item_tax_" + i + "' value='" + tax + "' style='border:none;width:50px;text-align:center;' readonly/></td>\n\
-                    <td style='text-align:center;'><input type='text' name='stoppage[" + i + "][6]' class='form-control item_amt' id='item_amt_" + i + "' value='" + amt + "' style='border:none;width:80px;text-align:center;' readonly/></td>\n\
+    if(gst=="Yes")
+    {
+         $(".row1:last").before("<tr class='input_fields_wrap'>\n\
+                    <td style='text-align:center;'><input type='text' value='"+i+"' class='form-control serial_no' style='width:60px;border:none;text-align:center;'></td>\n\
+                    <td style='text-align:center;'><textarea name='stoppage[" + i + "][1]' class='form-control item_name print' cols='10' style='border:none;resize:none;width:200px;height:33px;background-color:#ffffff;' readonly>" + item + "</textarea></td>\n\
+                    <td style='text-align:center;'><input type='text' name='stoppage[" + i + "][2]' class='form-control item_qty print' id='item_qty_" + i + "'  value='" + qty + "' style='width:50px;text-align:center;' onkeyup='table_cal("+i+")'/></td>\n\
+                    <td style='text-align:center;'><input type='text' name='stoppage[" + i + "][3]' class='form-control item_rate print' id='item_rate_" + i + "' value='" + rate + "' style='width:60px;text-align:center;' onkeyup='table_cal("+i+")'/></td>\n\
+                    <td style='text-align:center;' class='gst'><input type='text' name='stoppage[" + i + "][4]' class='form-control item_disc print' id='item_disc_" + i + "' value='" + disc + "' style='border:none;width:50px;text-align:center;background-color:#ffffff;' readonly/></td>\n\
+                    <td style='text-align:center;' class='gst'><input type='text' name='stoppage[" + i + "][5]' class='form-control item_tax print' id='item_tax_" + i + "' value='" + tax + "' style='border:none;width:50px;text-align:center;background-color:#ffffff;' readonly/></td>\n\
+                    <td style='text-align:center;'><input type='text' name='stoppage[" + i + "][6]' class='form-control item_amt print' id='item_amt_" + i + "' value='" + amt + "' style='border:none;width:80px;text-align:center;background-color:#ffffff;' readonly/></td>\n\
+\n\                 <td style='text-align:center;'><i class='fa fa-fw fa-times remove_field' style='color: red;'></i></td>\n\
             </tr>");
+    }
+    else
+    {
+              $(".row1:last").before("<tr class='input_fields_wrap'>\n\
+                    <td style='text-align:center;'><input type='text' value='"+i+"' class='form-control serial_no' style='width:60px;border:none;text-align:center;'></td>\n\
+                    <td style='text-align:center;'><textarea name='stoppage[" + i + "][1]' class='form-control item_name print' cols='10' style='border:none;resize:none;width:200px;height:33px;background-color:#ffffff;' readonly>" + item + "</textarea></td>\n\
+                    <td style='text-align:center;'><input type='text' name='stoppage[" + i + "][2]' class='form-control item_qty print' id='item_qty_" + i + "'  value='" + qty + "' style='width:50px;text-align:center;' onkeyup='table_cal("+i+")'/></td>\n\
+                    <td style='text-align:center;'><input type='text' name='stoppage[" + i + "][3]' class='form-control item_rate print' id='item_rate_" + i + "' value='" + rate + "' style='width:60px;text-align:center;' onkeyup='table_cal("+i+")'/></td>\n\
+\n\                  <td style='text-align:center;display:none;' class='gst'><input type='text' name='stoppage[" + i + "][4]' class='form-control item_disc print' id='item_disc_" + i + "' value='" + disc + "' style='border:none;width:50px;text-align:center;background-color:#ffffff;' readonly/></td>\n\
+                    <td style='text-align:center;display:none;' class='gst'><input type='text' name='stoppage[" + i + "][5]' class='form-control item_tax print' id='item_tax_" + i + "' value='" + tax + "' style='border:none;width:50px;text-align:center;background-color:#ffffff;' readonly/></td>\n\
+                    <td style='text-align:center;'><input type='text' name='stoppage[" + i + "][6]' class='form-control item_amt print' id='item_amt_" + i + "' value='" + amt + "' style='border:none;width:80px;text-align:center;background-color:#ffffff;' readonly/></td>\n\
+\n\                 <td style='text-align:center;'><i class='fa fa-fw fa-times remove_field' style='color: red;'></i></td>\n\
+            </tr>");
+    }
+   
      i++;
 }
  }
@@ -656,20 +796,37 @@ if(flag==0)
 });
 if(flag==0)
 {
-   $(".row1:last").before("<tr class='input_fields_wrap'>\n\
-                    <td style='text-align:center;'>" + i + "</td>\n\
-                    <td style='text-align:center;'><input type='text' name='stoppage[" + i + "][1]' class='form-control item_name' value='" + item + "' style='border:none;width:100px;text-align:center;'/></td>\n\
-                    <td style='text-align:center;'><input type='text' name='stoppage[" + i + "][2]' class='form-control item_qty' id='item_qty_" + i + "'  value='" + qty + "' style='border:none;width:50px;text-align:center;' onkeyup='table_cal("+i+")'/></td>\n\
-                    <td style='text-align:center;'><input type='text' name='stoppage[" + i + "][3]' class='form-control item_rate' id='item_rate_" + i + "' value='" + rate + "' style='border:none;width:50px;text-align:center;' onkeyup='table_cal("+i+")'/></td>\n\
-                    <td style='text-align:center;'><input type='text' name='stoppage[" + i + "][4]' class='form-control item_disc' id='item_disc_" + i + "' value='" + disc + "' style='border:none;width:50px;text-align:center;'/></td>\n\
-                    <td style='text-align:center;'><input type='text' name='stoppage[" + i + "][5]' class='form-control item_tax' id='item_tax_" + i + "' value='" + tax + "' style='border:none;width:50px;text-align:center;'/></td>\n\
-                    <td style='text-align:center;'><input type='text' name='stoppage[" + i + "][6]' class='form-control item_amt' id='item_amt_" + i + "' value='" + amt + "' style='border:none;width:80px;text-align:center;'/></td>\n\
+    if(gst=="Yes")
+    {
+         $(".row1:last").before("<tr class='input_fields_wrap'>\n\
+                    <td style='text-align:center;'><input type='text' value='"+i+"' class='form-control serial_no' style='width:60px;border:none;text-align:center;'></td>\n\
+                    <td style='text-align:center;'><textarea name='stoppage[" + i + "][1]' class='form-control item_name print' cols='10' style='border:none;resize:none;width:200px;height:33px;background-color:#ffffff;' readonly>" + item + "</textarea></td>\n\
+                    <td style='text-align:center;'><input type='text' name='stoppage[" + i + "][2]' class='form-control item_qty print' id='item_qty_" + i + "'  value='" + qty + "' style='width:50px;text-align:center;' onkeyup='table_cal("+i+")'/></td>\n\
+                    <td style='text-align:center;'><input type='text' name='stoppage[" + i + "][3]' class='form-control item_rate print' id='item_rate_" + i + "' value='" + rate + "' style='width:60px;text-align:center;' onkeyup='table_cal("+i+")'/></td>\n\
+                    <td style='text-align:center;' class='gst'><input type='text' name='stoppage[" + i + "][4]' class='form-control item_disc print' id='item_disc_" + i + "' value='" + disc + "' style='border:none;width:50px;text-align:center;background-color:#ffffff;' readonly/></td>\n\
+                    <td style='text-align:center;' class='gst'><input type='text' name='stoppage[" + i + "][5]' class='form-control item_tax print' id='item_tax_" + i + "' value='" + tax + "' style='border:none;width:50px;text-align:center;background-color:#ffffff;' readonly/></td>\n\
+                    <td style='text-align:center;'><input type='text' name='stoppage[" + i + "][6]' class='form-control item_amt print' id='item_amt_" + i + "' value='" + amt + "' style='border:none;width:80px;text-align:center;background-color:#ffffff;' readonly/></td>\n\
+\n\                 <td style='text-align:center;'><i class='fa fa-fw fa-times remove_field' style='color: red;'></i></td>\n\
             </tr>");
+    }
+    else
+    {
+         $(".row1:last").before("<tr class='input_fields_wrap'>\n\
+                    <td style='text-align:center;'><input type='text' value='"+i+"' class='form-control serial_no' style='width:60px;border:none;text-align:center;'></td>\n\
+                    <td style='text-align:center;'><textarea name='stoppage[" + i + "][1]' class='form-control item_name print' cols='10' style='border:none;resize:none;width:200px;height:33px;background-color:#ffffff;' readonly>" + item + "</textarea></td>\n\
+                    <td style='text-align:center;'><input type='text' name='stoppage[" + i + "][2]' class='form-control item_qty print' id='item_qty_" + i + "'  value='" + qty + "' style='width:50px;text-align:center;' onkeyup='table_cal("+i+")'/></td>\n\
+                    <td style='text-align:center;'><input type='text' name='stoppage[" + i + "][3]' class='form-control item_rate print' id='item_rate_" + i + "' value='" + rate + "' style='width:60px;text-align:center;' onkeyup='table_cal("+i+")'/></td>\n\
+\n\                  <td style='text-align:center;display:none;' class='gst'><input type='text' name='stoppage[" + i + "][4]' class='form-control item_disc print' id='item_disc_" + i + "' value='" + disc + "' style='border:none;width:50px;text-align:center;background-color:#ffffff;' readonly/></td>\n\
+                    <td style='text-align:center;display:none;' class='gst'><input type='text' name='stoppage[" + i + "][5]' class='form-control item_tax print' id='item_tax_" + i + "' value='" + tax + "' style='border:none;width:50px;text-align:center;background-color:#ffffff;' readonly/></td>\n\
+                    <td style='text-align:center;'><input type='text' name='stoppage[" + i + "][6]' class='form-control item_amt print' id='item_amt_" + i + "' value='" + amt + "' style='border:none;width:80px;text-align:center;background-color:#ffffff;' readonly/></td>\n\
+\n\                 <td style='text-align:center;'><i class='fa fa-fw fa-times remove_field' style='color: red;'></i></td>\n\
+            </tr>");
+    }
      i++;
       var total=$('#bill_totalamt').val();
      total=parseFloat(total)+parseFloat(rate);
     // alert(total)
-       $('#bill_totalamt').val(total);
+       $('#bill_totalamt').val(total.toFixed(2));
 }
                             }
                     });
@@ -688,7 +845,8 @@ if(flag==0)
      $('.item_amt').each(function() {
          total_amt = parseFloat(total_amt)+parseFloat($(this).val());
      });
-     $('.bill_totalamt').val(total_amt);
+     $('#bill_totalamt').val(total_amt.toFixed(2));
+     $('.bill_totalamt').val(total_amt.toFixed(2));
  }
  function assign_name(cust_name)
  {
@@ -696,6 +854,31 @@ if(flag==0)
      $('#cust_data').html("<b>Customer Name: </b> "+cust_name+"");
      $('#cust_data').hide();
  }
+ $( "#search_code" ).autocomplete({
+ 
+        source: function(request, response) {
+            $.ajax({
+            url: "{{url('autocomplete')}}",
+            data: {
+                    term : request.term
+             },
+            dataType: "json",
+            success: function(data){
+               var resp = $.map(data,function(obj){
+                    //console.log(obj.city_name);
+                    return obj.item_name;
+               }); 
+ 
+               response(resp);
+            }
+        });
+    },
+    minLength: 1
+ });
+// function print_click()
+// {
+//     alert("print");
+// }
 </script>
 @endsection
 

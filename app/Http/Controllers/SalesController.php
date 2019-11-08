@@ -25,20 +25,20 @@ class SalesController extends Controller
     {
          if(Auth::guard('admin')->check()){
             $id = $this->admin->rid;
-         $category = DB::table('tbl_category')
-                ->select('tbl_category.*','tbl_type.type_name')
-                ->leftjoin('tbl_type','tbl_type.type_id','=','tbl_category.type_id')
-                ->where(['tbl_category.is_active' => '1','tbl_category.cid'=>$id])
-                ->orderBy('tbl_category.cat_name', 'asc')
+         $category = DB::table('bil_category')
+                ->select('bil_category.*','bil_type.type_name')
+                ->leftjoin('bil_type','bil_type.type_id','=','bil_category.type_id')
+                ->where(['bil_category.is_active' => '1','bil_category.cid'=>$id])
+                ->orderBy('bil_category.cat_name', 'asc')
                 ->get();
           $hf_setting= \App\HeaderFooter::where(['cid'=>$id])->first();
           $bill_data = \App\BillMaster::select('bill_no')->where(['cid'=>$id])->orderBy('bill_no','desc')->first();
          }else if(Auth::guard('web')->check()){
-             $category = DB::table('tbl_category')
-                ->select('tbl_category.*','tbl_type.type_name')
-                ->leftjoin('tbl_type','tbl_type.type_id','=','tbl_category.type_id')
-                ->where(['tbl_category.is_active' => '1'])
-                ->orderBy('tbl_category.cat_name', 'asc')
+             $category = DB::table('bil_category')
+                ->select('bil_category.*','bil_type.type_name')
+                ->leftjoin('bil_type','bil_type.type_id','=','bil_category.type_id')
+                ->where(['bil_category.is_active' => '1'])
+                ->orderBy('bil_category.cat_name', 'asc')
                 ->get();
           $hf_setting= \App\HeaderFooter::first();
           $bill_data = \App\BillMaster::select('bill_no')->orderBy('bill_no','desc')->first();
@@ -52,11 +52,11 @@ class SalesController extends Controller
             if($client_data->location == "single" && $role == 2)
             {
                  //echo "in else";exit;
-                $category = DB::table('tbl_category')
-                ->select('tbl_category.*','tbl_type.type_name')
-                ->leftjoin('tbl_type','tbl_type.type_id','=','tbl_category.type_id')
-                ->where(['tbl_category.is_active' => '1','tbl_category.cid'=>$cid])
-                ->orderBy('tbl_category.cat_name', 'asc')
+                $category = DB::table('bil_category')
+                ->select('bil_category.*','bil_type.type_name')
+                ->leftjoin('bil_type','bil_type.type_id','=','bil_category.type_id')
+                ->where(['bil_category.is_active' => '1','bil_category.cid'=>$cid])
+                ->orderBy('bil_category.cat_name', 'asc')
                 ->get();
           $hf_setting= \App\HeaderFooter::where(['cid'=>$cid])->first();
           $bill_data = \App\BillMaster::select('bill_no')->where(['cid'=>$cid])->orderBy('bill_no','desc')->first();
@@ -67,13 +67,13 @@ class SalesController extends Controller
                 if($sub_emp_id != "")
                 {
                     
-                    $category = DB::table('tbl_category')
-                            ->select('tbl_category.*', 'tbl_type.type_name')
-                            ->leftjoin('tbl_type', 'tbl_type.type_id', '=', 'tbl_category.type_id')
-                            ->where(['tbl_category.is_active' => '1', 'tbl_category.cid' => $cid, 'tbl_category.lid' => $lid])
+                    $category = DB::table('bil_category')
+                            ->select('bil_category.*', 'bil_type.type_name')
+                            ->leftjoin('bil_type', 'bil_type.type_id', '=', 'bil_category.type_id')
+                            ->where(['bil_category.is_active' => '1', 'bil_category.cid' => $cid, 'bil_category.lid' => $lid])
                             ->orWhere(['emp_id' => $sub_emp_id])
                             ->orWhere(['emp_id' => $emp_id])
-                            ->orderBy('tbl_category.cat_name', 'asc')
+                            ->orderBy('bil_category.cat_name', 'asc')
                             ->get();
                     $hf_setting = \App\HeaderFooter::where(['cid' => $cid, 'lid' => $lid])
                             ->orWhere(['emp_id' => $sub_emp_id])
@@ -87,11 +87,11 @@ class SalesController extends Controller
                 }
                 else
                 {
-                    $category = DB::table('tbl_category')
-                            ->select('tbl_category.*', 'tbl_type.type_name')
-                            ->leftjoin('tbl_type', 'tbl_type.type_id', '=', 'tbl_category.type_id')
-                            ->where(['tbl_category.is_active' => '1', 'tbl_category.cid' => $cid, 'tbl_category.lid' => $lid])
-                            ->orderBy('tbl_category.cat_name', 'asc')
+                    $category = DB::table('bil_category')
+                            ->select('bil_category.*', 'bil_type.type_name')
+                            ->leftjoin('bil_type', 'bil_type.type_id', '=', 'bil_category.type_id')
+                            ->where(['bil_category.is_active' => '1', 'bil_category.cid' => $cid, 'bil_category.lid' => $lid])
+                            ->orderBy('bil_category.cat_name', 'asc')
                             ->get();
                     $hf_setting = \App\HeaderFooter::where(['cid' => $cid, 'lid' => $lid])
                             ->first();
@@ -102,11 +102,11 @@ class SalesController extends Controller
             }
              else if($client_data->location == "multiple" && $role == 1)
             {
-                  $category = DB::table('tbl_category')
-                            ->select('tbl_category.*', 'tbl_type.type_name')
-                            ->leftjoin('tbl_type', 'tbl_type.type_id', '=', 'tbl_category.type_id')
-                            ->where(['tbl_category.is_active' => '1', 'tbl_category.cid' => $cid, 'tbl_category.lid' => $lid])
-                            ->orderBy('tbl_category.cat_name', 'asc')
+                  $category = DB::table('bil_category')
+                            ->select('bil_category.*', 'bil_type.type_name')
+                            ->leftjoin('bil_type', 'bil_type.type_id', '=', 'bil_category.type_id')
+                            ->where(['bil_category.is_active' => '1', 'bil_category.cid' => $cid, 'bil_category.lid' => $lid])
+                            ->orderBy('bil_category.cat_name', 'asc')
                             ->get();
                     $hf_setting = \App\HeaderFooter::where(['cid' => $cid, 'lid' => $lid])
                             ->first();
@@ -117,6 +117,7 @@ class SalesController extends Controller
              
          }
         return view('sales.thumbnail_form',['category_data'=>$category,'bill_data'=>$bill_data,'hf_setting'=>$hf_setting]);
+//        return view('sales.autosearch',['category_data'=>$category,'bill_data'=>$bill_data,'hf_setting'=>$hf_setting]);
     }
     
     public function getItems()
@@ -139,6 +140,7 @@ class SalesController extends Controller
             $role = $this->employee->role;
             $sub_emp_id = $this->employee->sub_emp_id;
             $client_data = \App\Admin::select('location')->where(['rid'=>$cid])->first();
+         //   echo $lid;exit;
              if($client_data->location == "single" && $role == 2)
             {
                  $item_data = \App\Item::where(['is_active' => '0','cid'=>$cid])->orderBy('item_name', 'asc')->get();   
@@ -148,22 +150,23 @@ class SalesController extends Controller
                
                 if($sub_emp_id != "")
                 {
+                    
                    $item_data = \App\Item::where(['is_active' => '0','cid'=>$cid,'lid'=>$lid])
                                 ->orWhere(['emp_id'=>$sub_emp_id])
-                                ->orWhere(['emp_id'=>$emp_id])
+                               // ->orWhere(['emp_id'=>$emp_id])
                                 ->orderBy('item_name', 'asc')
                                 ->get();    
                 }
                 else
                 {
-                          $item_data = \App\Item::where(['is_active' => '0','cid'=>$cid])
+                          $item_data = \App\Item::where(['is_active' => '0','cid'=>$cid,'lid'=>$lid])
                                 ->orderBy('item_name', 'asc')
                                 ->get(); 
                 }
             }
             else if($client_data->location == "multiple" && $role == 1)
             {
-                    $item_data = \App\Item::where(['is_active' => '0','cid'=>$cid])
+                    $item_data = \App\Item::where(['is_active' => '0','cid'=>$cid,'lid'=>$lid])
                                 ->orderBy('item_name', 'asc')
                                 ->get(); 
             }
@@ -172,7 +175,8 @@ class SalesController extends Controller
             foreach($item_data as $data)
             {
                 $replaced_item = str_replace(' ', '_', $data->item_name);
-                $bdata.='<div class="col-sm-4 col-md-3"><button type="button" class="btn btn-block btn-default" style="border-color:#666666;" onclick="cal('.$data->item_final_rate.','.$data->item_id.','.$data->item_dis.','.$data->item_tax.')">'.$data->item_name.'<br/>'.$data->item_final_rate.'</button><input type="hidden" id="gitem_'.$data->item_id.'" value="'.$data->item_name.'"/></div>';
+                $bdata.='<button type="button" class="btn btn-block btn-default" style="border-color:#00ffc3;font-weight:bold;width:96px;height:68px;white-space: normal;margin-bottom:0px;display:inline;margin-right:0px; overflow: hidden;text-overflow: ellipsis;" onclick="cal('.$data->item_final_rate.','.$data->item_id.','.$data->item_dis.','.$data->item_tax.')">'.wordwrap($data->item_name, 12, "<br/>", false)."</br>Rs. ".$data->item_final_rate.'</button><input type="hidden" id="gitem_'.$data->item_id.'" value="'.$data->item_name.'"/>';
+//                 $bdata.='<button type="button" class="btn btn-block btn-default" style="border-color:#00ffc3;font-weight:bold;width:auto;height:68px;margin-bottom:5px;display:inline;margin-right:5px;" onclick="cal('.$data->item_final_rate.','.$data->item_id.','.$data->item_dis.','.$data->item_tax.')">'.wordwrap($data->item_name, 12, "<br/>", false).'<br/>Rs. '.$data->item_final_rate.'</button><input type="hidden" id="gitem_'.$data->item_id.'" value="'.$data->item_name.'"/>';
                 $j++;
 
             }
@@ -202,7 +206,7 @@ class SalesController extends Controller
                 {
                      $item_data = \App\Item::orderBy('item_name', 'asc')->where(['is_active' => '0','item_category'=>$cat_id,'cid'=>$cid,'lid'=>$lid])
                             ->orWhere(['emp_id'=>$sub_emp_id])
-                            ->orWhere(['emp_id'=>$emp_id])
+                           // ->orWhere(['emp_id'=>$emp_id])
                             ->get();    
                 }
                 else
@@ -219,8 +223,9 @@ class SalesController extends Controller
             foreach($item_data as $data)
             {
                 $replaced_item = str_replace(' ', '_', $data->item_name);
-                $bdata.='<div class="col-sm-4 col-md-3"><button type="button" class="btn btn-block btn-default" style="border-color:#666666;" onclick="cal('.$data->item_final_rate.','.$data->item_id.','.$data->item_dis.','.$data->item_tax.')">'.$data->item_name.'<br/>'.$data->item_final_rate.'</button><input type="hidden" id="gitem_'.$data->item_id.'" value="'.$data->item_name.'"/></div>';
-                $j++;
+                //$bdata.='<div class="col-sm-2" style="width:auto;"><button type="button" class="btn btn-block btn-default" style=" margin-left: -10px;border-color:#666666;width:auto;height:68px;" onclick="cal('.$data->item_final_rate.','.$data->item_id.','.$data->item_dis.','.$data->item_tax.')">'.wordwrap($data->item_name, 12, "<br/>", false).'<br/>Rs. '.$data->item_final_rate.'</button><input type="hidden" id="gitem_'.$data->item_id.'" value="'.$data->item_name.'"/></div>';
+                $bdata.='<button type="button" class="btn btn-block btn-default" style="border-color:#00ffc3;font-weight:bold;width:96px;height:68px;white-space: normal;margin-bottom:0px;display:inline;margin-right:0px; overflow: hidden;text-overflow: ellipsis;" onclick="cal('.$data->item_final_rate.','.$data->item_id.','.$data->item_dis.','.$data->item_tax.')">Rs.'.$data->item_final_rate.'<br/>'.wordwrap($data->item_name, 12, "<br/>", false).'</button><input type="hidden" id="gitem_'.$data->item_id.'" value="'.$data->item_name.'"/>';
+				$j++;
 
             } 
         }
@@ -244,7 +249,7 @@ class SalesController extends Controller
          {
          $requestData['cust_id']=$customer_data->cust_id;
          }
-         else
+         else if($requestData['cust_name']!="")
          {
              $cust_data=\App\Customer::create($requestData);
              $requestData['cust_id']=$cust_data->cust_id;
@@ -258,6 +263,10 @@ class SalesController extends Controller
              $requestData["bill_no"]=$bill_master->bill_no;
              $requestData["item_name"]=$data[1];
              $requestData["item_qty"]=$data[2];
+             $item_data = \App\Item::select('*')->where(['item_name'=>$requestData['item_name']])->first();
+             $updated_qty=$item_data->item_stock-$requestData["item_qty"];
+             $item_data->update(['item_stock'=>$updated_qty]);
+             //echo "<pre/>";print_r($item_data);
              $requestData["item_rate"]=$data[3];
              $requestData["discount"]=$data[4];
              $requestData["bill_tax"]=$data[5];
@@ -363,24 +372,34 @@ class SalesController extends Controller
     public function getItems1()
     {
         $query=$_GET["query"];
-        $data = DB::table('tbl_AddItems')
+        $data = DB::table('bil_AddItems')
         ->where('item_name', 'LIKE', "%{$query}%")
         ->get();
-      $output = '<ul class="dropdown-menu" style="display:block; position:relative">';
+      $output = '<ul class="dropdown-menu" style="display:block; position:absulte;z-index:30 !important">';
       foreach($data as $row)
       {
        $output .= '
-       <li><a href="#">'.$row->item_name.'</a></li>
-       ';
+       <li>'.$row->item_name.'</li>';
       }
       $output .= '</ul>';
       echo $output;
     }
-    
+    public function search(Request $request)
+    {
+          $search = $request->get('term');
+      
+          $result = \App\Item::orWhere('item_name', 'LIKE', '%'. $search. '%')
+                               ->orWhere('item_id', 'LIKE', '%'. $search. '%')
+                               ->orWhere('item_barcode', 'LIKE', '%'. $search. '%')
+                                ->get();
+ 
+          return response()->json($result);
+            
+    } 
     public function downloadBill()
     {
         $bill_no=$_GET["bill_no"];
-        $bill_details=DB::table('tbl_AddBillDetail')
+        $bill_details=DB::table('bil_AddBillDetail')
                 ->where('bill_no','=',$bill_no)
                 ->get();
 				//print_r($bill_details);
@@ -390,7 +409,7 @@ class SalesController extends Controller
             $cid=$bill_details[0]->cid;
             $lid=$bill_details[0]->lid;
             $emp_id=$bill_details[0]->emp_id;
-            $setting_details=DB::table('tbl_header_footer')
+            $setting_details=DB::table('bil_header_footer')
                 ->where(['cid'=>$cid,'lid'=>$lid])
                 ->first();
 				
@@ -405,11 +424,11 @@ class SalesController extends Controller
                 }
                 else if($page_size=="2 inch")
                 {
-                     $customPaper = array(25,0,169,500);
+                     $customPaper = array(0,0,169,500);
                 }
                 else if($page_size=="3 inch")
                 {
-                     $customPaper = array(25,0,241,432);
+                     $customPaper = array(0,0,241,432);
                 }
                 else
                 {
@@ -425,6 +444,56 @@ class SalesController extends Controller
 //        $pdf->save(storage_path().'_filename.pdf');
         
         return $pdf->download('bill_pdf.pdf');  
+    }
+       public function delete_sales()
+    {
+          if(Auth::guard('admin')->check()){
+        $id = $this->admin->rid;
+        $bill_data = \App\BillMaster::select('*')->where(['cid'=>$id])->get();
+        }else if(Auth::guard('web')->check()){
+           $bill_data = \App\BillMaster::select('*')->get(); 
+        }
+         else if(Auth::guard('employee')->check()){
+             $cid = $this->employee->cid;
+            $lid = $this->employee->lid;
+            $emp_id = $this->employee->id;
+            $role = $this->employee->role;
+            $sub_emp_id = $this->employee->sub_emp_id;
+            
+            $client_data = \App\Admin::select('location')->where(['rid'=>$cid])->get();
+            if($client_data->location == "single" && $role == 2){
+                -$item_data = \App\BillMaster::select('*')->where(['cid'=>$cid])->where('item_name','like',$code)->get(); 
+            }
+                       else if($client_data->location == "multiple" && $role == 2)
+            {
+               
+                if($sub_emp_id != "")
+                {
+                    $bill_data = \App\BillMaster::select('*')->where(['cid'=>$cid,'lid'=>$lid])
+                            ->get(); 
+                }
+                else
+                {
+                     $bill_data = \App\BillMaster::select('*')->where(['cid'=>$cid,'lid'=>$lid])->get();    
+                }
+            }
+            else if($client_data->location == "multiple" && $role == 1)
+            {
+               $bill_data = \App\BillMaster::select('*')->where(['cid'=>$cid,'lid'=>$lid])->get();     
+            }
+            //$item_data = \App\Item::select('*')->where(['is_active' => '0','cid'=>$cid,'lid'=>$lid,'emp_id'=>$emp_id])->where('item_name','like',$code)->first(); 
+         }
+        return view('sales.delete_sales',['bill_no'=>$bill_data]);
+    }
+    public function delete_bill(Request $request)
+    {
+         $requestData = $request->all();
+         $bill_no = $requestData['bill_no'];
+         DB::table('bil_AddBillMaster')->where('bill_no', $bill_no)->delete();
+         DB::table('bil_AddBillDetail')->where('bill_no', $bill_no)->delete();
+         Session::flash('alert-success','Cancelled Successfully.');
+        return redirect('delete_bill');
+         
     }
     
 }
