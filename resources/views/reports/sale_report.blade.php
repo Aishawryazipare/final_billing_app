@@ -7,6 +7,10 @@
     Width: 60px;
     }
 }
+::-webkit-scrollbar {
+    width: 0px;
+    background: transparent; /* make scrollbar transparent */
+}
 </style>
 <link href="css/sweetalert.css" rel="stylesheet">
 <link rel="stylesheet" href="bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
@@ -98,8 +102,8 @@
 
     <div class="row result" style="display:none;">
         <div class="col-md-12">
-             <div class="box">
-            <div class="box-body">
+             <div class="box" style="overflow-x:auto;">
+            <div class="box-body" >
                 <span id="amt"></span>
               <table id="example1" class="table table-bordered table-striped" border="1">
                 <thead id="header_data">
@@ -110,6 +114,7 @@
                   <th>Total Amount</th>
                   <th>Cash/Credit</th>
                   <th>Location</th>
+                  <th>User</th>
                 </tr>
                 </thead>
                 <tbody id="table_data">
@@ -130,6 +135,7 @@
 <script src="js/sweetalert.min.js"></script>
 <script>
 $(document).ready(function () {
+    var i=1;
     var fullDate = new Date();
     var month = fullDate.getMonth() + 1;
     var currentDate = fullDate.getFullYear() + "-" + month + "-" + fullDate.getDate();
@@ -137,14 +143,35 @@ $(document).ready(function () {
                             url: 'sale_report',
                             type: "POST",
                             data: {from_date:currentDate,to_date:currentDate},
-                            success: function(data) {
+                              success: function(data) {
                             console.log(data);
                             var a=JSON.parse(data);
+                            var result=a.other_data;
+                             var table;
+         table = $('#example1').DataTable();    
+         if(data!='') {               
+          for (var key=0, size=result.length; key<size; key++){
+            var j = -1;
+            var r = new Array();
+// represent columns as array
+                r[++j] ='<tr><td>'+i+'</td></tr>';
+                r[++j] ='<tr><td>'+result[key].bill_no+'</td></tr>';
+                r[++j] ='<tr><td>'+result[key].cust_name+'</td></tr>';
+                r[++j] ='<tr><td>'+result[key].bill_totalamt+'</td></tr>';
+                r[++j] ='<tr><td>'+result[key].cash_or_credit+'</td></tr>';
+                r[++j] ='<tr><td>'+result[key].loc_name+'</td></tr>';
+                r[++j] ='<tr><td>'+result[key].user+'</td></tr>';
+                r[++j] ='<tr><td>'+result[key].bill_no+'</td></tr>';
+                rowNode = table.row.add(r);
+                i++;
+
+        }         
+         }
+         else {
+         $('#example1').html('<h3>No Data Avaliable</h3>');
+         }
+         table.draw();
                             $('#amt').html("<h3>Total Amount: "+a.amount+"</h3>");
-                            $("#header_data").html(a.head);
-                            $("#table_data").html(a.other_data);
-                             $('#example1').DataTable();
-                            if(a.amount>0)
                             $(".result").show();
                             }
                     });  
@@ -179,10 +206,32 @@ $('.calendar1').click(function() {
                             success: function(data) {
                             console.log(data);
                             var a=JSON.parse(data);
+                            var result=a.other_data;
+                             var table;
+         table = $('#example1').DataTable();    
+         if(data!='') {               
+          for (var key=0, size=result.length; key<size; key++){
+            var j = -1;
+            var r = new Array();
+// represent columns as array
+                r[++j] ='<tr><td>'+i+'</td></tr>';
+                r[++j] ='<tr><td>'+result[key].bill_no+'</td></tr>';
+                r[++j] ='<tr><td>'+result[key].cust_name+'</td></tr>';
+                r[++j] ='<tr><td>'+result[key].bill_totalamt+'</td></tr>';
+                r[++j] ='<tr><td>'+result[key].cash_or_credit+'</td></tr>';
+                r[++j] ='<tr><td>'+result[key].loc_name+'</td></tr>';
+                r[++j] ='<tr><td>'+result[key].user+'</td></tr>';
+                r[++j] ='<tr><td>'+result[key].bill_no+'</td></tr>';
+                rowNode = table.row.add(r);
+                i++;
+
+        }         
+         }
+         else {
+         $('#example1').html('<h3>No Data Avaliable</h3>');
+         }
+         table.draw();
                             $('#amt').html("<h3>Total Amount: "+a.amount+"</h3>");
-                            $("#header_data").html(a.head);
-                            $("#table_data").html(a.other_data);
-                             $('#example1').DataTable();
                             $(".result").show();
                             }
                     });  

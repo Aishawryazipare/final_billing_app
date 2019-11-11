@@ -67,6 +67,9 @@
     .example-modal .modal {
       background: transparent !important;
     }
+    ::-webkit-scrollbar {
+    width: 0px;
+    background: transparent;
 </style>
 <body class="hold-transition skin-blue sidebar-mini">
     <div class="wrapper">

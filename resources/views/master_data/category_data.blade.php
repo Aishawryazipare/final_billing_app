@@ -30,7 +30,7 @@
             </div>
             <!-- /.box-header -->
              <?php $x = 1; ?>
-            <div class="box-body">
+            <div class="box-body" style="overflow-x:auto;">
               <table id="example1" class="table table-bordered table-striped" border="1">
                 <thead>
                 <tr>

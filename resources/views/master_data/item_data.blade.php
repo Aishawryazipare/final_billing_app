@@ -32,7 +32,7 @@
               <h3 class="box-title">ITEM LIST</h3><a href="{{url('add_item')}}" class="panel-title" style="margin-left: 82%;color: #dc3d59;"><span class="fa fa-plus-square"></span> Add New Item</a>
             </div>
              <?php $x = 1; ?>
-            <div class="box-body">
+            <div class="box-body" style="overflow-x:auto;">
               <table id="example1" class="table table-bordered table-striped" border="1">
                 <thead>
                 <tr>

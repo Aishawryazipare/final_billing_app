@@ -10,9 +10,21 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-
 Route::view('/', 'welcome');
-Auth::routes();
+// Authentication Routes...
+Route::get('login', 'Auth\AdminController@showLoginForm')->name('login');
+Route::post('login', 'Auth\LoginController@login');
+Route::post('logout', 'Auth\LoginController@logout')->name('logout');
+
+// Registration Routes...
+Route::get('register', 'Auth\RegisterController@showRegistrationForm')->name('register');
+Route::post('register', 'Auth\RegisterController@register');
+
+// Password Reset Routes...
+Route::get('password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request');
+Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
+Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
+Route::post('password/reset', 'Auth\ResetPasswordController@reset');
 
 Route::get('/home', 'HomeController@index');
 
@@ -20,14 +32,16 @@ Route::get('/home', 'HomeController@index');
 Route::get('client-register','Auth\ClientController@showRegform');
 Route::post('client-register','Auth\ClientController@create');
 
-Route::get('admin-login', 'Auth\AdminController@showLoginForm');
+Route::get('admin-login', 'Auth\LoginController@showLoginForm');
 Route::post('admin-login', ['as'=>'admin-login','uses'=>'Auth\AdminController@login']);
 Route::post('/admin-logout', 'Auth\AdminController@logout');//->name('admin.logout');
 
 
-Route::get('/','Auth\LoginController@showLoginForm');
 
-//Admin login
+
+
+Route::get('/','Auth\AdminController@showLoginForm');
+
 //Route::get('admin-login','Auth\AdminController@showLoginForm');
 //Route::post('admin-login', 'Auth\AdminController@login');
 
@@ -297,5 +311,6 @@ Route::get('autocomplete', 'SalesController@search');
 //delete bill_no
 Route::get('delete_bill','SalesController@delete_sales');
 Route::post('cancel_bill','SalesController@delete_bill');
+Route::get('fetch_bill','SalesController@fetch_bill');
 
 

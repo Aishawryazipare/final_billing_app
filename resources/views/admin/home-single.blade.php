@@ -22,7 +22,7 @@ $a=0;
 
       <div class="info-box-content">
         <span class="info-box-text"><b style="font-size:17px;">Amount</b></span>
-        <span class="info-box-number" style="font-size:17px;">Rs. {{$total_sales_amount}}</span>
+        <span class="info-box-number" style="font-size:17px;">Rs. {{@$total_sales_amount}}</span>
       </div>
     </div>
 </div>
@@ -32,7 +32,7 @@ $a=0;
 
       <div class="info-box-content">
         <span class="info-box-text"><b style="font-size:17px;">Items</b></span>
-        <span class="info-box-number" style="font-size:17px;">{{$total_items}}</span>
+        <span class="info-box-number" style="font-size:17px;">{{@$total_items}}</span>
       </div>
     </div>
 </div>
@@ -42,7 +42,7 @@ $a=0;
 
       <div class="info-box-content">
         <span class="info-box-text"><b style="font-size:17px;">Orders</b></span>
-        <span class="info-box-number" style="font-size:17px;">{{$total_sales}}</span>
+        <span class="info-box-number" style="font-size:17px;">{{@$total_sales}}</span>
       </div>
     </div>
 </div>
@@ -52,7 +52,7 @@ $a=0;
 
       <div class="info-box-content">
         <span class="info-box-text"><b style="font-size:17px;">Locations</b></span>
-        <span class="info-box-number" style="font-size:17px;">{{$total_loc}}</span>
+        <span class="info-box-number" style="font-size:17px;">{{@$total_loc}}</span>
       </div>
     </div>
 </div>
@@ -60,7 +60,7 @@ $a=0;
             </div>
         </div>
     </div>
-    <?php if(count($top_items)!=0){?>
+    <?php if(count(@$top_items)!=0){?>
     <h1>Top Selling Items</h1>
 <!--    @foreach($top_items as $item)
     <div class="col-lg-3 col-xs-12">

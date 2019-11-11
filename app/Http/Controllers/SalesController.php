@@ -495,5 +495,37 @@ class SalesController extends Controller
         return redirect('delete_bill');
          
     }
+        public function fetch_bill()
+    {
+        $bill_no=$_GET['bill_no'];
+        $total_amount=0;
+        $tdata='';
+        $bill_master_data= \App\BillMaster::select('*')->
+                                   leftjoin('bil_addCustomer','bil_addCustomer.cust_id','=','bil_AddBillMaster.cust_id')->where('bill_no','=',$bill_no)->first();
+        $bill_detail_data = \App\BillDetail::select('*')->where(['bill_no'=>$bill_no])->get();
+        $i=1;
+        foreach($bill_detail_data as $data)
+        {
+            $tdata.='<tr>';
+            $tdata.='<td style="text-align:center;">'.$i.'</td>';
+            $tdata.='<td style="text-align:center;">'.$data->item_name.'</td>';
+            $tdata.='<td style="text-align:center;">'.$data->item_qty.'</td>';
+            $tdata.='<td style="text-align:center;">'.$data->item_rate.'</td>';
+            $tdata.='<td style="text-align:center;">'.$data->item_totalrate.'</td>';
+            $tdata.='</tr>';
+            $total_amount=$total_amount+$data->item_totalrate;
+            $i++;
+        }
+            $tdata.='<tr >';
+             $tdata.='<td style="text-align:center;"></td><td style="text-align:center;"></td>';
+             $tdata.='<td style="text-align:center;"></td>';
+             $tdata.='<td style="text-align:center;"><b>Total Amount</b></td>';
+            $tdata.='<td rowspan="4" style="text-align:center;"><b>'.$total_amount.'</b></td>';
+            $tdata.='</tr>';
+        $result['master_data']=$bill_master_data;
+        $result['data']=$tdata;
+        echo json_encode($result);
+                
+    }
     
 }

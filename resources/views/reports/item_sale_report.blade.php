@@ -95,7 +95,7 @@
         <div class="col-md-12">
             <div class="box">
                  <span id="amt"></span>
-                <div class="box-body">
+                <div class="box-body" style="overflow-x:auto;">
                     <table id="example1" class="table table-bordered table-striped" border="1">
                         <thead>
                             <tr>
@@ -126,6 +126,7 @@
 <script src="js/sweetalert.min.js"></script>
 <script>
 $(document).ready(function () {
+    var i=1;
     $('.select2').select2();
     $('#example1').DataTable();
      $('.datepicker').datepicker({
@@ -149,16 +150,36 @@ $(document).ready(function () {
                             url: 'item_sale_report',
                             type: "POST",
                             data: {from_date:currentDate,to_date:currentDate},
-                            success: function(data) {
-                            console.log(data);
-                            var a=JSON.parse(data);
-                            $('#amt').html("<h3>Total Amount: "+a.amount+"</h3>");
-                            $("#header_data").html(a.head);
-                            $("#table_data").html(a.data);
-                             $('#example1').DataTable();
-                            if(a.amount>0)
-                            $(".result").show();
-                            }
+                               success: function (data) {
+                    console.log(data);
+                      var a=JSON.parse(data);
+                      var result=a.other_data;
+                     $('#amt').html("<h3>Total Amount: "+a.amount+"</h3>");
+                    var table;
+         table = $('#example1').DataTable();    
+         if(data!='') {               
+          for (var key=0, size=result.length; key<size; key++){
+            var j = -1;
+            var r = new Array();
+// represent columns as array
+                r[++j] ='<tr><td>'+i+'</td></tr>';
+                r[++j] ='<tr><td>'+result[key].item_name+'</td></tr>';
+                r[++j] ='<tr><td>'+result[key].item_qty+'</td></tr>';
+                r[++j] ='<tr><td>'+result[key].item_rate+'</td></tr>';
+                r[++j] ='<tr><td>'+result[key].item_totalrate+'</td></tr>';
+                r[++j] ='<tr><td>'+result[key].loc_name+'</td></tr>';
+                r[++j] ='<tr><td>'+result[key].user+'</td></tr>';
+                rowNode = table.row.add(r);
+                i++;
+
+        }         
+         }
+         else {
+         $('#example1').html('<h3>No Data Avaliable</h3>');
+         }
+         table.draw();
+                    $(".result").show();
+                }
                     });  
     $("#btnsubmit").click(function () {
         var from_date = $('#from_date').val();
@@ -174,8 +195,31 @@ $(document).ready(function () {
                 success: function (data) {
                     console.log(data);
                       var a=JSON.parse(data);
+                      var result=a.other_data;
                      $('#amt').html("<h3>Total Amount: "+a.amount+"</h3>");
-                    $("#table_data").html(a.data);
+                    var table;
+         table = $('#example1').DataTable();    
+         if(data!='') {               
+          for (var key=0, size=result.length; key<size; key++){
+            var j = -1;
+            var r = new Array();
+// represent columns as array
+                r[++j] ='<tr><td>'+i+'</td></tr>';
+                r[++j] ='<tr><td>'+result[key].item_name+'</td></tr>';
+                r[++j] ='<tr><td>'+result[key].item_qty+'</td></tr>';
+                r[++j] ='<tr><td>'+result[key].item_rate+'</td></tr>';
+                r[++j] ='<tr><td>'+result[key].item_totalrate+'</td></tr>';
+                r[++j] ='<tr><td>'+result[key].loc_name+'</td></tr>';
+                r[++j] ='<tr><td>'+result[key].user+'</td></tr>';
+                rowNode = table.row.add(r);
+                i++;
+
+        }         
+         }
+         else {
+         $('#example1').html('<h3>No Data Avaliable</h3>');
+         }
+         table.draw();
                     $(".result").show();
                 }
             });

@@ -15,6 +15,7 @@ class AuthController extends Controller
      *
      * @return Response
      */
+    protected $loginPath = 'admin-login';  
     public function authenticate()
     {
         //update

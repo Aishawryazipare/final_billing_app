@@ -94,7 +94,7 @@
     <div class="row result">
         <div class="col-md-12">
              <div class="box">
-            <div class="box-body">
+            <div class="box-body" style="overflow-x:auto;">
               <table id="example1" class="table table-bordered table-striped" border="1">
                 <thead>
                 <tr>
@@ -125,6 +125,44 @@
 <script src="js/sweetalert.min.js"></script>
 <script>
 $(document).ready(function () {
+    var i=1;
+     var fullDate = new Date();
+    var month = fullDate.getMonth() + 1;
+    var currentDate = fullDate.getFullYear() + "-" + month + "-" + fullDate.getDate();
+    $.ajax({
+                            url: 'inventory_report',
+                            type: "POST",
+                            data: {from_date:currentDate,to_date:currentDate},
+                            success: function(data) {
+                            console.log(data);
+                            var a=JSON.parse(data);
+                             var result=a.other_data;
+                             var table;
+         table = $('#example1').DataTable();    
+         if(data!='') {               
+          for (var key=0, size=result.length; key<size; key++){
+            var j = -1;
+            var r = new Array();
+// represent columns as array
+                r[++j] ='<tr><td>'+i+'</td></tr>';
+                r[++j] ='<tr><td>'+result[key].sup_name+'</td></tr>';
+                r[++j] ='<tr><td>'+result[key].inventoryitemid+'</td></tr>';
+                r[++j] ='<tr><td>'+result[key].inventoryitemquantity+'</td></tr>';
+                r[++j] ='<tr><td>'+result[key].inventorystatus+'</td></tr>';
+                r[++j] ='<tr><td>'+result[key].loc_name+'</td></tr>';
+                r[++j] ='<tr><td>'+result[key].user+'</td></tr>';
+                rowNode = table.row.add(r);
+                i++;
+
+        }   
+         }
+         else {
+         $('#table_data').html('<h3>No Data Avaliable</h3>');
+         }
+         table.draw();
+                            $(".result").show();
+                            }
+                    });  
     $('.select2').select2();
     $('#example1').DataTable();
   $('.datepicker').datepicker({
@@ -149,13 +187,39 @@ $(document).ready(function () {
             }
             else
             {
+
+
                $.ajax({
                             url: 'inventory_report',
                             type: "POST",
                             data: $("#userForm").serialize(),
                             success: function(data) {
                             console.log(data);
-                            $("#table_data").html(data);
+                            var a=JSON.parse(data);
+                             var result=a.other_data;
+                             var table;
+         table = $('#example1').DataTable();    
+         if(data!='') {               
+          for (var key=0, size=result.length; key<size; key++){
+            var j = -1;
+            var r = new Array();
+// represent columns as array
+                r[++j] ='<tr><td>'+i+'</td></tr>';
+                r[++j] ='<tr><td>'+result[key].sup_name+'</td></tr>';
+                r[++j] ='<tr><td>'+result[key].inventoryitemid+'</td></tr>';
+                r[++j] ='<tr><td>'+result[key].inventoryitemquantity+'</td></tr>';
+                r[++j] ='<tr><td>'+result[key].inventorystatus+'</td></tr>';
+                r[++j] ='<tr><td>'+result[key].loc_name+'</td></tr>';
+                r[++j] ='<tr><td>'+result[key].user+'</td></tr>';
+                rowNode = table.row.add(r);
+                i++;
+
+        }   
+         }
+         else {
+         $('#table_data').html('<h3>No Data Avaliable</h3>');
+         }
+         table.draw();
                             $(".result").show();
                             }
                     });  

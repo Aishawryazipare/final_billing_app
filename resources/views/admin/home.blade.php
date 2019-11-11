@@ -18,7 +18,7 @@ $a=0;
 
       <div class="info-box-content" style="padding-left:0px;">
         <span class="info-box-text"><b style="font-size:17px;">Amount</b></span>
-        <span class="info-box-number" style="font-size:17px;">Rs. <?php echo round($total_sales_amount,2);?></span>
+        <span class="info-box-number" style="font-size:17px;">Rs. <?php if(isset($total_sales_amount)){ echo round($total_sales_amount,2);}?></span>
       </div>
     </div>
 </div>
@@ -103,7 +103,7 @@ $a=0;
                   </tr>
                   </thead>
                   <tbody>
-                      <?php $j=1;?>
+                      <?php $j=1; if(isset($items)){?>
                       @foreach($items as $i)
                       <tr>
                           <td>{{$j}}</td>
@@ -112,7 +112,7 @@ $a=0;
                       </tr>
                       <?php $j++;?>
                       @endforeach
-                        
+                      <?php } ?>
                   </tbody>
                 </table>
               </div>

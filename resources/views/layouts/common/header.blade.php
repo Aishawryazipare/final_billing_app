@@ -24,23 +24,23 @@
           
           <?php if (Auth::guard('admin')->check()) {     ?>
           <li class="dropdown user user-menu">
-            <a class="dropdown-item" href="{{ url('admin-logout') }}"
-                                       onclick="event.preventDefault();document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
-            </a>
-
-            <form id="logout-form" action="{{ url('admin-logout') }}" method="POST" style="display: none;">
-                @csrf
-            </form>  
-          </li>    
-          <?php } else if(Auth::guard('web')->check()){ ?>
-          <li class="dropdown user user-menu">
             <a class="dropdown-item" href="{{ url('logout') }}"
                                        onclick="event.preventDefault();document.getElementById('logout-form').submit();">
                                         {{ __('Logout') }}
             </a>
 
             <form id="logout-form" action="{{ url('logout') }}" method="POST" style="display: none;">
+                @csrf
+            </form>  
+          </li>    
+          <?php } else if(Auth::guard('web')->check()){ ?>
+          <li class="dropdown user user-menu">
+            <a class="dropdown-item" href="{{ url('admin-logout') }}"
+                                       onclick="event.preventDefault();document.getElementById('logout-form').submit();">
+                                        {{ __('Logout') }}
+            </a>
+
+            <form id="logout-form" action="{{ url('admin-logout') }}" method="POST" style="display: none;">
                 @csrf
             </form>  
           </li>

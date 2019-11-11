@@ -201,54 +201,40 @@ class ReportController extends Controller
              }
           }
             $i=1;
-            $tdata='';
-            $thead_data='';
-            $thead_data.='<tr>';
-            $thead_data.='<th style="width:50px;">No.</th>';
-            $thead_data.='<th>Bill No</th>';
-            $thead_data.='<th>Customer Name</th>';
-            $thead_data.='<th>Total Amount</th>';
-            $thead_data.='<th>Cash or Credit</th>';
-            $thead_data.='<th>Location</th>';
-            $thead_data.='<th>User</th>';
-            $thead_data.='</tr>';
+            $result_final=array();
          foreach($bill_data as $data)
          {
              $total_amount = $total_amount + $data->bill_totalamt;
-             $tdata.='<tr>';
-             $tdata.='<td>'.$i.'</td>';
-             $tdata.='<td>'.$data->bill_no.'</td>';
+             $result_data['bill_no']=$data->bill_no;
              $customer_data= \App\Customer::select('*')->where(['cust_id'=>$data->cust_id])->first();
              if(!empty($customer_data))
-             $tdata.='<td>'.$customer_data->cust_name.'</td>';
+              $result_data['cust_name']=$customer_data->cust_name;
              else
-              $tdata.='<td></td>';
-             $tdata.='<td>'.$data->bill_totalamt.'</td>';
-             $tdata.='<td>'.$data->cash_or_credit.'</td>';
+               $result_data['cust_name']='';
+            
+             $result_data['bill_totalamt']=$data->bill_totalamt;
+             $result_data['cash_or_credit']=$data->cash_or_credit;
              if(isset($requestData['location']))
              {
              $location_data= \App\EnquiryLocation::select('*')->where(['loc_id'=>$data->lid])->first();
-             $tdata.='<td>'.$location_data->loc_name.'</td>';
+            $result_data['loc_name']=$location_data->loc_name;
              }
              else
              {
-                  $tdata.='<td>Own</td>';
+                  $result_data['loc_name']='Own';
              }
              $user_data= \App\Employee::select('*')->where(['cid'=>$data->cid,'lid'=>$data->lid,'id'=>$data->emp_id])->first();
              if(empty($user_data))
              {
                 $user_data= \App\Admin::select('*')->where(['rid'=>$data->cid])->first();
-             $tdata.='<td>'.$user_data->reg_personname.'</td>';  
+              $result_data['user']=$user_data->reg_personname;  
              }
             else
-            $tdata.='<td>'.$user_data->name.'</td>';  
-            
-             $tdata.='</tr>';
-             $i++;
+            $result_data['user']=$user_data->name;  
+             array_push($result_final, $result_data);
          }
          $result['amount']=round($total_amount,2);
-         $result['head']=$thead_data;
-         $result['other_data']=$tdata;
+         $result['other_data']=$result_final;
          echo json_encode($result);
          
     }
@@ -577,38 +563,37 @@ class ReportController extends Controller
         }  
         
         $tdata='';
-           
+        $result_final=array();
         foreach($bill_data as $data)
         {
-            $tdata.='<tr>';
-            $tdata.='<td>'.$i.'</td>';
             $supplier_data= \App\Supplier::select('*')->where(['sup_id'=>$data->inventorysupid])->first();
-            $tdata.='<td>'.$supplier_data->sup_name.'</td>';
-            $tdata.='<td>'.$data->inventoryitemid.'</td>';
-            $tdata.='<td>'.$data->inventoryitemquantity.'</td>';
-            $tdata.='<td>'.$data->inventorystatus.'</td>';
-            if(isset($requestData['location']))
+            $result_data['sup_name']=$supplier_data->sup_name;
+            $result_data['inventoryitemid']=$data->inventoryitemid;
+            $result_data['inventoryitemquantity']=$data->inventoryitemquantity;
+            $result_data['inventorystatus']=$data->inventorystatus;
+             if(isset($requestData['location']))
              {
              $location_data= \App\EnquiryLocation::select('*')->where(['loc_id'=>$data->lid])->first();
-             $tdata.='<td>'.$location_data->loc_name.'</td>';
+             $result_data['loc_name']=$location_data->loc_name;
              }
              else
              {
-                  $tdata.='<td>Own</td>';
+                 $result_data['loc_name']='Own';
              }
-             $user_data= \App\Employee::select('*')->where(['cid'=>$data->cid,'lid'=>$data->lid,'id'=>$data->emp_id])->first();
+              $user_data= \App\Employee::select('*')->where(['cid'=>$data->cid,'lid'=>$data->lid,'id'=>$data->emp_id])->first();
              if(empty($user_data))
              {
                 $user_data= \App\Admin::select('*')->where(['rid'=>$data->cid])->first();
-             $tdata.='<td>'.$user_data->reg_personname.'</td>';  
+              $result_data['user']=$user_data->reg_personname;  
              }
             else
-            $tdata.='<td>'.$user_data->name.'</td>';  
-            $tdata.='</tr>';
+            $result_data['user']=$user_data->name;  
+            array_push($result_final,$result_data);
             $i++;
         }
          
-         echo $tdata;
+         $result['other_data']=$result_final;
+         echo json_encode($result);
          
     }
     public function DownloadInventory(Request $request)
@@ -992,39 +977,38 @@ class ReportController extends Controller
             $i=1;
             $tdata='';
            $total_amount=0;
+            $result_final=array();
          foreach($bill_data as $data)
          {
-             $tdata.='<tr>';
-             $tdata.='<td>'.$i.'</td>';
-             $tdata.='<td>'.$data->item_name.'</td>';
-             $tdata.='<td>'.$data->item_qty.'</td>';
-             $tdata.='<td>'.$data->item_rate.'</td>';
-             $tdata.='<td>'.$data->item_totalrate.'</td>';
-              if(isset($requestData['location']))
+             $result_data['item_name']=$data->item_name;
+             $result_data['item_qty']=$data->item_qty;
+             $result_data['item_rate']=$data->item_rate;
+             $result_data['item_totalrate']=$data->item_totalrate;
+                        if(isset($requestData['location']))
              {
              $location_data= \App\EnquiryLocation::select('*')->where(['loc_id'=>$data->lid])->first();
-             $tdata.='<td>'.$location_data->loc_name.'</td>';
+             $result_data['loc_name']=$location_data->loc_name;
              }
              else
              {
-                  $tdata.='<td>Own</td>';
+                 $result_data['loc_name']='Own';
              }
-             $user_data= \App\Employee::select('*')->where(['cid'=>$data->cid,'lid'=>$data->lid,'id'=>$data->emp_id])->first();
+              $user_data= \App\Employee::select('*')->where(['cid'=>$data->cid,'lid'=>$data->lid,'id'=>$data->emp_id])->first();
              if(empty($user_data))
              {
                 $user_data= \App\Admin::select('*')->where(['rid'=>$data->cid])->first();
-             $tdata.='<td>'.$user_data->reg_personname.'</td>';  
+              $result_data['user']=$user_data->reg_personname;  
              }
             else
-            $tdata.='<td>'.$user_data->name.'</td>';  
-             $tdata.='</tr>';
+            $result_data['user']=$user_data->name;  
+            array_push($result_final,$result_data);
              $total_amount=$total_amount+$data->item_totalrate;
              
              $i++;
          }
          
           $result['amount']=round($total_amount,2);
-         $result['data']=$tdata;
+         $result['other_data']=$result_final;
          echo json_encode($result);
          
     }

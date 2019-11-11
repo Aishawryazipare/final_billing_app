@@ -68,7 +68,23 @@
 	border-radius: 50%;
 	background: white;
 }
-
+.serial_no{
+    pointer-events: none;
+    font-size: 15px;
+}
+.tbl_width_oveflow{
+    max-height:500px;
+    overflow:auto;
+}
+@media print {
+    .tbl_width_oveflow{
+        max-height:0px;
+        overflow: hidden;
+    }
+    .serial_no{
+        font-size: 20px;
+    }
+}
 
 </style>
 <link href="css/sweetalert.css" rel="stylesheet">
@@ -166,7 +182,7 @@
              <div class="col-md-6 table-responsive" id="print_content">
                  <form action="{{ url('add_bill') }}" method="POST" id="bill_form" class="form-horizontal" enctype="multipart/form-data">
                 {{ csrf_field() }}
-                 <div class="box box-default" style="max-height:500px;overflow:auto;">
+                 <div class="box box-default tbl_width_oveflow" >
                      <div class="box-body">
                       <div id="set_header">
                     @if(!empty($hf_setting))
@@ -485,76 +501,12 @@ else
 });
 
     $('.select2').select2() 
-//             $.ajax({
-//                url: 'get_setting_details',
-//                type: "get",
-//                success: function(reportdata) {
-//                        console.log(reportdata);
-//                        var data1 = JSON.parse(reportdata);
-//                           
-//                        if(data1!="")
-//                        {   
-//                            if(data1.h1!=null)
-//                            {
-//                                 $("#print_content1").append('<center><h5><b>'+data1.h1+'</b></h5></center>');
-//                            }
-//                            if(data1.h2!=null)
-//                            {
-//                                 $("#print_content1").append('<center><h5><b>'+data1.h2+'</b></h5></center>');
-//                            }
-//                            if(data1.h3!=null)
-//                            {
-//                                 $("#print_content1").append('<center><h5><b>'+data1.h3+'</b></h5></center>');
-//                            }
-//                            if(data1.h4!=null)
-//                            {
-//                                 $("#print_content1").append('<center><h5><b>'+data1.h4+'</b></h5></center>');
-//                            }
-//                            if(data1.h5!=null)
-//                            {
-//                                 $("#print_content1").append('<center><h5><b>'+data1.h5+'</b></h5></center>');
-//                            }
-//                            if(data1.f1!=null)
-//                            {
-//                                 $("#print_content1").append('<center><h5><b>'+data1.f1+'</b></h5></center>');
-//                            }
-//                        }
-//                }
-//                });  
-//     $("#print_bill").click(function(){
-//                console.log("Hello");
-//                   var prtContent = document.getElementById("print_content");
-//      var WinPrint = window.open('', '', 'left=0,top=0,width=900,height=900,toolbar=0,scrollbars=0,status=0');
-//		//WinPrint=window.open();
-//	  WinPrint.document.write(prtContent.innerHTML);
-//       WinPrint.document.close();
-//       WinPrint.focus();
-//       WinPrint.print();
-//       WinPrint.close();
-	   
-	  // window.print();
 
-//        var printContent =document.getElementById("print_content");
-//        var windowUrl = 'about:blank';
-//        var uniqueName = new Date();
-//        var windowName = 'Print' + uniqueName.getTime();
-////
-//        var printWindow = window.open(windowUrl, windowName, 'left=50000,top=50000,width=800,height=600');
-//        printWindow.document.write(printContent.innerHTML);
-//        printWindow.document.close();
-//        printWindow.focus();
-//        printWindow.print();
-//        printWindow.close();
-//    });
- 
  $("#set_header").hide(); 
  $("#set_footer").hide(); 
   $("#print_bill").hide();
  $("#print_bill").click(function(){
-     
-//     window.print();
- 
-	  // window.print();
+        
         var multi_print="<?php echo $hf_setting->multiple_print;?>";
        
         
@@ -566,6 +518,8 @@ else
         $("#bill_no").hide(); 
         
         var printContent =document.getElementById("print_content");
+//        $(".box box-default").css("max-height","0px");
+//        $(".box box-default").css("overflow","hidden");
         var allInputs = printContent.querySelectorAll("input,select,textarea");
         for( var counter = 0; counter < allInputs.length; counter++)
         {
@@ -577,7 +531,7 @@ else
         var windowName = 'Print' + uniqueName.getTime();
         var printWindow = window.open(windowUrl, windowName, 'left=50000,top=50000,width=800,height=600');
         printWindow.document.write(printContent.innerHTML);
-        printWindow.document.write('<html><head><style>th { font-size: 20px }.print{ font-size: 20px }.print_1{ font-size: 18px }.print{border:none} .remove_field{display:none;}<style></head><body>');
+        printWindow.document.write('<html><head><style>th { font-size: 20px }.print{ font-size: 20px }.print_1{ font-size: 18px }.print{border:none} .remove_field{display:none;} .serial_no{font-size:20px;}<style></head><body>');
         printWindow.document.close();
         printWindow.focus();
         printWindow.print();
@@ -617,7 +571,10 @@ else
                             var res=JSON.parse(result);
                             console.log(res);
                             $("#print_bill").click();
-                            swal({ type: "success", title: "Good Job!", confirmButtonColor: "#292929", text: "Bill Generated Successfully", confirmButtonText: "Ok" });
+                            swal({ type: "success", title: "Good Job!", confirmButtonColor: "#292929", text: "Bill Generated Successfully", confirmButtonText: "Ok" }, 
+                                function() {
+                                    location.reload();
+                                });
                             $('#print_bill').attr("display","block");
                             $("#new_bill_no").val(res.bill_no);
                             $("#dwn_pdf").attr("disabled", false);
@@ -636,19 +593,25 @@ else
         }
         else
         {
+//            location.reload();
 //             alert(multi_print);
              //$("#print_bill").show(); 
         }
 		
     });
      $("#h_lost").on('click','.remove_field',function(){
-           // alert(sub_id);
+         var count = $('#bill_tbl').children('tr').length;
+            
             var amt=$(this).closest('tr').find('.item_amt').val();
             var total_amt=$('#bill_totalamt').val();
             var new_amt = total_amt-amt;
-            $('#bill_totalamt').val(new_amt.toFixed(2));
+            if(count == 1){
+                $('#bill_totalamt').val(0);
+            }else{
+                $('#bill_totalamt').val(new_amt.toFixed(2));
+            }
             $(this).parent().parent().remove();
-            var i=1;
+             var i=1;
              $(".serial_no").each(function() {
                  //alert(i);
                  $(this).val(i);
@@ -701,6 +664,12 @@ else
  {
      flag=0;
      var item=$('#gitem_'+item_id).val();
+   //  alert(total)
+     var count = $('#bill_tbl').children('tr').length;
+     if(count == 1){
+         total = 0;
+         i = 1;
+     }
      total=parseFloat(total)+parseFloat(x);
      result_arr.push(item_id);
      result_arr.push(x);
