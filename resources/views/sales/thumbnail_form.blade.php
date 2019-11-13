@@ -112,7 +112,7 @@
     <section class="content">
         <div class="row">
             <div class="col-md-6">
-                <input type="text" name="search_code" id="search_code" class="form-control" onblur="get_code(this.value)" placeholder="Search By Name/Code/Barcode" />
+                <input type="text" name="search_code" id="search_code" class="form-control"  placeholder="Search By Name/Code/Barcode" />
                 <!--<input type="text" name="search_code" id="search_code" class="form-control" onblur="get_code(this.value)" placeholder="Search By Name/Code/Barcode"/>-->
                  <div id="countryList">
     </div>
@@ -120,7 +120,7 @@
             <div class="col-md-3">
                 <input type="text" name="cust_name"  class="form-control"  onkeyup="assign_name(this.value)" placeholder="Client Name"/>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <div class="form-group">
                     <label class="radio-inline">
       <input type="radio" name="cash_or_credit1" value="cash" checked>Card
@@ -128,28 +128,11 @@
     <label class="radio-inline">
       <input type="radio" name="cash_or_credit1" value="cash">Cash
     </label>
-<!--                    <label class="container">
-                        <div class="iradio_minimal-blue checked" aria-checked="true" aria-disabled="false">Card<input name="cash_or_credit1" type="radio" value="card" checked/><span class="checkmark"></span></div>
-                          
-                    </label>
-                     <label class="container">
-                        <div class="iradio_minimal-blue checked" aria-checked="true" aria-disabled="false">Cash<input name="cash_or_credit1" type="radio" value="cash" /><span class="checkmark"></span></div>
-                          
-                    </label>-->
-                    <!--
-                    <label class="">
-                        <div class="iradio_minimal-blue" aria-checked="false" aria-disabled="false"><input name="cash_or_credit" type="radio" value="cash" checked/> Cash</div>
-                       <input type="radio" name="cash_or_credit" class="minimal" value="multiple" style="position: absolute; opacity: 0;" required>
-                    </label>-->
-<!--                    <label class="container">One
-  <input type="radio" checked="checked" name="cash_or_credit">
-  <span class="checkmark"></span>
-</label>-->
-<!--<label class="container">Two
-  <input type="radio"  name="cash_or_credit">
-  <span class="checkmark"></span>
-</label>-->
                 </div>
+<!--                <div >
+                    <button type="button"  class="btn btn-success pull-right" id="clear_item"><i class="fa fa-credit-card"></i> Clear Item
+                </button>
+                </div>-->
             </div>
         </div>
         <div class="row">
@@ -169,9 +152,9 @@
                     <br/>
                     <br/>
                     @if(!empty($hf_setting))
-                    <input type="hidden" id="gst_sett" value="{{$hf_setting->gst_setting}}">
+                    <input type="hidden" id="gst_setting" name="gst_setting" value="{{$hf_setting->gst_setting}}">
                     @else
-                    <input type="hidden" id="gst_sett" value="">
+                    <input type="hidden" id="gst_setting" name="gst_setting" value="No">
                     @endif
                     <div id="item_data">
                         
@@ -236,8 +219,6 @@
                     <th class="gst">Tax</th>
                 @endif
             @endif
-              <th class="gst">Dis</th>
-              <th class="gst">Tax</th>
               <th>Amt</th>
             </tr>
             </thead> 
@@ -338,6 +319,8 @@
 <!--          <a href="{{ url('download_bill?bill_no='.$b_no)}}"><button type="button" id="dwn_pdf" class="btn btn-success pull-right" style="margin-right: 5px;">
             <i class="fa fa-download"></i> Download Bill
           </button></a>-->
+                    <button type="button"  class="btn btn-success" id="clear_item"><i class="fa fa-credit-card"></i> Clear Item
+                </button>
           <button type="button" class="btn btn-primary pull-right" id="save_bill" style="margin-right: 5px;">
             <i class="fa fa-download"></i> Generate Bill
           </button>
@@ -470,7 +453,82 @@
 <script>
 $(document.body).addClass('skin-blue sidebar-mini sidebar-collapse');
 var gst=$("#gst_sett").val();
+
 $(document).ready(function(){
+    document.getElementById("search_code").onkeypress = function(event){
+    if (event.keyCode == 13 || event.which == 13){
+        var code=$(this).val();
+             var flag=0;
+    // alert(flag);
+                $.ajax({
+                            url: 'check-code',
+                            type: "GET",
+                            data: {code:code},
+                            success: function(result) 
+                            {
+                            console.log(result);
+                            var a=JSON.parse(result);
+                            var item=a.item_name;
+                            var rate=a.item_rate;
+                            var disc=a.item_dis;
+                            var tax=a.item_tax;
+                            var qty=1;
+                            var amt=parseFloat(rate)*parseFloat(rate);
+                            $('.item_name').each(function() {
+    var prev_item=$(this).val();
+    if(item==prev_item)
+    {
+//        alert($(this).closest('.item_qty').val());
+        prev_qty=$(this).closest('tr').find('.item_qty').val();
+        var rate=$(this).closest('tr').find('.item_rate').val();
+        new_qty=parseFloat(prev_qty)+1;
+        var amt=parseFloat(new_qty)*parseFloat(rate);
+        $(this).closest('tr').find('.item_qty').val(new_qty);
+        $(this).closest('tr').find('.item_amt').val(amt);
+        flag=1;
+        return false;
+    }
+    
+});
+if(flag==0)
+{
+    if(gst=="Yes")
+    {
+         $(".row1:last").before("<tr class='input_fields_wrap'>\n\
+                    <td style='text-align:center;'><input type='text' value='"+i+"' class='form-control serial_no' style='width:60px;border:none;text-align:center;'></td>\n\
+                    <td style='text-align:center;'><textarea name='stoppage[" + i + "][1]' class='form-control item_name print' cols='10' style='border:none;resize:none;width:200px;height:33px;background-color:#ffffff;' readonly>" + item + "</textarea></td>\n\
+                    <td style='text-align:center;'><input type='text' name='stoppage[" + i + "][2]' class='form-control item_qty print' id='item_qty_" + i + "'  value='" + qty + "' style='width:50px;text-align:center;' onkeyup='table_cal("+i+")'/></td>\n\
+                    <td style='text-align:center;'><input type='text' name='stoppage[" + i + "][3]' class='form-control item_rate print' id='item_rate_" + i + "' value='" + rate + "' style='width:60px;text-align:center;' onkeyup='table_cal("+i+")'/></td>\n\
+                    <td style='text-align:center;' class='gst'><input type='text' name='stoppage[" + i + "][4]' class='form-control item_disc print' id='item_disc_" + i + "' value='" + disc + "' style='border:none;width:50px;text-align:center;background-color:#ffffff;' readonly/></td>\n\
+                    <td style='text-align:center;' class='gst'><input type='text' name='stoppage[" + i + "][5]' class='form-control item_tax print' id='item_tax_" + i + "' value='" + tax + "' style='border:none;width:50px;text-align:center;background-color:#ffffff;' readonly/></td>\n\
+                    <td style='text-align:center;'><input type='text' name='stoppage[" + i + "][6]' class='form-control item_amt print' id='item_amt_" + i + "' value='" + amt + "' style='border:none;width:80px;text-align:center;background-color:#ffffff;' readonly/></td>\n\
+\n\                 <td style='text-align:center;'><i class='fa fa-fw fa-times remove_field' style='color: red;'></i></td>\n\
+            </tr>");
+    }
+    else
+    {
+         $(".row1:last").before("<tr class='input_fields_wrap'>\n\
+                    <td style='text-align:center;'><input type='text' value='"+i+"' class='form-control serial_no' style='width:60px;border:none;text-align:center;'></td>\n\
+                    <td style='text-align:center;'><textarea name='stoppage[" + i + "][1]' class='form-control item_name print' cols='10' style='border:none;resize:none;width:200px;height:33px;background-color:#ffffff;' readonly>" + item + "</textarea></td>\n\
+                    <td style='text-align:center;'><input type='text' name='stoppage[" + i + "][2]' class='form-control item_qty print' id='item_qty_" + i + "'  value='" + qty + "' style='width:50px;text-align:center;' onkeyup='table_cal("+i+")'/></td>\n\
+                    <td style='text-align:center;'><input type='text' name='stoppage[" + i + "][3]' class='form-control item_rate print' id='item_rate_" + i + "' value='" + rate + "' style='width:60px;text-align:center;' onkeyup='table_cal("+i+")'/></td>\n\
+\n\                  <td style='text-align:center;display:none;' class='gst'><input type='text' name='stoppage[" + i + "][4]' class='form-control item_disc print' id='item_disc_" + i + "' value='" + disc + "' style='border:none;width:50px;text-align:center;background-color:#ffffff;' readonly/></td>\n\
+                    <td style='text-align:center;display:none;' class='gst'><input type='text' name='stoppage[" + i + "][5]' class='form-control item_tax print' id='item_tax_" + i + "' value='" + tax + "' style='border:none;width:50px;text-align:center;background-color:#ffffff;' readonly/></td>\n\
+                    <td style='text-align:center;'><input type='text' name='stoppage[" + i + "][6]' class='form-control item_amt print' id='item_amt_" + i + "' value='" + amt + "' style='border:none;width:80px;text-align:center;background-color:#ffffff;' readonly/></td>\n\
+\n\                 <td style='text-align:center;'><i class='fa fa-fw fa-times remove_field' style='color: red;'></i></td>\n\
+            </tr>");
+    }
+     i++;
+      var total=$('#bill_totalamt').val();
+     total=parseFloat(total)+parseFloat(rate);
+    // alert(total)
+       $('#bill_totalamt').val(total.toFixed(2));
+}
+                            }
+                    });
+                    $('#search_code').val("");
+    }
+};
     $(function () {
 //    $('input').iCheck({
 //      checkboxClass: 'icheckbox_square-blue',
@@ -571,7 +629,7 @@ else
                             var res=JSON.parse(result);
                             console.log(res);
                             $("#print_bill").click();
-                            swal({ type: "success", title: "Good Job!", confirmButtonColor: "#292929", text: "Bill Generated Successfully", confirmButtonText: "Ok" }, 
+                            swal({ type: "success", title: "Done!", confirmButtonColor: "#292929", text: "Bill Generated Successfully", confirmButtonText: "Ok" }, 
                                 function() {
                                     location.reload();
                                 });
@@ -618,6 +676,11 @@ else
                  i++;
              });
         });
+        $( "#clear_item" ).click(function() {
+            $('table tr.input_fields_wrap').remove();
+            $('#bill_totalamt').val(0);
+            var i=1;;
+        });
  $( "#download_bill" ).click(function() {
     
     var bill_no=$('#bil_no').val();
@@ -636,7 +699,7 @@ else
     
  });
   function get_items(cat_id,x){
-//         var cat_id=$(this).find('.cat_id').text();
+         var gst_setting=$('#gst_setting').val();
        //  if(cat_id==0)
        //  {
              $('#item_data').html("");
@@ -645,7 +708,7 @@ else
          $.ajax({
                             url: 'get-item',
                             type: "GET",
-                            data: {cat_id:cat_id},
+                            data: {cat_id:cat_id,gst:gst_setting},
                             success: function(result) 
                             {
                             console.log(result);
@@ -663,6 +726,7 @@ else
  function cal(x,item_id,disc,tax)
  {
      flag=0;
+     
      var item=$('#gitem_'+item_id).val();
    //  alert(total)
      var count = $('#bill_tbl').children('tr').length;
@@ -823,6 +887,7 @@ if(flag==0)
      $('#cust_data').html("<b>Customer Name: </b> "+cust_name+"");
      $('#cust_data').hide();
  }
+ 
  $( "#search_code" ).autocomplete({
  
         source: function(request, response) {

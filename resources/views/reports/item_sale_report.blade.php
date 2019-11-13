@@ -43,7 +43,7 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-calendar calendar1"></i>
                                     </div>
-                                    <input type="text" name="from_date" class="form-control mobile_date datepicker from_date"style="background-color: #ffffff;" id="from_date" autocomplete="off" required/>
+                                    <input type="text" name="from_date" class="form-control mobile_date datepicker from_date"style="background-color: #ffffff;" id="from_date" autocomplete="off" value="<?php echo date('Y-m-d');?>" required/>
                                 </div>
                             </div>
                             <label for="lbl_cat_name" class="col-sm-2 control-label">To Date</label>
@@ -52,7 +52,7 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-calendar calendar2"></i>
                                     </div>
-                                    <input type="text" name="to_date" class="form-control mobile_date datepicker to_date" value="" style="background-color: #ffffff;" autocomplete="off"/>
+                                    <input type="text" name="to_date" class="form-control mobile_date datepicker to_date"  style="background-color: #ffffff;" autocomplete="off" value="<?php echo date('Y-m-d');?>"/>
                                 </div>
                             </div>
                         </div>
@@ -99,11 +99,12 @@
                     <table id="example1" class="table table-bordered table-striped" border="1">
                         <thead>
                             <tr>
-                                <th style="width:50px;">Sr.No</th>
+                                <th style="width:20px;">Sr.No</th>
+                                <th style="width:20px;">ICode</th>
                                 <th>Item Name</th>
                                 <th>Item Qty</th>
-                                <th>Rate</th>
-                                <th>Amount</th>
+                                <th  style="width:20px;">Rate</th>
+                                <th  style="width:20px;">Amount</th>
                                 <th>Location</th>
                                 <th>User</th>
                             </tr>
@@ -155,7 +156,9 @@ $(document).ready(function () {
                       var a=JSON.parse(data);
                       var result=a.other_data;
                      $('#amt').html("<h3>Total Amount: "+a.amount+"</h3>");
-                    var table;
+                                              var table = $('#example1').DataTable();
+table.clear().draw();
+     i=1;  
          table = $('#example1').DataTable();    
          if(data!='') {               
           for (var key=0, size=result.length; key<size; key++){
@@ -163,6 +166,7 @@ $(document).ready(function () {
             var r = new Array();
 // represent columns as array
                 r[++j] ='<tr><td>'+i+'</td></tr>';
+                r[++j] ='<tr><td>'+result[i].icode+'</td></tr>';
                 r[++j] ='<tr><td>'+result[key].item_name+'</td></tr>';
                 r[++j] ='<tr><td>'+result[key].item_qty+'</td></tr>';
                 r[++j] ='<tr><td>'+result[key].item_rate+'</td></tr>';
@@ -205,6 +209,7 @@ $(document).ready(function () {
             var r = new Array();
 // represent columns as array
                 r[++j] ='<tr><td>'+i+'</td></tr>';
+                r[++j] ='<tr><td>'+result[key].icode+'</td></tr>';
                 r[++j] ='<tr><td>'+result[key].item_name+'</td></tr>';
                 r[++j] ='<tr><td>'+result[key].item_qty+'</td></tr>';
                 r[++j] ='<tr><td>'+result[key].item_rate+'</td></tr>';

@@ -10,6 +10,6 @@ class BillMaster extends Model
     public $table = "bil_AddBillMaster";
     public $timestamps=false;
     protected $fillable = [
-        'bill_date','cust_id','cash_or_credit','discount','bill_totalamt','bill_tax','created_at_TIMESTAMP','updated_at_TIMESTAMP','isactive','lid','cid','emp_id'
+        'bill_date','cust_id','cash_or_credit','discount','gst_setting','bill_totalamt','bill_tax','created_at_TIMESTAMP','updated_at_TIMESTAMP','isactive','lid','cid','emp_id'
     ];
 }

@@ -35,7 +35,8 @@ class HomeController extends Controller
 //            exit;
             if($location=="multiple")
             {
-                $total_items=Item::where('cid', '=', $id)->count();
+                 $active_items=Item::where(['cid'=>$id,'is_active'=>0])->count();
+                $inactive_items=Item::where(['cid'=>$id,'is_active'=>1])->count();
                 $total_sales= BillDetail::where('cid', '=', $id)->count();
 				$total_sales_amount= BillDetail::where('cid', '=', $id)->sum('item_totalrate');
                 $total_loc= EnquiryLocation::where('cid', '=', $id)->count();
@@ -85,7 +86,7 @@ class HomeController extends Controller
 //                echo "<pre>";
 //                print_r($items);
 //                exit;
-                return view('admin.home',['total_items'=>$total_items,'total_sales'=>$total_sales,'top_items'=>$top_items,'total_loc'=>$total_loc,'top_loc'=>$top_loc,'final_pie'=>$final_pie,'items'=>$items,'total_sales_amount'=>$total_sales_amount]);
+                return view('admin.home',['active_items'=>$active_items,'inactive_items'=>$inactive_items,'total_sales'=>$total_sales,'top_items'=>$top_items,'total_loc'=>$total_loc,'top_loc'=>$top_loc,'final_pie'=>$final_pie,'items'=>$items,'total_sales_amount'=>$total_sales_amount]);
 //                echo "<pre>";
 //                print_r($final_pie);
 //                exit;
@@ -93,7 +94,8 @@ class HomeController extends Controller
             }
             if($location=="single")
             {
-                $total_items=Item::where('cid', '=', $id)->count();
+                $active_items=Item::where(['cid'=>$id,'is_active'=>0])->count();
+                $inactive_items=Item::where(['cid'=>$id,'is_active'=>1])->count();
                 $total_sales= BillDetail::where('cid', '=', $id)->count();
 				$total_sales_amount= BillDetail::where('cid', '=', $id)->sum('item_totalrate');
                 $total_loc= EnquiryLocation::where('cid', '=', $id)->count();
@@ -116,7 +118,7 @@ class HomeController extends Controller
                      ->orderby('orders','desc')
                      ->limit(4)
                      ->get();
-                return view('admin.home-single',['total_items'=>$total_items,'total_sales'=>$total_sales,'top_items'=>$top_items,'total_loc'=>$total_loc,'total_sales_amount'=>$total_sales_amount]);
+                return view('admin.home-single',['active_items'=>$active_items,'inactive_items'=>$inactive_items,'total_sales'=>$total_sales,'top_items'=>$top_items,'total_loc'=>$total_loc,'total_sales_amount'=>$total_sales_amount]);
 //                return view('admin.home-single');
             }
             
@@ -124,90 +126,16 @@ class HomeController extends Controller
         
     }
     
-//    public function indexAdmin()
-//    {
-//        $date = date('Y-m-d');
-//        if(Auth::guard('admin')->check()){
-//            $id = $this->admin->rid;
-//            $today_en = DB::table('tbl_enquiry')
-//                  ->select('enquiry_no','customer_name','mobile_no','enquiry_id')
-//                  ->where('followup_date','=',$date)
-//                  ->where(['cid'=>$id])
-//                  ->get();
-//             $status = \App\EnquiryStatus::where(['is_active'=>0,'cid'=>$id])->get();
-//        }else if(Auth::guard('web')->check()){
-//             $today_en = DB::table('tbl_enquiry')
-//                  ->select('enquiry_no','customer_name','mobile_no','enquiry_id')
-//                  ->where('followup_date','=',$date)
-//                  ->get();
-//             $status = \App\EnquiryStatus::where(['is_active'=>0])->get();
-//        }
-//        else if(Auth::guard('employee')->check()){
-//            $cid = $this->employee->cid;
-//            $lid = $this->employee->lid;
-//            $emp_id = $this->employee->id;
-//            $today_en = DB::table('tbl_enquiry')
-//                  ->select('enquiry_no','customer_name','mobile_no','enquiry_id')
-//                  ->where('followup_date','=',$date)
-//                  ->where(['cid'=>$cid,'lid'=>$lid,'emp_id'=>$emp_id])
-//                  ->get();
-//            $status = \App\EnquiryStatus::where(['is_active'=>0,'cid'=>$id,'emp_id'=>$emp_id,'lid'=>$lid])->get();
-//        }  
-//        return view('admin.home',['today_en'=>$today_en,'status'=>$status]);
-//    }
     /**
      * Show the application dashboard.
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index()
-    {
-                    
-        return view('home');
-        //}
-    }
+   
     
     public function empIndex(){
-        $date = date('Y-m-d');
-        if(Auth::guard('admin')->check()){
-            $id = $this->admin->rid;
-             $today_en = DB::table('tbl_enquiry')
-                  ->select('enquiry_no','customer_name','mobile_no','enquiry_id')
-                  ->where('followup_date','=',$date)
-                  ->where(['cid'=>$id])
-                  ->get();
-             $status = \App\EnquiryStatus::where(['is_active'=>0,'cid'=>$id])->get();
-        }else if(Auth::guard('web')->check()){
-             $today_en = DB::table('tbl_enquiry')
-                  ->select('enquiry_no','customer_name','mobile_no','enquiry_id')
-                  ->where('followup_date','=',$date)
-                  ->get();
-             $status = \App\EnquiryStatus::where(['is_active'=>0])->get();
-        }
-        else if(Auth::guard('employee')->check()){						
-            $cid = $this->employee->cid;
-            $lid = $this->employee->lid;
-            $emp_id = $this->employee->id;
-            $role = $this->employee->role;
-            if($role == 1){
-                $today_en = DB::table('tbl_enquiry')
-                  ->select('enquiry_no','customer_name','mobile_no','enquiry_id')
-                  ->where('followup_date','=',$date)
-                  ->where(['cid'=>$cid,'lid'=>$lid,'emp_id'=>$emp_id])
-                  ->get();
-                $status = \App\EnquiryStatus::where(['is_active'=>0,'cid'=>$cid,'emp_id'=>$emp_id])->get();
-            }else{
-            $today_en = DB::table('tbl_enquiry')
-                  ->select('enquiry_no','customer_name','mobile_no','enquiry_id')
-                  ->where('followup_date','=',$date)
-                  ->where(['cid'=>$cid,'lid'=>$lid,'emp_id'=>$emp_id])
-                  ->get();
-               $status = \App\EnquiryStatus::where(['is_active'=>0,'cid'=>$cid,'emp_id'=>$emp_id])->get();
-            }
-            
-        }  
        
-        return view('employee.home',['today_en'=>$today_en,'status'=>$status]);
+        return view('employee.home');
     }
     public function dealerIndex(){
         $date = date('Y-m-d');

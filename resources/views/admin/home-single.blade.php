@@ -22,7 +22,7 @@ $a=0;
 
       <div class="info-box-content">
         <span class="info-box-text"><b style="font-size:17px;">Amount</b></span>
-        <span class="info-box-number" style="font-size:17px;">Rs. {{@$total_sales_amount}}</span>
+        <span class="info-box-number" style="font-size:17px;">Rs. <?php if(isset($total_sales_amount)){ echo $total_sales_amount; }else { echo 0; }?></span>
       </div>
     </div>
 </div>
@@ -31,8 +31,8 @@ $a=0;
       <span class="info-box-icon bg-red"><i class="fa fa-fw fa-cubes" style="padding-top: 17px;"></i></span>
 
       <div class="info-box-content">
-        <span class="info-box-text"><b style="font-size:17px;">Items</b></span>
-        <span class="info-box-number" style="font-size:17px;">{{@$total_items}}</span>
+        <span class="info-box-text"><b style="font-size:17px;">Active Items</b></span>
+        <span class="info-box-number" style="font-size:17px;">{{@$active_items}}</span>
       </div>
     </div>
 </div>
@@ -53,6 +53,16 @@ $a=0;
       <div class="info-box-content">
         <span class="info-box-text"><b style="font-size:17px;">Locations</b></span>
         <span class="info-box-number" style="font-size:17px;">{{@$total_loc}}</span>
+      </div>
+    </div>
+</div>
+<div class="col-md-3 col-sm-6 col-xs-12">
+    <div class="info-box">
+      <span class="info-box-icon bg-red"><i class="fa fa-fw fa-cubes" style="padding-top: 17px;"></i></span>
+
+      <div class="info-box-content">
+        <span class="info-box-text"><b style="font-size:17px;">Inactive Items</b></span>
+        <span class="info-box-number" style="font-size:17px;">{{@$inactive_items}}</span>
       </div>
     </div>
 </div>

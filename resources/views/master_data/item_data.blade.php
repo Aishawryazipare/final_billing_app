@@ -36,19 +36,22 @@
               <table id="example1" class="table table-bordered table-striped" border="1">
                 <thead>
                 <tr>
-                  <th style="width:50px;">Code</th>
+                   <th style="width:20px;">Sr.No</th>
+                  <th style="width:20px;">ICode</th>
                   <th>Item Name</th>
-                  <th>Rate</th>
-                  <th>Discount Rate</th>
-                  <th>Final Rate</th>
-                  <th>Category</th>
+                  <th style="width:20px;">Rate</th>
+                  <th style="width:20px;">Discount Rate</th>
+                  <th style="width:20px;">Final Rate</th>
+                  <th style="width:50px;">Category</th>
                   <th>Unit</th>
                   <th style="width: 100px;">Action</th>
                 </tr>
                 </thead>
                 <tbody>
+                    <?php $i=1;?>
                     @foreach($item_data as $s)
                         <tr>
+                            <td>{{$i}}</td>
                             <td>{{$s->item_id}}</td>
                             <td>{{$s->item_name}}</td>
                             <td>{{$s->item_rate}}</td>
@@ -66,6 +69,7 @@
                                 <a href="{{ url('delete-item')}}/{{$s->item_id}}" style="color:red" class="delete"><span class="fa fa-trash"></span></a>
                             </td>
                         </tr>
+                        <?php $i++;?>
                     @endforeach
                 </tbody>
               </table>

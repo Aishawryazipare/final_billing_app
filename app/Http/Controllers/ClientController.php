@@ -22,6 +22,13 @@ class ClientController extends Controller
 //        });
     }
     
+     public function index()
+    {
+                    
+        return view('home');
+        //}
+    }
+    
     public function getClientData() {
         $client_data = DB::table('bil_Registration')->orderBy('rid', 'asc')->get();
         return view('master_data.client_data',['client_data' => $client_data]);

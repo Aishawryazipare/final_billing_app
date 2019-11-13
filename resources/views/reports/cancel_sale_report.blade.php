@@ -16,11 +16,11 @@
 <link rel="stylesheet" href="bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
 <section class="content-header">
     <h1>
-        Sales Report
+        Cancel Sales Report
     </h1>
     <ol class="breadcrumb">
         <li><a href="{{url('home')}}"><i class="fa fa-dashboard"></i> Report</a></li>
-        <li class="active">Sales Report</li>
+        <li class="active">Cancel Sales Report</li>
     </ol>
 </section>
 @if (Session::has('alert-success'))
@@ -36,7 +36,7 @@
                 <div class="box-header">
                     <h3 class="box-title"></h3>
                 </div>
-                <form class="form-horizontal" id="userForm" method="post" action="{{ url('download_sale') }}">
+                <form class="form-horizontal" id="userForm" method="post" action="{{ url('download_cancel_bill_report') }}">
                     {{ csrf_field() }}
                     <div class="box-body">
                         <input type="hidden" name="en_id" id="en_id" value="" />
@@ -134,7 +134,6 @@
                   <th style="width:20px;">Cash/Credit</th>
                   <th style="width:50px;">Location</th>
                   <th>User</th>
-                  <th>Action</th>
                 </tr>
                 </thead>
                 <tbody id="table_data">
@@ -160,7 +159,7 @@ $(document).ready(function () {
     var month = fullDate.getMonth() + 1;
     var currentDate = fullDate.getFullYear() + "-" + month + "-" + fullDate.getDate();
      $.ajax({
-                            url: 'sale_report',
+                            url: 'cancel_bill_report',
                             type: "POST",
                             data: {from_date:currentDate,to_date:currentDate},
                               success: function(data) {
@@ -181,7 +180,6 @@ $(document).ready(function () {
                 r[++j] ='<tr><td>'+result[key].cash_or_credit+'</td></tr>';
                 r[++j] ='<tr><td>'+result[key].loc_name+'</td></tr>';
                 r[++j] ='<tr><td>'+result[key].user+'</td></tr>';
-                r[++j] ='<tr><td><i class="fa fa-fw fa-times remove_field" style="color: red;"></i></td></tr>';
                 rowNode = table.row.add(r);
                 i++;
 
@@ -220,16 +218,16 @@ $('.calendar1').click(function() {
             else
             {
                $.ajax({
-                            url: 'sale_report',
+                            url: 'cancel_bill_report',
                             type: "POST",
                             data: $("#userForm").serialize(),
                             success: function(data) {
                             console.log(data);
                             var a=JSON.parse(data);
                             var result=a.other_data;
-                            var table = $('#example1').DataTable();
+                             var table = $('#example1').DataTable();
 table.clear().draw();
-     i=1;                        
+i=1;
          table = $('#example1').DataTable();    
          if(data!='') {               
           for (var key=0, size=result.length; key<size; key++){
@@ -243,7 +241,6 @@ table.clear().draw();
                 r[++j] ='<tr><td>'+result[key].cash_or_credit+'</td></tr>';
                 r[++j] ='<tr><td>'+result[key].loc_name+'</td></tr>';
                 r[++j] ='<tr><td>'+result[key].user+'</td></tr>';
-                r[++j] ='<tr><td><i class="fa fa-fw fa-times remove_field" style="color: red;"></i></td></tr>';
                 rowNode = table.row.add(r);
                 i++;
 

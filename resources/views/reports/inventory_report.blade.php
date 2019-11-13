@@ -43,7 +43,7 @@
                                             <div class="input-group-addon">
                                               <i class="fa fa-calendar calendar1"></i>
                                             </div>
-                                <input type="text" name="from_date" class="form-control mobile_date datepicker from_date"id="from_date" style="background-color: #ffffff;" autocomplete="off" required/>
+                                <input type="text" name="from_date" class="form-control mobile_date datepicker from_date"id="from_date" style="background-color: #ffffff;" autocomplete="off" value="<?php echo date('Y-m-d');?>" required/>
                                         </div>
                         </div>
                          <label for="lbl_cat_name" class="col-sm-2 control-label">To Date</label>
@@ -52,7 +52,7 @@
                                             <div class="input-group-addon">
                                               <i class="fa fa-calendar calendar2"></i>
                                             </div>
-                                <input type="text" name="to_date" class="form-control mobile_date datepicker to_date" value="" style="background-color: #ffffff;" autocomplete="off"/>
+                                <input type="text" name="to_date" class="form-control mobile_date datepicker to_date"  style="background-color: #ffffff;" autocomplete="off" value="<?php echo date('Y-m-d');?>"/>
                                         </div>
                         </div>
                     </div>

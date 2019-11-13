@@ -106,14 +106,15 @@ class EmployeeController extends Controller
     
     public function login(Request $request)
     {
+        echo "<pre>";print_r($request->all());exit;
         $this->validate($request, [
             'mobile_no' => 'required',
             'password' => 'required',
         ]);
         if (auth()->guard('employee')->attempt(['mobile_no' => $request->mobile_no, 'password' => $request->password], $request->get('remember'))) {
             $minutes = 10;
-            Cookie::queue('mobile_no', $request->mobile_no , $minutes);
-            Cookie::queue('password', $request->password , $minutes);
+            //Cookie::queue('mobile_no', $request->mobile_no , $minutes);
+           // Cookie::queue('password', $request->password , $minutes);
 //            $response = new Response('Hello World');
 //            $response->withCookie(cookie('mobile_no', $request->mobile_no , $minutes));
 //            $response->withCookie(cookie('password', $request->password , $minutes));

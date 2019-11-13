@@ -123,6 +123,7 @@ class SalesController extends Controller
     public function getItems()
     {
         $cat_id=$_GET["cat_id"];
+        $gst_setting=$_GET["gst"];
         $bdata='';
         $j=1;
         if($cat_id==0)
@@ -175,6 +176,8 @@ class SalesController extends Controller
             foreach($item_data as $data)
             {
                 $replaced_item = str_replace(' ', '_', $data->item_name);
+                if($gst_setting=="Yes")
+                $data->item_final_rate=$data->item_rate;
                 $bdata.='<button type="button" class="btn btn-block btn-default" style="border-color:#00ffc3;font-weight:bold;width:96px;height:68px;white-space: normal;margin-bottom:0px;display:inline;margin-right:0px; overflow: hidden;text-overflow: ellipsis;" onclick="cal('.$data->item_final_rate.','.$data->item_id.','.$data->item_dis.','.$data->item_tax.')">'.wordwrap($data->item_name, 12, "<br/>", false)."</br>Rs. ".$data->item_final_rate.'</button><input type="hidden" id="gitem_'.$data->item_id.'" value="'.$data->item_name.'"/>';
 //                 $bdata.='<button type="button" class="btn btn-block btn-default" style="border-color:#00ffc3;font-weight:bold;width:auto;height:68px;margin-bottom:5px;display:inline;margin-right:5px;" onclick="cal('.$data->item_final_rate.','.$data->item_id.','.$data->item_dis.','.$data->item_tax.')">'.wordwrap($data->item_name, 12, "<br/>", false).'<br/>Rs. '.$data->item_final_rate.'</button><input type="hidden" id="gitem_'.$data->item_id.'" value="'.$data->item_name.'"/>';
                 $j++;
@@ -222,9 +225,11 @@ class SalesController extends Controller
             }
             foreach($item_data as $data)
             {
+                  if($gst_setting=="Yes")
+                $data->item_final_rate=$data->item_rate;
                 $replaced_item = str_replace(' ', '_', $data->item_name);
                 //$bdata.='<div class="col-sm-2" style="width:auto;"><button type="button" class="btn btn-block btn-default" style=" margin-left: -10px;border-color:#666666;width:auto;height:68px;" onclick="cal('.$data->item_final_rate.','.$data->item_id.','.$data->item_dis.','.$data->item_tax.')">'.wordwrap($data->item_name, 12, "<br/>", false).'<br/>Rs. '.$data->item_final_rate.'</button><input type="hidden" id="gitem_'.$data->item_id.'" value="'.$data->item_name.'"/></div>';
-                $bdata.='<button type="button" class="btn btn-block btn-default" style="border-color:#00ffc3;font-weight:bold;width:96px;height:68px;white-space: normal;margin-bottom:0px;display:inline;margin-right:0px; overflow: hidden;text-overflow: ellipsis;" onclick="cal('.$data->item_final_rate.','.$data->item_id.','.$data->item_dis.','.$data->item_tax.')">Rs.'.$data->item_final_rate.'<br/>'.wordwrap($data->item_name, 12, "<br/>", false).'</button><input type="hidden" id="gitem_'.$data->item_id.'" value="'.$data->item_name.'"/>';
+                $bdata.='<button type="button" class="btn btn-block btn-default" style="border-color:#00ffc3;font-weight:bold;width:96px;height:68px;white-space: normal;margin-bottom:0px;display:inline;margin-right:0px; overflow: hidden;text-overflow: ellipsis;" onclick="cal('.$data->item_final_rate.','.$data->item_id.','.$data->item_dis.','.$data->item_tax.')">'.wordwrap($data->item_name, 12, "<br/>", false)."</br>Rs. ".$data->item_final_rate.'</button><input type="hidden" id="gitem_'.$data->item_id.'" value="'.$data->item_name.'"/>';
 				$j++;
 
             } 
@@ -526,6 +531,31 @@ class SalesController extends Controller
         $result['data']=$tdata;
         echo json_encode($result);
                 
+    }
+    public function delete_bill_no()
+    {
+        $bill_no=$_GET['bill_no'];
+        $master_data= \App\BillMaster::select('*')->where(['bill_no'=>$bill_no,'isactive'=>0])->first();
+       $amount=$master_data->bill_totalamt;
+        $master_data->update(['isactive'=>1]);
+        if(Auth::guard('admin')->check()){
+            $cid=$this->admin->rid;
+        }
+        $bill_data = \App\BillDetail::select('*')->where(['bill_no'=>$bill_no,'isactive'=>0])->get();
+        foreach($bill_data as $data)
+        {
+            $item_data=\App\Item::select('item_stock')->where(['item_name'=>$data->item_name,'cid'=>$cid])->first();
+          
+            $updated_stock=$item_data->item_stock+$data->item_qty;
+           // echo $updated_stock;
+            $count=\App\Item::where(['item_name'=>$data->item_name,'cid'=>$cid])->update(['item_stock'=>$updated_stock]);
+            $count=\App\BillDetail::where(['bill_no'=>$bill_no,'isactive'=>0])->update(['isactive'=>1]);
+              
+        }
+        $result['amount']=$amount;
+        $result['flag']=1;
+        echo json_encode($result);
+        
     }
     
 }

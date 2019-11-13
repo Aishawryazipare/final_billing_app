@@ -12,6 +12,7 @@
 		//exit;
     }
     elseif(Auth::guard('web')->check()){
+        //echo "1";exit;
         $permission = json_decode(Auth::guard('web')->user()->permission,true);
         $role = 1;
         $logo = "cat_images/admin.png";
@@ -109,6 +110,19 @@
            <li <?php if(Request::is('supplier_data')) { ?>class="active" <?php } ?>><a href="{{url('supplier_data')}}"><i class="fa fa-circle-o" style="color: #00ffc3;"></i>Supplier</a></li>
            </ul>
            </li>
+            <li class="treeview">
+           <a href="#">
+            <i class="fa fa-list" style="color: #00ffc3;"></i> <span>Sales</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right" style="color: #00ffc3;"></i>
+            </span>
+          </a>
+             <ul class="treeview-menu">
+                <li><a href="{{url('thumbnail')}}"><i class="fa fa-circle-o" style="color: #00ffc3;"></i>Thumbnail Wise</a></li>
+                 <!--<li><a href="{{url('delete_bill')}}"><i class="fa fa-circle-o" style="color: #00ffc3;"></i>Delete Bill</a></li>-->
+             </ul>
+           
+        </li>
                 <li class="treeview">
          <a href="#">
            <i class="fa fa-list" style="color: #00ffc3;"></i> <span>Purchase</span>
@@ -120,25 +134,28 @@
            <li <?php if(Request::is('inventory')) { ?>class="active" <?php } ?>><a href="{{url('inventory')}}"><i class="fa fa-circle-o" style="color: #00ffc3;"></i>Inventory /Stock</a></li>
          </ul>
        </li>
+         <li class="treeview">
+           <a href="#">
+            <i class="fa fa-list" style="color: #00ffc3;"></i> <span>Reports</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right" style="color: #00ffc3;"></i>
+            </span>
+          </a>
+             <ul class="treeview-menu" <?php if(Request::is('sale_report') || Request::is('inventory_report') || Request::is('item_report') || Request::is('item_sale_report')) {?> style="display:block" <?php } ?>>
+                <li <?php if(Request::is('sale_report')) { ?>class="active" <?php } ?>><a href="{{url('sale_report')}}"><i class="fa fa-circle-o" style="color: #00ffc3;"></i>Sales Bill Report</a></li>
+                <li <?php if(Request::is('inventory_report')) { ?>class="active" <?php } ?>><a href="{{url('inventory_report')}}"><i class="fa fa-circle-o" style="color: #00ffc3;"></i>Inventory Report</a></li>
+                <li <?php if(Request::is('item_report')) { ?>class="active" <?php } ?>><a href="{{url('item_report')}}"><i class="fa fa-circle-o" style="color: #00ffc3;"></i>Stock Report</a></li>
+                <li <?php if(Request::is('item_sale_report')) { ?>class="active" <?php } ?>><a href="{{url('item_sale_report')}}"><i class="fa fa-circle-o" style="color: #00ffc3;"></i>Item Sales Report</a></li>
+                <li <?php if(Request::is('cancel_bill_report')) { ?>class="active" <?php } ?>><a href="{{url('cancel_bill_report')}}"><i class="fa fa-circle-o" style="color: #00ffc3;"></i>Cancel Bill Report</a></li>
+         </ul>
+        </li>
         <li <?php if(Request::is('user-list')) { ?>class="active" <?php } ?>>
             <a href="{{url('user-list')}}">
                 <!--<i class="fa fa-user"></i>  Users-->
                  <i class="fa fa-user" style="color: #00ffc3;"></i> <span>Users</span>
             </a>
         </li>
-       <li class="treeview">
-           <a href="#">
-            <i class="fa fa-list" style="color: #00ffc3;"></i> <span>Sales</span>
-            <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right" style="color: #00ffc3;"></i>
-            </span>
-          </a>
-             <ul class="treeview-menu">
-                <li><a href="{{url('thumbnail')}}"><i class="fa fa-circle-o" style="color: #00ffc3;"></i>Thumbnail Wise</a></li>
-                 <li><a href="{{url('delete_bill')}}"><i class="fa fa-circle-o" style="color: #00ffc3;"></i>Delete Bill</a></li>
-             </ul>
-           
-        </li>
+      
          <li class="treeview">
            <a href="#">
             <i class="fa fa-list" style="color: #00ffc3;"></i> <span>Settings</span>
@@ -162,20 +179,7 @@
                 </li>
             </ul>
         </li>
-        <li class="treeview">
-           <a href="#">
-            <i class="fa fa-list" style="color: #00ffc3;"></i> <span>Reports</span>
-            <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right" style="color: #00ffc3;"></i>
-            </span>
-          </a>
-             <ul class="treeview-menu" <?php if(Request::is('sale_report') || Request::is('inventory_report') || Request::is('item_report') || Request::is('item_sale_report')) {?> style="display:block" <?php } ?>>
-                <li <?php if(Request::is('sale_report')) { ?>class="active" <?php } ?>><a href="{{url('sale_report')}}"><i class="fa fa-circle-o" style="color: #00ffc3;"></i>Sales Bill Report</a></li>
-                <li <?php if(Request::is('inventory_report')) { ?>class="active" <?php } ?>><a href="{{url('inventory_report')}}"><i class="fa fa-circle-o" style="color: #00ffc3;"></i>Inventory Report</a></li>
-                <li <?php if(Request::is('item_report')) { ?>class="active" <?php } ?>><a href="{{url('item_report')}}"><i class="fa fa-circle-o" style="color: #00ffc3;"></i>Stock Report</a></li>
-                <li <?php if(Request::is('item_sale_report')) { ?>class="active" <?php } ?>><a href="{{url('item_sale_report')}}"><i class="fa fa-circle-o" style="color: #00ffc3;"></i>Item Sales Report</a></li>
-         </ul>
-        </li>
+      
         <?php } else if($location=="multiple"){ 
             //multilocation admin?>
         <li class="treeview <?php if(Request::is('bil_location_list') || Request::is('user-list')){ ?> menu-open <?php } ?>">
@@ -215,7 +219,7 @@
         @if(Auth::guard('employee')->check())
          <?php if(in_array(1,$permission)) { ?>
        <li class="treeview <?php if(Request::is('item_data') || Request::is('cust_data') || Request::is('inventory') || Request::is('active-inactive')){ ?> menu-open <?php } ?>">
-          <a href="#">
+<!--          <a href="#">
             <i class="fa fa-list" style="color: #00ffc3;"></i> <span>Master Data</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right" style="color: #00ffc3;"></i>
@@ -229,7 +233,7 @@
            <li <?php if(Request::is('customer_data')) { ?>class="active" <?php } ?>><a href="{{url('customer_data')}}"><i class="fa fa-circle-o" style="color: #00ffc3;"></i>Customer</a></li>
            <li <?php if(Request::is('supplier_data')) { ?>class="active" <?php } ?>><a href="{{url('supplier_data')}}"><i class="fa fa-circle-o" style="color: #00ffc3;"></i>Supplier</a></li>
            </ul>
-           </li>
+           </li>-->
            <?php 
            if($role==1){
            ?>
@@ -239,7 +243,7 @@
             </a>
         </li>
            <?php } ?>
-                <li class="treeview">
+<!--                <li class="treeview">
          <a href="#">
            <i class="fa fa-list" style="color: #00ffc3;"></i> <span>Purchase</span>
            <span class="pull-right-container">
@@ -249,7 +253,7 @@
          <ul class="treeview-menu" <?php if(Request::is('inventory')) {?> style="display:block" <?php } ?>>
            <li <?php if(Request::is('inventory')) { ?>class="active" <?php } ?>><a href="{{url('inventory')}}"><i class="fa fa-circle-o" style="color: #00ffc3;"></i>Inventory /Stock</a></li>
          </ul>
-       </li>
+       </li>-->
        <li class="treeview">
            <a href="#">
             <i class="fa fa-list" style="color: #00ffc3;"></i> <span>Sales</span>
@@ -259,11 +263,11 @@
           </a>
              <ul class="treeview-menu">
                 <li><a href="{{url('thumbnail')}}"><i class="fa fa-circle-o" style="color: #00ffc3;"></i>Thumbnail Wise</a></li>
-                <li><a href="{{url('delete_bill')}}"><i class="fa fa-circle-o" style="color: #00ffc3;"></i>Cancel Bill</a></li>
+                <!--<li><a href="{{url('delete_bill')}}"><i class="fa fa-circle-o" style="color: #00ffc3;"></i>Cancel Bill</a></li>-->
          </ul>
            
         </li>
-         <li class="treeview">
+<!--         <li class="treeview">
            <a href="#">
             <i class="fa fa-list" style="color: #00ffc3;"></i> <span>Settings</span>
             <span class="pull-right-container">
@@ -294,12 +298,12 @@
             </span>
           </a>
              <ul class="treeview-menu" <?php if(Request::is('sale_report') || Request::is('inventory_report') || Request::is('item_report') || Request::is('item_sale_report')) {?> style="display:block" <?php } ?>>
-<!--                <li <?php if(Request::is('sale_report')) { ?>class="active" <?php } ?>><a href="{{url('sale_report')}}"><i class="fa fa-circle-o"></i>Sales Bill Report</a></li>-->
+                <li <?php if(Request::is('sale_report')) { ?>class="active" <?php } ?>><a href="{{url('sale_report')}}"><i class="fa fa-circle-o"></i>Sales Bill Report</a></li>
                 <li <?php if(Request::is('inventory_report')) { ?>class="active" <?php } ?>><a href="{{url('inventory_report')}}"><i class="fa fa-circle-o"></i>Inventory Report</a></li>
                 <li <?php if(Request::is('item_report')) { ?>class="active" <?php } ?>><a href="{{url('item_report')}}"><i class="fa fa-circle-o"></i>Stock Report</a></li>
-                <!--<li <?php if(Request::is('item_sale_report')) { ?>class="active" <?php } ?>><a href="{{url('item_sale_report')}}"><i class="fa fa-circle-o"></i>Item Sales Report</a></li>-->
+                <li <?php if(Request::is('item_sale_report')) { ?>class="active" <?php } ?>><a href="{{url('item_sale_report')}}"><i class="fa fa-circle-o"></i>Item Sales Report</a></li>
          </ul>
-        </li>
+        </li>-->
         
         <?php } ?>
         @endif

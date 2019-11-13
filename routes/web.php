@@ -11,20 +11,7 @@
 |
 */
 Route::view('/', 'welcome');
-// Authentication Routes...
-Route::get('login', 'Auth\AdminController@showLoginForm')->name('login');
-Route::post('login', 'Auth\LoginController@login');
-Route::post('logout', 'Auth\LoginController@logout')->name('logout');
-
-// Registration Routes...
-Route::get('register', 'Auth\RegisterController@showRegistrationForm')->name('register');
-Route::post('register', 'Auth\RegisterController@register');
-
-// Password Reset Routes...
-Route::get('password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request');
-Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
-Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
-Route::post('password/reset', 'Auth\ResetPasswordController@reset');
+Auth::routes();
 
 Route::get('/home', 'HomeController@index');
 
@@ -32,7 +19,7 @@ Route::get('/home', 'HomeController@index');
 Route::get('client-register','Auth\ClientController@showRegform');
 Route::post('client-register','Auth\ClientController@create');
 
-Route::get('admin-login', 'Auth\LoginController@showLoginForm');
+//Route::get('admin-login', 'Auth\LoginController@showLoginForm');
 Route::post('admin-login', ['as'=>'admin-login','uses'=>'Auth\AdminController@login']);
 Route::post('/admin-logout', 'Auth\AdminController@logout');//->name('admin.logout');
 
@@ -41,7 +28,7 @@ Route::post('/admin-logout', 'Auth\AdminController@logout');//->name('admin.logo
 
 
 Route::get('/','Auth\AdminController@showLoginForm');
-
+Route::get('/login','Auth\LoginController@showLoginForm')->name('login');
 //Route::get('admin-login','Auth\AdminController@showLoginForm');
 //Route::post('admin-login', 'Auth\AdminController@login');
 
@@ -75,7 +62,7 @@ Route::get('edit-user','UserController@userEdit');
 Route::put('update-user/{id}','UserController@updateUser');
 Route::get('delete-user/{id}','UserController@deletUser');
 
-Route::get('/home', 'HomeController@index');
+Route::get('/home', 'ClientController@index');
 //Route::post('/login' , 'Auth\AuthController@authenticate');
 //Enquiry
 Route::get('enquiry-list','EnquiryController@enquiryList');
@@ -234,6 +221,11 @@ Route::get('get_item_id','PurchaseController@getItemid');
 Route::get('sale_report','ReportController@getSale');
 Route::post('sale_report','ReportController@fetchSale');
 Route::post('download_sale','ReportController@downloadSale');
+
+//Cancel Bill report
+Route::get('cancel_bill_report','ReportController@getCancelSale');
+Route::post('cancel_bill_report','ReportController@fetchCancelSale');
+Route::post('download_cancel_bill_report','ReportController@downloadCancelSale');
 //inventory report
 Route::get('inventory_report','ReportController@getInventory');
 Route::post('inventory_report','ReportController@fetchInventory');
@@ -312,5 +304,7 @@ Route::get('autocomplete', 'SalesController@search');
 Route::get('delete_bill','SalesController@delete_sales');
 Route::post('cancel_bill','SalesController@delete_bill');
 Route::get('fetch_bill','SalesController@fetch_bill');
+
+Route::get('delete_bill_no','SalesController@delete_bill_no');
 
 

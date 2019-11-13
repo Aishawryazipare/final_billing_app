@@ -37,6 +37,7 @@
                 <thead>
                 <tr>
                   <th style="width:50px;">Sr.No</th>
+                  <th style="width:50px;">ICode</th>
                   <th>Item Name</th>
                   <th>Stock</th>
                   
@@ -46,6 +47,7 @@
                     @foreach($item_data as $s)
                         <tr>
                             <td>{{$x++}}</td>
+                            <td>{{$s->item_id}}</td>
                             <td>{{$s->item_name}}</td>
                             <td>{{$s->item_stock}}</td>
                            

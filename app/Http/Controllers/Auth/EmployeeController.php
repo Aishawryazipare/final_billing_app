@@ -112,13 +112,13 @@ class EmployeeController extends Controller
         ]);
         if (auth()->guard('employee')->attempt(['mobile_no' => $request->mobile_no, 'password' => $request->password], $request->get('remember'))) {
            // $minutes = 1;
-            $minutes = 6*30*24*3600;
-            Cookie::queue('mobile_no', $request->mobile_no , $minutes);
-            Cookie::queue('password', $request->password , $minutes);
+//            $minutes = 6*30*24*3600;
+//            Cookie::queue('mobile_no', $request->mobile_no , $minutes);
+//            Cookie::queue('password', $request->password , $minutes);
 //            $response = new Response('Hello World');
 //            $response->withCookie(cookie('mobile_no', $request->mobile_no , $minutes));
 //            $response->withCookie(cookie('password', $request->password , $minutes));
-            return redirect('add-enquiry');
+            return redirect('employee-home');
         }
         return back()->withErrors(['email' => 'Email or password are wrong.']);
     }
