@@ -105,8 +105,7 @@
                                 <th>Item Qty</th>
                                 <th  style="width:20px;">Rate</th>
                                 <th  style="width:20px;">Amount</th>
-                                <th>Location</th>
-                                <th>User</th>
+                                
                             </tr>
                         </thead>
                         <tbody id="table_data">
@@ -171,8 +170,6 @@ table.clear().draw();
                 r[++j] ='<tr><td>'+result[key].item_qty+'</td></tr>';
                 r[++j] ='<tr><td>'+result[key].item_rate+'</td></tr>';
                 r[++j] ='<tr><td>'+result[key].item_totalrate+'</td></tr>';
-                r[++j] ='<tr><td>'+result[key].loc_name+'</td></tr>';
-                r[++j] ='<tr><td>'+result[key].user+'</td></tr>';
                 rowNode = table.row.add(r);
                 i++;
 
@@ -214,8 +211,6 @@ table.clear().draw();
                 r[++j] ='<tr><td>'+result[key].item_qty+'</td></tr>';
                 r[++j] ='<tr><td>'+result[key].item_rate+'</td></tr>';
                 r[++j] ='<tr><td>'+result[key].item_totalrate+'</td></tr>';
-                r[++j] ='<tr><td>'+result[key].loc_name+'</td></tr>';
-                r[++j] ='<tr><td>'+result[key].user+'</td></tr>';
                 rowNode = table.row.add(r);
                 i++;
 

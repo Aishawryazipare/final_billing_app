@@ -10,7 +10,7 @@ use App\Subscription;
 use Session;
 use Illuminate\Support\Facades\Auth;
 
-class ReportController extends Controller
+class TaxController extends Controller
 {
     public function __construct()
     {
@@ -22,7 +22,7 @@ class ReportController extends Controller
         });
     }
     
-    public function getSale()
+    public function getTax()
     {
         $location_data=$employee_data='';
         if(Auth::guard('admin')->check()){
@@ -35,9 +35,9 @@ class ReportController extends Controller
           $employee_data= \App\Employee::select('*')->where(['cid'=>$cid])->get();
 //          echo "<pre/>";print_r();exit;
         }
-        return view('reports.sale_report',['location_data'=>$location_data,'employee_data'=>$employee_data]);
+        return view('reports.tax_bill_report',['location_data'=>$location_data,'employee_data'=>$employee_data]);
     }
-    public function fetchSale(Request $request)
+    public function fetchTax(Request $request)
     {
          $requestData = $request->all();
          $total_amount=0;
@@ -63,9 +63,9 @@ class ReportController extends Controller
                         if(isset($requestData['employee']))
                         {
                              $bill_data = DB::table('bil_AddBillMaster')
-                                     ->select('*')
+                                     ->selectRaw('*')
                                      ->whereBetween('bill_date', [$from_date, $to_date])
-                                     ->where(['cid'=>$cid,'emp_id'=>$requestData['employee'],'isactive'=>0])
+                                     ->where(['cid'=>$cid,'emp_id'=>$requestData['employee'],'isactive'=>0,'gst_setting'=>"Yes"])
                                      ->orderBy('bill_date')
                                      ->orderBy('bill_no')
                                      ->get();
@@ -75,7 +75,7 @@ class ReportController extends Controller
                              $bill_data = DB::table('bil_AddBillMaster')
                                      ->select('*')
                                      ->whereBetween('bill_date', [$from_date, $to_date])
-                                     ->where(['cid'=>$cid,'isactive'=>0])
+                                     ->where(['cid'=>$cid,'isactive'=>0,'gst_setting'=>"Yes"])
                                      ->orderBy('bill_date')
                                      ->orderBy('bill_no')
                                      ->get();
@@ -89,7 +89,7 @@ class ReportController extends Controller
                            $bill_data = DB::table('bil_AddBillMaster')
                                      ->select('*')
                                      ->whereBetween('bill_date', [$from_date, $to_date])
-                                     ->where(['cid'=>$cid,'lid'=>$lid,'emp_id'=>$requestData['employee'],'isactive'=>0])
+                                     ->where(['cid'=>$cid,'lid'=>$lid,'emp_id'=>$requestData['employee'],'isactive'=>0,'gst_setting'=>"Yes"])
                                      ->orderBy('bill_date')
                                      ->orderBy('bill_no')
                                      ->get();
@@ -99,7 +99,7 @@ class ReportController extends Controller
                            $bill_data = DB::table('bil_AddBillMaster')
                                      ->select('*')
                                      ->whereBetween('bill_date', [$from_date, $to_date])
-                                     ->where(['cid'=>$cid,'lid'=>$lid,'isactive'=>0])
+                                     ->where(['cid'=>$cid,'lid'=>$lid,'isactive'=>0,'gst_setting'=>"Yes"])
                                      ->orderBy('bill_date')
                                      ->orderBy('bill_no')
                                      ->get();
@@ -113,18 +113,17 @@ class ReportController extends Controller
                           $bill_data = DB::table('bil_AddBillMaster')
                                      ->select('*')
                                      ->whereBetween('bill_date', [$from_date, $to_date])
-                                     ->where(['cid'=>$cid,'emp_id'=>$requestData['employee'],'isactive'=>0])
+                                     ->where(['cid'=>$cid,'emp_id'=>$requestData['employee'],'isactive'=>0,'gst_setting'=>"Yes"])
                                      ->orderBy('bill_date')
                                      ->orderBy('bill_no')
                                      ->get();
                    }
                    else
                    {
-                    //   echo "in else".$from_date."&".$to_date;
                        $bill_data = DB::table('bil_AddBillMaster')
                                      ->select('*')
                                      ->whereBetween('bill_date', [$from_date, $to_date])
-                                     ->where(['cid'=>$cid,'isactive'=>0])
+                                     ->where(['cid'=>$cid,'isactive'=>0,'gst_setting'=>"Yes"])
                                      ->orderBy('bill_date')
                                      ->orderBy('bill_no')
                                      ->get();
@@ -139,6 +138,7 @@ class ReportController extends Controller
              $bill_data = DB::table('bil_AddBillMaster')
                                      ->select('*')
                                      ->whereBetween('bill_date', [$from_date, $to_date])
+                                     ->where(['gst_setting'=>"Yes"])
                                       ->orderBy('bill_date')
                                      ->orderBy('bill_no')
                                      ->get();
@@ -157,7 +157,7 @@ class ReportController extends Controller
                  $bill_data = DB::table('bil_AddBillMaster')
                                      ->select('*')
                                     ->whereBetween('bill_date', [$from_date, $to_date])
-                                     ->where(['cid'=>$cid,'isactive'=>0])
+                                     ->where(['cid'=>$cid,'isactive'=>0,'gst_setting'=>"Yes"])
                                      ->orderBy('bill_date')
                                      ->orderBy('bill_no')
                                      ->get();
@@ -172,7 +172,7 @@ class ReportController extends Controller
                     
                     $bill_data = DB::table('bil_AddBillMaster')
                                      ->select('*')
-                                     ->where(['cid'=>$cid,'lid'=>$lid,'isactive'=>0])
+                                     ->where(['cid'=>$cid,'lid'=>$lid,'isactive'=>0,'gst_setting'=>"Yes"])
                                      ->whereBetween('bill_date', [$from_date, $to_date])
                                      ->orderBy('bill_date')
                                      ->orderBy('bill_no')
@@ -184,7 +184,7 @@ class ReportController extends Controller
                       $bill_data = DB::table('bil_AddBillMaster')
                                      ->select('*')
                                       ->whereBetween('bill_date', [$from_date, $to_date])
-                                     ->where(['cid'=>$cid,'lid'=>$lid,'isactive'=>0])
+                                     ->where(['cid'=>$cid,'lid'=>$lid,'isactive'=>0,'gst_setting'=>"Yes"])
                                      ->orderBy('bill_date')
                                      ->orderBy('bill_no')
                                      ->get();
@@ -195,7 +195,7 @@ class ReportController extends Controller
                 $bill_data = DB::table('bil_AddBillMaster')
                                      ->select('*')
                                       ->whereBetween('bill_date', [$from_date, $to_date])
-                                     ->where(['cid'=>$cid,'lid'=>$lid,'isactive'=>0])
+                                     ->where(['cid'=>$cid,'lid'=>$lid,'isactive'=>0,'gst_setting'=>"Yes"])
                                      ->orderBy('bill_date')
                                      ->orderBy('bill_no')
                                      ->get();
@@ -203,36 +203,21 @@ class ReportController extends Controller
           }
             $i=1;
             $result_final=array();
-           // echo "<pre/>";print_r($bill_data);exit;
          foreach($bill_data as $data)
          {
              $total_amount = $total_amount + $data->bill_totalamt;
+              $bill_detail_data= $bill_data = DB::table('bil_AddBillDetail')
+                                        ->selectRaw('sum(discount) as total_discount')
+                                        ->selectRaw('sum(item_rate) as total_rate')
+                                        ->selectRaw('sum(bill_tax) as total_tax')
+                                        ->where(['bill_no'=>$data->bill_no,'isactive'=>0])
+                                        ->first();
              $result_data['bill_no']=$data->bill_no;
-             $customer_data= \App\Customer::select('*')->where(['cust_id'=>$data->cust_id])->first();
-             if(!empty($customer_data))
-              $result_data['cust_name']=$customer_data->cust_name;
-             else
-               $result_data['cust_name']='';
+             $result_data['total_rate']=$bill_detail_data->total_rate;
+             $result_data['total_discount']=$bill_detail_data->total_discount;
+             $result_data['total_tax']=$bill_detail_data->total_tax;
+             $result_data['total_amount']=$data->bill_totalamt;
             
-             $result_data['bill_totalamt']=$data->bill_totalamt;
-             $result_data['cash_or_credit']=$data->cash_or_credit;
-             if(isset($requestData['location']))
-             {
-             $location_data= \App\EnquiryLocation::select('*')->where(['loc_id'=>$data->lid])->first();
-            $result_data['loc_name']=$location_data->loc_name;
-             }
-             else
-             {
-                  $result_data['loc_name']='Own';
-             }
-             $user_data= \App\Employee::select('*')->where(['cid'=>$data->cid,'lid'=>$data->lid,'id'=>$data->emp_id])->first();
-             if(empty($user_data))
-             {
-                $user_data= \App\Admin::select('*')->where(['rid'=>$data->cid])->first();
-              $result_data['user']=$user_data->reg_personname;  
-             }
-            else
-            $result_data['user']=$user_data->name;  
              array_push($result_final, $result_data);
          }
          $result['amount']=round($total_amount,2);
@@ -259,7 +244,7 @@ class ReportController extends Controller
         echo $sdata;
     }
 
-    public function downloadSale(Request $request)
+    public function downloadTaxBill(Request $request)
     {
         $requestData = $request->all();
         $from_date = $requestData["from_date"];
@@ -272,6 +257,7 @@ class ReportController extends Controller
           $from_date = date($from_date . ' 00:00:00', time());
          $to_date   = date($to_date . ' 22:00:40', time());
            
+       //  echo "<pre/>";print_r($requestData);exit;
          if(Auth::guard('admin')->check()){
                $cid = $this->admin->rid;
                  $cid = $this->admin->rid;
@@ -287,7 +273,7 @@ class ReportController extends Controller
                              $bill_data = DB::table('bil_AddBillMaster')
                                      ->select('*')
                                      ->whereBetween('bill_date', [$from_date, $to_date])
-                                     ->where(['cid'=>$cid,'emp_id'=>$requestData['employee'],'isactive'=>0])
+                                     ->where(['cid'=>$cid,'emp_id'=>$requestData['employee'],'isactive'=>0,'gst_setting'=>"Yes"])
                                      ->orderBy('bill_date')
                                      ->orderBy('bill_no')
                                      ->get();
@@ -297,7 +283,7 @@ class ReportController extends Controller
                              $bill_data = DB::table('bil_AddBillMaster')
                                      ->select('*')
                                      ->whereBetween('bill_date', [$from_date, $to_date])
-                                     ->where(['cid'=>$cid,'isactive'=>0])
+                                     ->where(['cid'=>$cid,'isactive'=>0,'gst_setting'=>"Yes"])
                                      ->orderBy('bill_date')
                                      ->orderBy('bill_no')
                                      ->get();
@@ -309,7 +295,7 @@ class ReportController extends Controller
                        $bill_data = DB::table('bil_AddBillMaster')
                                      ->select('*')
                                      ->whereBetween('bill_date', [$from_date, $to_date])
-                                     ->where(['cid'=>$cid,'lid'=>$lid,'isactive'=>0])
+                                     ->where(['cid'=>$cid,'lid'=>$lid,'isactive'=>0,'gst_setting'=>"Yes"])
                                      ->orderBy('bill_date')
                                      ->orderBy('bill_no')
                                      ->get();
@@ -321,21 +307,32 @@ class ReportController extends Controller
                           $bill_data = DB::table('bil_AddBillMaster')
                                      ->select('*')
                                      ->whereBetween('bill_date', [$from_date, $to_date])
-                                     ->where(['cid'=>$cid,'emp_id'=>$requestData['employee'],'isactive'=>0])
+                                     ->where(['cid'=>$cid,'emp_id'=>$requestData['employee'],'isactive'=>0,'gst_setting'=>"Yes"])
                                      ->orderBy('bill_date')
                                      ->orderBy('bill_no')
                                      ->get();
                    }
                    else
                    {
-                       $bill_data = DB::table('bil_AddBillMaster')
+                        $bill_data = DB::table('bil_AddBillMaster')
+                             ->select(['*'])
+                               ->whereBetween('bill_date', [$from_date, $to_date])
+                                     ->where(['cid'=>$cid,'isactive'=>0,'gst_setting'=>"Yes"])
+                                     ->orderBy('bill_date')
+                                     ->orderBy('bill_no')
+                                     ->get();
+                        
+                        
+                      /*$bill_data = DB::table('bil_AddBillMaster')
                                      ->select('*')
+                                      ->leftjoin(['bil_AddDetail','bil_AddDetail.bill_no','=','bil_AddBillMaster.bill_no'])
                                      ->whereBetween('bill_date', [$from_date, $to_date])
                                      ->where(['cid'=>$cid,'isactive'=>0])
                                      ->orderBy('bill_date')
                                      ->orderBy('bill_no')
-                                     ->get();
+                                     ->get();*/
                    }
+                 //  echo "<pre/>";print_r($bill_data);exit;
             }
          
          }
@@ -361,7 +358,7 @@ class ReportController extends Controller
                  $bill_data = DB::table('bil_AddBillMaster')
                                      ->select('*')
                                     ->whereBetween('bill_date', [$from_date, $to_date])
-                                     ->where(['cid'=>$cid,'isactive'=>0])
+                                     ->where(['cid'=>$cid,'isactive'=>0,'gst_setting'=>"Yes"])
                                      ->orderBy('bill_date')
                                      ->orderBy('bill_no')
                                      ->get();
@@ -376,7 +373,7 @@ class ReportController extends Controller
                     
                     $bill_data = DB::table('bil_AddBillMaster')
                                      ->select('*')
-                                     ->where(['cid'=>$cid,'lid'=>$lid,'isactive'=>0])
+                                     ->where(['cid'=>$cid,'lid'=>$lid,'isactive'=>0,'gst_setting'=>"Yes"])
                                      ->whereBetween('bill_date', [$from_date, $to_date])
                                      ->orderBy('bill_date')
                                      ->orderBy('bill_no')
@@ -388,7 +385,7 @@ class ReportController extends Controller
                       $bill_data = DB::table('bil_AddBillMaster')
                                      ->select('*')
                                       ->whereBetween('bill_date', [$from_date, $to_date])
-                                     ->where(['cid'=>$cid,'lid'=>$lid,'isactive'=>0])
+                                     ->where(['cid'=>$cid,'lid'=>$lid,'isactive'=>0,'gst_setting'=>"Yes"])
                                      ->orderBy('bill_date')
                                      ->orderBy('bill_no')
                                      ->get();
@@ -399,15 +396,15 @@ class ReportController extends Controller
                 $bill_data = DB::table('bil_AddBillMaster')
                                      ->select('*')
                                       ->whereBetween('bill_date', [$from_date, $to_date])
-                                     ->where(['cid'=>$cid,'lid'=>$lid,'isactive'=>0])
+                                     ->where(['cid'=>$cid,'lid'=>$lid,'isactive'=>0,'gst_setting'=>"Yes"])
                                      ->orderBy('bill_date')
                                      ->orderBy('bill_no')
                                      ->get();
              }
           }
-         return view('reports.download_sales_report',['bill_data'=>$bill_data]);
+         return view('reports.download_bill_tax_report',['bill_data'=>$bill_data,'cid'=>$cid,'from_date'=>$requestData['from_date'],'to_date'=>$requestData['to_date']]);
     }
-    public function getInventory()
+    public function getBillDetail()
     {
          $location_data=$employee_data='';
         if(Auth::guard('admin')->check()){
@@ -419,7 +416,7 @@ class ReportController extends Controller
          
           $employee_data= \App\Employee::select('*')->where(['cid'=>$cid])->get();
         }
-        return view('reports.inventory_report',['location_data'=>$location_data,'employee_data'=>$employee_data]);
+        return view('reports.tax.bill_detail_report',['location_data'=>$location_data,'employee_data'=>$employee_data]);
     }
     
     public function fetchInventory(Request $request)
@@ -598,7 +595,7 @@ class ReportController extends Controller
          echo json_encode($result);
          
     }
-    public function DownloadInventory(Request $request)
+    public function DownloadBillDetail(Request $request)
     {
          $requestData = $request->all();
         $from_date = $requestData["from_date"];
@@ -621,30 +618,27 @@ class ReportController extends Controller
                   {
                       if(isset($requestData['employee']))
                       {
-                          $bill_data = DB::table('bil_inventory')
-                     ->select('bil_inventory.*','bil_AddItems.item_name as inventoryitemid')
-                     ->leftjoin('bil_AddItems','bil_AddItems.item_id','=','bil_inventory.inventoryitemid')
-                     ->whereBetween('created_at', [$from_date, $to_date])
-                     ->where(['bil_inventory.cid'=>$cid,'bil_inventory.emp_id'=>$requestData['employee']])
+                         $bill_data = DB::table('bil_AddBillMaster')
+                     ->select('bil_AddBillMaster.*')
+                     ->whereBetween('bil_AddBillMaster.bill_date', [$from_date, $to_date])
+                     ->where(['cid'=>$cid,'emp_id'=>$requestData['employee']])
                      ->get();
                       }
                       else
                       {
-                          $bill_data = DB::table('bil_inventory')
-                     ->select('bil_inventory.*','bil_AddItems.item_name as inventoryitemid')
-                     ->leftjoin('bil_AddItems','bil_AddItems.item_id','=','bil_inventory.inventoryitemid')
-                     ->whereBetween('created_at', [$from_date, $to_date])
-                     ->where(['bil_inventory.cid'=>$cid])
+                       $bill_data = DB::table('bil_AddBillMaster')
+                     ->select('bil_AddBillMaster.*')
+                     ->whereBetween('bil_AddBillMaster.bill_date', [$from_date, $to_date])
+                    ->where(['cid'=>$cid])
                      ->get();
                       }
                       
                   }
                   else {
-                      $bill_data = DB::table('bil_inventory')
-                     ->select('bil_inventory.*','bil_AddItems.item_name as inventoryitemid')
-                     ->leftjoin('bil_AddItems','bil_AddItems.item_id','=','bil_inventory.inventoryitemid')
-                     ->whereBetween('created_at', [$from_date, $to_date])
-                     ->where(['bil_inventory.cid'=>$cid,'bil_inventory.lid'=>$lid])
+                      $bill_data = DB::table('bil_AddBillMaster')
+                     ->select('bil_AddBillMaster.*')
+                     ->whereBetween('bil_AddBillMaster.bill_date', [$from_date, $to_date])
+                    ->where(['cid'=>$cid,'lid'=>$lid])
                      ->get();
                   }
               }
@@ -652,28 +646,25 @@ class ReportController extends Controller
               {
             if(isset($requestData['employee']))
                   {
-                          $bill_data = DB::table('bil_inventory')
-                     ->select('bil_inventory.*','bil_AddItems.item_name as inventoryitemid')
-                     ->leftjoin('bil_AddItems','bil_AddItems.item_id','=','bil_inventory.inventoryitemid')
-                     ->whereBetween('created_at', [$from_date, $to_date])
-                     ->where(['bil_inventory.cid'=>$cid,'bil_inventory.emp_id'=>$requestData['employee']])
+                         $bill_data = DB::table('bil_AddBillMaster')
+                     ->select('bil_AddBillMaster.*')
+                     ->whereBetween('bil_AddBillMaster.bill_date', [$from_date, $to_date])
+             ->where(['cid'=>$cid,'emp_id'=>$requestData['employee']])
                      ->get();
                   }
                   else{
-                  $bill_data = DB::table('bil_inventory')
-                     ->select('bil_inventory.*','bil_AddItems.item_name as inventoryitemid')
-                     ->leftjoin('bil_AddItems','bil_AddItems.item_id','=','bil_inventory.inventoryitemid')
-                     ->whereBetween('created_at', [$from_date, $to_date])
-                     ->where(['bil_inventory.cid'=>$cid])
+                  $bill_data = DB::table('bil_AddBillMaster')
+                     ->select('bil_AddBillMaster.*')
+                     ->whereBetween('bil_AddBillMaster.bill_date', [$from_date, $to_date])
+                     ->where(['bil_AddBillMaster.cid'=>$cid])
                      ->get();
                   }
               }
         }else if(Auth::guard('web')->check()){
-            $bill_data = DB::table('bil_inventory')
-                     ->select('bil_inventory.*','bil_AddItems.item_name as inventoryitemid')
-                     ->leftjoin('bil_AddItems','bil_AddItems.item_id','=','bil_inventory.inventoryitemid')
-                     ->whereBetween('created_at', [$from_date, $to_date])
-                     ->get();
+            $bill_data = DB::table('bil_AddBillMaster')
+                     ->select('bil_AddBillMaster.*')
+                     ->whereBetween('bil_AddBillMaster.bill_date', [$from_date, $to_date])
+                    ->get();
         }
         else if(Auth::guard('employee')->check()){
            $cid = $this->employee->cid;
@@ -685,49 +676,45 @@ class ReportController extends Controller
 //            echo $client_data->location."&".$role;exit;
             if($client_data->location == "single" && $role == 2)
             {
-            $bill_data = DB::table('bil_inventory')
-                     ->select('bil_inventory.*','bil_AddItems.item_name as inventoryitemid')
-                     ->leftjoin('bil_AddItems','bil_AddItems.item_id','=','bil_inventory.inventoryitemid')
-                     ->whereBetween('created_at', [$from_date, $to_date])
-                     ->where(['bil_inventory.cid'=>$cid])
+                $bill_data = DB::table('bil_AddBillMaster')
+                     ->select('bil_AddBillMaster.*')
+                     ->whereBetween('bil_AddBillMaster.bill_date', [$from_date, $to_date])
+                    ->where(['cid'=>$cid])
                      ->get();
             }
              else if($client_data->location == "multiple" && $role == 2)
             {
                  if($sub_emp_id != "")
                 {
-                     $bill_data = DB::table('bil_inventory')
-                     ->select('bil_inventory.*','bil_AddItems.item_name as inventoryitemid')
-                     ->leftjoin('bil_AddItems','bil_AddItems.item_id','=','bil_inventory.inventoryitemid')
-                     ->whereBetween('created_at', [$from_date, $to_date])
-                     ->where(['bil_inventory.cid'=>$cid,'bil_inventory.lid'=>$lid])
+                     $bill_data = DB::table('bil_AddBillMaster')
+                     ->select('bil_AddBillMaster.*')
+                     ->whereBetween('bil_AddBillMaster.bill_date', [$from_date, $to_date])
+                     ->where(['cid'=>$cid,'lid'=>$lid])
                      ->get();
                  }
                  else
                  {
-                     $bill_data = DB::table('bil_inventory')
-                     ->select('bil_inventory.*','bil_AddItems.item_name as inventoryitemid')
-                     ->leftjoin('bil_AddItems','bil_AddItems.item_id','=','bil_inventory.inventoryitemid')
-                     ->whereBetween('created_at', [$from_date, $to_date])
-                     ->where(['bil_inventory.cid'=>$cid,'bil_inventory.lid'=>$lid])
+                 $bill_data = DB::table('bil_AddBillMaster')
+                     ->select('bil_AddBillMaster.*')
+                     ->whereBetween('bil_AddBillMaster.bill_date', [$from_date, $to_date])
+                      ->where(['cid'=>$cid,'lid'=>$lid])
                      ->get();
                  }
              }
              else if($client_data->location == "multiple" && $role == 1)
                 {
-                   $bill_data = DB::table('bil_inventory')
-                     ->select('bil_inventory.*','bil_AddItems.item_name as inventoryitemid')
-                     ->leftjoin('bil_AddItems','bil_AddItems.item_id','=','bil_inventory.inventoryitemid')
-                     ->whereBetween('created_at', [$from_date, $to_date])
-                     ->where(['bil_inventory.cid'=>$cid,'bil_inventory.lid'=>$lid])
+                  $bill_data = DB::table('bil_AddBillMaster')
+                     ->select('bil_AddBillMaster.*')
+                     ->whereBetween('bil_AddBillMaster.bill_date', [$from_date, $to_date])
+                     ->where(['cid'=>$cid,'lid'=>$lid])
                      ->get();
              }
     
             
         }  
-       //  echo "<pre/>";print_r($inventory_data);exit;
+         //echo "<pre/>";print_r($bill_data);exit;
          
-         return view('reports.download_inventory_report',['inventory_data'=>$bill_data]);
+         return view('reports.tax.download_bill_report',['bill_data'=>$bill_data,'cid'=>$cid,'from_date'=>$requestData['from_date'],'to_date'=>$requestData['to_date']]);
     }
       public function getItem()
     {
@@ -857,28 +844,20 @@ class ReportController extends Controller
                   {
                       if(isset($requestData['employee']))
                       {
-                         $bill_data = DB::table('bil_AddBillDetail')
-                                        ->select('item_name')
-                                        ->selectRaw('sum(item_totalrate) as final_rate')
-                                        ->selectRaw('sum(item_rate) as total_rate')
-                                        ->selectRaw('sum(item_qty) as total_qty')
-                                        ->groupBy('item_name')
-                                        ->orderBy('item_name')
+                          $bill_data = DB::table('bil_AddBillDetail')
+                                     ->select('*')
                                      ->whereBetween('created_at_TIMESTAMP', [$from_date, $to_date])
                                      ->where(['cid'=>$id,'emp_id'=>$requestData['employee'],'isactive'=>0])
+                                      ->orderBy('item_name')
                                      ->get();
                       }
                       else
                       {
-                          $bill_data = DB::table('bil_AddBillDetail')
-                                        ->select('item_name')
-                                        ->selectRaw('sum(item_totalrate) as final_rate')
-                                        ->selectRaw('sum(item_rate) as total_rate')
-                                        ->selectRaw('sum(item_qty) as total_qty')
-                                        ->groupBy('item_name')
-                                        ->orderBy('item_name')
+                         $bill_data = DB::table('bil_AddBillDetail')
+                                     ->select('*')
                                      ->whereBetween('created_at_TIMESTAMP', [$from_date, $to_date])
                                      ->where(['cid'=>$id,'isactive'=>0])
+                                      ->orderBy('item_name')
                                      ->get(); 
                       }
                   }
@@ -887,27 +866,19 @@ class ReportController extends Controller
                        if(isset($requestData['employee']))
                       {
                            $bill_data = DB::table('bil_AddBillDetail')
-                                        ->select('item_name')
-                                        ->selectRaw('sum(item_totalrate) as final_rate')
-                                        ->selectRaw('sum(item_rate) as total_rate')
-                                        ->selectRaw('sum(item_qty) as total_qty')
-                                        ->groupBy('item_name')
-                                        ->orderBy('item_name')
+                                     ->select('*')
                                      ->whereBetween('created_at_TIMESTAMP', [$from_date, $to_date])
                                      ->where(['cid'=>$id,'lid'=>$lid,'emp_id'=>$requestData['employee'],'isactive'=>0])
+                                      ->orderBy('item_name')
                                      ->get();
                       }
                       else
                       {
-                                   $bill_data = DB::table('bil_AddBillDetail')
-                                        ->select('item_name')
-                                        ->selectRaw('sum(item_totalrate) as final_rate')
-                                        ->selectRaw('sum(item_rate) as total_rate')
-                                        ->selectRaw('sum(item_qty) as total_qty')
-                                        ->groupBy('item_name')
-                                        ->orderBy('item_name')
+                           $bill_data = DB::table('bil_AddBillDetail')
+                                     ->select('*')
                                      ->whereBetween('created_at_TIMESTAMP', [$from_date, $to_date])
                                      ->where(['cid'=>$id,'lid'=>$lid,'isactive'=>0])
+                                      ->orderBy('item_name')
                                      ->get();
                       }
                   }
@@ -916,45 +887,32 @@ class ReportController extends Controller
               {
                   if(isset($requestData['employee']))
                   {
-                                     $bill_data = DB::table('bil_AddBillDetail')
-                                        ->select('item_name')
-                                        ->selectRaw('sum(item_totalrate) as final_rate')
-                                        ->selectRaw('sum(item_rate) as total_rate')
-                                        ->selectRaw('sum(item_qty) as total_qty')
-                                        ->groupBy('item_name')
-                                        ->orderBy('item_name')
+                       $bill_data = DB::table('bil_AddBillDetail')
+                                     ->select('*')
+                                     ->whereBetween('created_at_TIMESTAMP', [$from_date, $to_date])
                                      ->where(['cid'=>$id,'emp_id'=>$requestData['employee'],'isactive'=>0])
+                                      ->orderBy('item_name')
                                      ->get();
                   }
                   else
                   {
-
-                        $bill_data = DB::table('bil_AddBillDetail')
-            ->select('item_name')
-            ->selectRaw('sum(item_totalrate) as final_rate')
-            ->selectRaw('sum(item_rate) as total_rate')
-            ->selectRaw('sum(item_qty) as total_qty')
-            ->groupBy('item_name')
-            ->orderBy('item_name')
-            ->whereBetween('created_at_TIMESTAMP', [$from_date, $to_date])
-            ->where(['cid'=>$id,'isactive'=>0])
-            ->get();
-                    //  echo "<pre/>";print_r($bill_data);
+                      $bill_data = DB::table('bil_AddBillDetail')
+                                     ->select('*')
+                                     ->whereBetween('created_at_TIMESTAMP', [$from_date, $to_date])
+                                     ->where(['cid'=>$id,'isactive'=>0])
+                                      ->orderBy('item_name')
+                                     ->get(); 
                   }
                   
               }
         
          }else if(Auth::guard('web')->check())
          {
-              $bill_data = DB::table('bil_AddBillDetail')
-                                        ->select('item_name')
-                                        ->selectRaw('sum(item_totalrate) as final_rate')
-                                        ->selectRaw('sum(item_rate) as total_rate')
-                                        ->selectRaw('sum(item_qty) as total_qty')
-                                        ->groupBy('item_name')
-                                        ->orderBy('item_name')
-                                        ->whereBetween('created_at_TIMESTAMP', [$from_date, $to_date])
-                                        ->get();
+             $bill_data = DB::table('bil_AddBillDetail')
+                                     ->select('*')
+                                     ->whereBetween('created_at_TIMESTAMP', [$from_date, $to_date])
+                                     ->orderBy('item_name')
+                                     ->get();
          }
            else if(Auth::guard('employee')->check()){
                    $cid = $this->employee->cid;
@@ -965,57 +923,41 @@ class ReportController extends Controller
             $client_data = \App\Admin::select('location')->where(['rid'=>$cid,'isactive'=>0])->first();
             if($client_data->location == "single" && $role == 2)
             {
-                    $bill_data = DB::table('bil_AddBillDetail')
-                                        ->select('item_name')
-                                        ->selectRaw('sum(item_totalrate) as final_rate')
-                                        ->selectRaw('sum(item_rate) as total_rate')
-                                        ->selectRaw('sum(item_qty) as total_qty')
-                                        ->groupBy('item_name')
-                                        ->orderBy('item_name')
+                 $bill_data = DB::table('bil_AddBillDetail')
+                                     ->select('*')
                                      ->whereBetween('created_at_TIMESTAMP', [$from_date, $to_date])
                                      ->where(['cid'=>$cid,'isactive'=>0])
+                                      ->orderBy('item_name')
                                      ->get();
             }
             else if($client_data->location == "multiple" && $role == 2)
             {
                  if($sub_emp_id != "")
                 {
-                         $bill_data = DB::table('bil_AddBillDetail')
-                                        ->select('item_name')
-                                        ->selectRaw('sum(item_totalrate) as final_rate')
-                                        ->selectRaw('sum(item_rate) as total_rate')
-                                        ->selectRaw('sum(item_qty) as total_qty')
-                                        ->groupBy('item_name')
-                                        ->orderBy('item_name')
+                     $bill_data = DB::table('bil_AddBillDetail')
+                                     ->select('*')
                                      ->whereBetween('created_at_TIMESTAMP', [$from_date, $to_date])
                                      ->where(['cid'=>$cid,'lid'=>$lid,'isactive'=>0])
+                                      ->orderBy('item_name')
                                      ->get();
                  }
                  else
                  {
-                             $bill_data = DB::table('bil_AddBillDetail')
-                                        ->select('item_name')
-                                        ->selectRaw('sum(item_totalrate) as final_rate')
-                                        ->selectRaw('sum(item_rate) as total_rate')
-                                        ->selectRaw('sum(item_qty) as total_qty')
-                                        ->groupBy('item_name')
-                                        ->orderBy('item_name')
+                         $bill_data = DB::table('bil_AddBillDetail')
+                                     ->select('*')
                                      ->whereBetween('created_at_TIMESTAMP', [$from_date, $to_date])
                                      ->where(['cid'=>$cid,'lid'=>$lid,'isactive'=>0])
+                                      ->orderBy('item_name')
                                      ->get(); 
                  }
             }
             else if($client_data->location == "multiple" && $role == 1)
                 {
-                    $bill_data = DB::table('bil_AddBillDetail')
-                                        ->select('item_name')
-                                        ->selectRaw('sum(item_totalrate) as final_rate')
-                                        ->selectRaw('sum(item_rate) as total_rate')
-                                        ->selectRaw('sum(item_qty) as total_qty')
-                                        ->groupBy('item_name')
-                                        ->orderBy('item_name')
+                 $bill_data = DB::table('bil_AddBillDetail')
+                                     ->select('*')
                                      ->whereBetween('created_at_TIMESTAMP', [$from_date, $to_date])
                                      ->where(['cid'=>$cid,'lid'=>$lid,'isactive'=>0])
+                                      ->orderBy('item_name')
                                      ->get();
             }
             
@@ -1031,22 +973,28 @@ class ReportController extends Controller
              $result_data['item_name']=$data->item_name;
              $item_data= \App\Item::select('*')->where(['item_name'=>$data->item_name])->first();
              $result_data['icode']=$item_data->item_id;
-             $result_data['item_qty']=$data->total_qty;
-             $result_data['item_rate']=$data->total_rate;
-             $result_data['item_totalrate']=$data->final_rate;
-                        
-              /*$user_data= \App\Employee::select('*')->where(['cid'=>$data->cid,'lid'=>$data->lid,'id'=>$data->emp_id])->first();
+             $result_data['item_qty']=$data->item_qty;
+             $result_data['item_rate']=$data->item_rate;
+             $result_data['item_totalrate']=$data->item_totalrate;
+                        if(isset($requestData['location']))
+             {
+             $location_data= \App\EnquiryLocation::select('*')->where(['loc_id'=>$data->lid])->first();
+             $result_data['loc_name']=$location_data->loc_name;
+             }
+             else
+             {
+                 $result_data['loc_name']='Own';
+             }
+              $user_data= \App\Employee::select('*')->where(['cid'=>$data->cid,'lid'=>$data->lid,'id'=>$data->emp_id])->first();
              if(empty($user_data))
              {
                 $user_data= \App\Admin::select('*')->where(['rid'=>$data->cid])->first();
               $result_data['user']=$user_data->reg_personname;  
              }
             else
-            $result_data['user']=$user_data->name;  */
-             $result_data['user']="";
-               $total_amount=$total_amount+$data->final_rate;
+            $result_data['user']=$user_data->name;  
             array_push($result_final,$result_data);
-           
+             $total_amount=$total_amount+$data->item_totalrate;
              
              $i++;
          }
@@ -1068,115 +1016,60 @@ class ReportController extends Controller
         
          $from_date = date($from_date . ' 00:00:00', time());
          $to_date   = date($to_date . ' 22:00:40', time());
-          if(Auth::guard('admin')->check()){
+            if(Auth::guard('admin')->check()){
             $id = $this->admin->rid;
-             if(isset($requestData['location']))
+                   if(isset($requestData['location']))
               {
                  
                   $lid=$requestData['location'];
                  //  echo $lid;exit;
                   if($lid=="all")
                   {
-                      if(isset($requestData['employee']))
-                      {
-                         $bill_data = DB::table('bil_AddBillDetail')
-                                        ->select('item_name')
-                                        ->selectRaw('sum(item_totalrate) as final_rate')
-                                        ->selectRaw('sum(item_rate) as total_rate')
-                                        ->selectRaw('sum(item_qty) as total_qty')
-                                        ->groupBy('item_name')
-                                        ->orderBy('item_name')
-                                     ->whereBetween('created_at_TIMESTAMP', [$from_date, $to_date])
-                                     ->where(['cid'=>$id,'emp_id'=>$requestData['employee'],'isactive'=>0])
-                                     ->get();
-                      }
-                      else
-                      {
-                          $bill_data = DB::table('bil_AddBillDetail')
-                                        ->select('item_name')
-                                        ->selectRaw('sum(item_totalrate) as final_rate')
-                                        ->selectRaw('sum(item_rate) as total_rate')
-                                        ->selectRaw('sum(item_qty) as total_qty')
-                                        ->groupBy('item_name')
-                                        ->orderBy('item_name')
+                       $bill_data = DB::table('bil_AddBillDetail')
+                                     ->select('*')
                                      ->whereBetween('created_at_TIMESTAMP', [$from_date, $to_date])
                                      ->where(['cid'=>$id,'isactive'=>0])
-                                     ->get(); 
-                      }
+                                      ->orderBy('item_name')
+                                     ->get();
                   }
                   else
                   {
-                       if(isset($requestData['employee']))
-                      {
-                           $bill_data = DB::table('bil_AddBillDetail')
-                                        ->select('item_name')
-                                        ->selectRaw('sum(item_totalrate) as final_rate')
-                                        ->selectRaw('sum(item_rate) as total_rate')
-                                        ->selectRaw('sum(item_qty) as total_qty')
-                                        ->groupBy('item_name')
-                                        ->orderBy('item_name')
-                                     ->whereBetween('created_at_TIMESTAMP', [$from_date, $to_date])
-                                     ->where(['cid'=>$id,'lid'=>$lid,'emp_id'=>$requestData['employee'],'isactive'=>0])
-                                     ->get();
-                      }
-                      else
-                      {
-                                   $bill_data = DB::table('bil_AddBillDetail')
-                                        ->select('item_name')
-                                        ->selectRaw('sum(item_totalrate) as final_rate')
-                                        ->selectRaw('sum(item_rate) as total_rate')
-                                        ->selectRaw('sum(item_qty) as total_qty')
-                                        ->groupBy('item_name')
-                                        ->orderBy('item_name')
+                       $bill_data = DB::table('bil_AddBillDetail')
+                                     ->select('*')
                                      ->whereBetween('created_at_TIMESTAMP', [$from_date, $to_date])
                                      ->where(['cid'=>$id,'lid'=>$lid,'isactive'=>0])
+                                      ->orderBy('item_name')
                                      ->get();
-                      }
                   }
               }
               else
               {
                   if(isset($requestData['employee']))
                   {
-                                     $bill_data = DB::table('bil_AddBillDetail')
-                                        ->select('item_name')
-                                        ->selectRaw('sum(item_totalrate) as final_rate')
-                                        ->selectRaw('sum(item_rate) as total_rate')
-                                        ->selectRaw('sum(item_qty) as total_qty')
-                                        ->groupBy('item_name')
-                                        ->orderBy('item_name')
+                       $bill_data = DB::table('bil_AddBillDetail')
+                                     ->select('*')
+                                     ->whereBetween('created_at_TIMESTAMP', [$from_date, $to_date])
                                      ->where(['cid'=>$id,'emp_id'=>$requestData['employee'],'isactive'=>0])
+                                      ->orderBy('item_name')
                                      ->get();
                   }
                   else
                   {
-
-                        $bill_data = DB::table('bil_AddBillDetail')
-            ->select('item_name')
-            ->selectRaw('sum(item_totalrate) as final_rate')
-            ->selectRaw('sum(item_rate) as total_rate')
-            ->selectRaw('sum(item_qty) as total_qty')
-            ->groupBy('item_name')
-            ->orderBy('item_name')
-            ->whereBetween('created_at_TIMESTAMP', [$from_date, $to_date])
-            ->where(['cid'=>$id,'isactive'=>0])
-            ->get();
-                    //  echo "<pre/>";print_r($bill_data);
+                      $bill_data = DB::table('bil_AddBillDetail')
+                                     ->select('*')
+                                     ->whereBetween('created_at_TIMESTAMP', [$from_date, $to_date])
+                                     ->where(['cid'=>$id,'isactive'=>0])
+                                      ->orderBy('item_name')
+                                     ->get(); 
                   }
-                  
               }
-        
          }else if(Auth::guard('web')->check())
          {
-              $bill_data = DB::table('bil_AddBillDetail')
-                                        ->select('item_name')
-                                        ->selectRaw('sum(item_totalrate) as final_rate')
-                                        ->selectRaw('sum(item_rate) as total_rate')
-                                        ->selectRaw('sum(item_qty) as total_qty')
-                                        ->groupBy('item_name')
-                                        ->orderBy('item_name')
-                                        ->whereBetween('created_at_TIMESTAMP', [$from_date, $to_date])
-                                        ->get();
+             $bill_data = DB::table('bil_AddBillDetail')
+                                     ->select('*')
+                                     ->whereBetween('created_at_TIMESTAMP', [$from_date, $to_date])
+                                     ->orderBy('item_name')
+                                     ->get();
          }
            else if(Auth::guard('employee')->check()){
                    $cid = $this->employee->cid;
@@ -1184,60 +1077,44 @@ class ReportController extends Controller
             $emp_id = $this->employee->id;
             $role = $this->employee->role;
             $sub_emp_id = $this->employee->sub_emp_id;
-            $client_data = \App\Admin::select('location')->where(['rid'=>$cid,'isactive'=>0])->first();
+            $client_data = \App\Admin::select('location')->where(['rid'=>$cid])->first();
             if($client_data->location == "single" && $role == 2)
             {
-                    $bill_data = DB::table('bil_AddBillDetail')
-                                        ->select('item_name')
-                                        ->selectRaw('sum(item_totalrate) as final_rate')
-                                        ->selectRaw('sum(item_rate) as total_rate')
-                                        ->selectRaw('sum(item_qty) as total_qty')
-                                        ->groupBy('item_name')
-                                        ->orderBy('item_name')
+                 $bill_data = DB::table('bil_AddBillDetail')
+                                     ->select('*')
                                      ->whereBetween('created_at_TIMESTAMP', [$from_date, $to_date])
                                      ->where(['cid'=>$cid,'isactive'=>0])
+                                      ->orderBy('item_name')
                                      ->get();
             }
             else if($client_data->location == "multiple" && $role == 2)
             {
                  if($sub_emp_id != "")
                 {
-                         $bill_data = DB::table('bil_AddBillDetail')
-                                        ->select('item_name')
-                                        ->selectRaw('sum(item_totalrate) as final_rate')
-                                        ->selectRaw('sum(item_rate) as total_rate')
-                                        ->selectRaw('sum(item_qty) as total_qty')
-                                        ->groupBy('item_name')
-                                        ->orderBy('item_name')
+                     $bill_data = DB::table('bil_AddBillDetail')
+                                     ->select('*')
                                      ->whereBetween('created_at_TIMESTAMP', [$from_date, $to_date])
                                      ->where(['cid'=>$cid,'lid'=>$lid,'isactive'=>0])
+                                      ->orderBy('item_name')
                                      ->get();
                  }
                  else
                  {
-                             $bill_data = DB::table('bil_AddBillDetail')
-                                        ->select('item_name')
-                                        ->selectRaw('sum(item_totalrate) as final_rate')
-                                        ->selectRaw('sum(item_rate) as total_rate')
-                                        ->selectRaw('sum(item_qty) as total_qty')
-                                        ->groupBy('item_name')
-                                        ->orderBy('item_name')
+                         $bill_data = DB::table('bil_AddBillDetail')
+                                     ->select('*')
                                      ->whereBetween('created_at_TIMESTAMP', [$from_date, $to_date])
                                      ->where(['cid'=>$cid,'lid'=>$lid,'isactive'=>0])
+                                      ->orderBy('item_name')
                                      ->get(); 
                  }
             }
             else if($client_data->location == "multiple" && $role == 1)
                 {
-                    $bill_data = DB::table('bil_AddBillDetail')
-                                        ->select('item_name')
-                                        ->selectRaw('sum(item_totalrate) as final_rate')
-                                        ->selectRaw('sum(item_rate) as total_rate')
-                                        ->selectRaw('sum(item_qty) as total_qty')
-                                        ->groupBy('item_name')
-                                        ->orderBy('item_name')
+                 $bill_data = DB::table('bil_AddBillDetail')
+                                     ->select('*')
                                      ->whereBetween('created_at_TIMESTAMP', [$from_date, $to_date])
                                      ->where(['cid'=>$cid,'lid'=>$lid,'isactive'=>0])
+                                      ->orderBy('item_name')
                                      ->get();
             }
             

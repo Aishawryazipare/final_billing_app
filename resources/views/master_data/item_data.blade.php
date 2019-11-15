@@ -40,7 +40,8 @@
                   <th style="width:20px;">ICode</th>
                   <th>Item Name</th>
                   <th style="width:20px;">Rate</th>
-                  <th style="width:20px;">Discount Rate</th>
+                  <th style="width:20px;">Tax</th>
+                  <th style="width:20px;">Discount</th>
                   <th style="width:20px;">Final Rate</th>
                   <th style="width:50px;">Category</th>
                   <th>Unit</th>
@@ -55,6 +56,7 @@
                             <td>{{$s->item_id}}</td>
                             <td>{{$s->item_name}}</td>
                             <td>{{$s->item_rate}}</td>
+                            <td>{{$s->item_tax}}</td>
                             <td>{{$s->item_dis}}</td>
                             <td>{{$s->item_final_rate}}</td>
                             <?php

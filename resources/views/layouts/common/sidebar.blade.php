@@ -146,7 +146,9 @@
                 <li <?php if(Request::is('inventory_report')) { ?>class="active" <?php } ?>><a href="{{url('inventory_report')}}"><i class="fa fa-circle-o" style="color: #00ffc3;"></i>Inventory Report</a></li>
                 <li <?php if(Request::is('item_report')) { ?>class="active" <?php } ?>><a href="{{url('item_report')}}"><i class="fa fa-circle-o" style="color: #00ffc3;"></i>Stock Report</a></li>
                 <li <?php if(Request::is('item_sale_report')) { ?>class="active" <?php } ?>><a href="{{url('item_sale_report')}}"><i class="fa fa-circle-o" style="color: #00ffc3;"></i>Item Sales Report</a></li>
-                <li <?php if(Request::is('cancel_bill_report')) { ?>class="active" <?php } ?>><a href="{{url('cancel_bill_report')}}"><i class="fa fa-circle-o" style="color: #00ffc3;"></i>Cancel Bill Report</a></li>
+                <li <?php if(Request::is('cancel_bill_report')) { ?>class="active" <?php } ?>><a href="{{url('cancel_bill_report')}}"><i class="fa fa-circle-o" style="color: #00ffc3;"></i>Delete Bill Report</a></li>
+                <li <?php if(Request::is('bill_tax_report')) { ?>class="active" <?php } ?>><a href="{{url('bill_tax_report')}}"><i class="fa fa-circle-o" style="color: #00ffc3;"></i>Bill Tax Report</a></li>
+                <li <?php if(Request::is('bill_detail_report')) { ?>class="active" <?php } ?>><a href="{{url('bill_detail_report')}}"><i class="fa fa-circle-o" style="color: #00ffc3;"></i>Bill Detail Report</a></li>
          </ul>
         </li>
         <li <?php if(Request::is('user-list')) { ?>class="active" <?php } ?>>

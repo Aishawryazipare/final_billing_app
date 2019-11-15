@@ -221,8 +221,16 @@ Route::get('get_item_id','PurchaseController@getItemid');
 Route::get('sale_report','ReportController@getSale');
 Route::post('sale_report','ReportController@fetchSale');
 Route::post('download_sale','ReportController@downloadSale');
-
+//Tax Report
 //Cancel Bill report
+Route::get('bill_tax_report','TaxController@getTax');
+Route::post('bill_tax_report','TaxController@fetchTax');
+Route::post('download_bill_tax_report','TaxController@downloadTaxBill');
+//Bill Detail report
+Route::get('bill_detail_report','TaxController@getBillDetail');
+Route::post('bill_detail_report','TaxController@fetchBillDetail');
+Route::post('download_bill_detail_report','TaxController@downloadBillDetail');
+//Tax Bill report
 Route::get('cancel_bill_report','ReportController@getCancelSale');
 Route::post('cancel_bill_report','ReportController@fetchCancelSale');
 Route::post('download_cancel_bill_report','ReportController@downloadCancelSale');

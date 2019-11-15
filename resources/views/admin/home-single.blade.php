@@ -1,9 +1,10 @@
 @extends('layouts.app')
 @section('content')
 <style>
-    .small-box h3 {
-        
-    }
+.info-box-content {
+    padding: 5px 10px;
+    margin-left: 61px;
+}
     </style>
 <div class="container">
     <div class="row justify-content-center">
@@ -15,13 +16,109 @@ $a=0;
 //echo $top_loc;
 //exit;
 ?>
-<h1>Total Scenario</h1>
-<div class="col-md-3 col-sm-6 col-xs-12">
-    <div class="info-box">
-      <span class="info-box-icon bg-green"><i class="fa fa-fw fa-shopping-cart" style="padding-top: 20px;"></i></span>
+                     <h1>Today Scenario</h1>
+                <div class="row">
+                    <div class="col-sm-4 col-md-2">
+                       <div class="info-box" >
+      <span class="info-box-icon bg-green" style="width:60px;"><i class="fa fa-fw fa-rupee" style="padding-top: 20px;"></i></span>
 
       <div class="info-box-content">
-        <span class="info-box-text"><b style="font-size:17px;">Amount</b></span>
+        <span class="info-box-text"><b style="font-size:17px;">Sales</b></span>
+        <span class="info-box-number" style="font-size:17px;">Rs. <?php if(isset($today_total_sales_amount)){ echo $today_total_sales_amount; }else { echo 0; }?></span>
+      </div>
+    </div> 
+                    </div>
+<!--                    <div class="col-sm-4 col-md-2">
+                        <div class="info-box">
+      <span class="info-box-icon bg-red" style="width:60px;"><i class="fa fa-fw fa-cubes" style="padding-top: 17px;"></i></span>
+
+      <div class="info-box-content">
+          <span class="info-box-text"><b style="font-size:17px;">Active<br/>Items</b></span>
+        <span class="info-box-number" style="font-size:17px;">{{@$today_active_items}}</span>
+      </div>
+    </div>
+                    </div>-->
+                    <div class="col-sm-4 col-md-2">
+                    <div class="info-box">
+      <span class="info-box-icon bg-green" style='width:60px;'><i class="fa fa-fw fa-shopping-cart" style="padding-top: 20px;"></i></span>
+
+      <div class="info-box-content">
+        <span class="info-box-text"><b style="font-size:17px;">Bills</b></span>
+        <span class="info-box-number" style="font-size:17px;">{{@$today_total_sales}}</span>
+      </div>
+    </div>    
+                    </div>
+<!--                    <div class="col-sm-4 col-md-2">
+                         <div class="info-box">
+      <span class="info-box-icon bg-red" style='width:60px;'><i class="fa fa-fw fa-cubes" style="padding-top: 17px;"></i></span>
+
+      <div class="info-box-content">
+          <span class="info-box-text"><b style="font-size:17px;">Inactive<br/>Items</b></span>
+        <span class="info-box-number" style="font-size:17px;">{{@$today_inactive_items}}</span>
+      </div>
+    </div>
+                    </div>-->
+                </div>
+                <h1>Total Scenario</h1>
+                <div class="row">
+                    <div class="col-sm-4 col-md-2">
+                       <div class="info-box" >
+      <span class="info-box-icon bg-green" style="width:60px;"><i class="fa fa-fw fa-rupee" style="padding-top: 20px;"></i></span>
+
+      <div class="info-box-content">
+        <span class="info-box-text"><b style="font-size:17px;">Sales</b></span>
+        <span class="info-box-number" style="font-size:17px;">Rs. <?php if(isset($total_sales_amount)){ echo $total_sales_amount; }else { echo 0; }?></span>
+      </div>
+    </div> 
+                    </div>
+                    <div class="col-sm-4 col-md-2">
+                        <div class="info-box">
+      <span class="info-box-icon bg-red" style="width:60px;"><i class="fa fa-fw fa-cubes" style="padding-top: 17px;"></i></span>
+
+      <div class="info-box-content">
+          <span class="info-box-text"><b style="font-size:17px;">Active<br/>Items</b></span>
+        <span class="info-box-number" style="font-size:17px;">{{@$active_items}}</span>
+      </div>
+    </div>
+                    </div>
+                    <div class="col-sm-4 col-md-2">
+                    <div class="info-box">
+      <span class="info-box-icon bg-green" style='width:60px;'><i class="fa fa-fw fa-shopping-cart" style="padding-top: 20px;"></i></span>
+
+      <div class="info-box-content">
+        <span class="info-box-text"><b style="font-size:17px;">Bills</b></span>
+        <span class="info-box-number" style="font-size:17px;">{{@$total_sales}}</span>
+      </div>
+    </div>    
+                    </div>
+                    <div class="col-sm-4 col-md-2">
+                    <div class="info-box">
+                        <span class="info-box-icon bg-yellow" style="width:60px;"><i class="fa fa-fw fa-map-marker" style="padding: 17px;"></i></span>
+
+      <div class="info-box-content">
+        <span class="info-box-text"><b style="font-size:17px;">Location</span>
+        <span class="info-box-number" style="font-size:17px;">{{@$total_loc}}</span>
+      </div>
+    </div>    
+                    </div>
+                    <div class="col-sm-4 col-md-2">
+                         <div class="info-box">
+      <span class="info-box-icon bg-red" style='width:60px;'><i class="fa fa-fw fa-cubes" style="padding-top: 17px;"></i></span>
+
+      <div class="info-box-content">
+          <span class="info-box-text"><b style="font-size:17px;">Inactive<br/>Items</b></span>
+        <span class="info-box-number" style="font-size:17px;">{{@$inactive_items}}</span>
+      </div>
+    </div>
+                    </div>
+                </div>
+<!--<h1>Total Scenario</h1>
+<div class="col-md-3 col-sm-6 col-xs-12">
+    <div class="info-box">
+      <span class="info-box-icon bg-green"><i class="fa fa-fw fa-rupee" style="padding-top: 20px;"></i></span>
+
+      <div class="info-box-content">
+        <span class="info-box-text"><b style="font-size:17px;">Sales</b></span>
         <span class="info-box-number" style="font-size:17px;">Rs. <?php if(isset($total_sales_amount)){ echo $total_sales_amount; }else { echo 0; }?></span>
       </div>
     </div>
@@ -31,7 +128,7 @@ $a=0;
       <span class="info-box-icon bg-red"><i class="fa fa-fw fa-cubes" style="padding-top: 17px;"></i></span>
 
       <div class="info-box-content">
-        <span class="info-box-text"><b style="font-size:17px;">Active Items</b></span>
+          <span class="info-box-text"><b style="font-size:17px;">Active<br/>Items</b></span>
         <span class="info-box-number" style="font-size:17px;">{{@$active_items}}</span>
       </div>
     </div>
@@ -41,7 +138,7 @@ $a=0;
       <span class="info-box-icon bg-green"><i class="fa fa-fw fa-shopping-cart" style="padding-top: 20px;"></i></span>
 
       <div class="info-box-content">
-        <span class="info-box-text"><b style="font-size:17px;">Orders</b></span>
+        <span class="info-box-text"><b style="font-size:17px;">Bills</b></span>
         <span class="info-box-number" style="font-size:17px;">{{@$total_sales}}</span>
       </div>
     </div>
@@ -51,7 +148,7 @@ $a=0;
       <span class="info-box-icon bg-yellow"><i class="fa fa-fw fa-map-marker" style="padding: 17px;"></i></span>
 
       <div class="info-box-content">
-        <span class="info-box-text"><b style="font-size:17px;">Locations</b></span>
+        <span class="info-box-text"><b style="font-size:17px;">Locations</span>
         <span class="info-box-number" style="font-size:17px;">{{@$total_loc}}</span>
       </div>
     </div>
@@ -61,11 +158,11 @@ $a=0;
       <span class="info-box-icon bg-red"><i class="fa fa-fw fa-cubes" style="padding-top: 17px;"></i></span>
 
       <div class="info-box-content">
-        <span class="info-box-text"><b style="font-size:17px;">Inactive Items</b></span>
+          <span class="info-box-text"><b style="font-size:17px;">Inactive<br/>Items</b></span>
         <span class="info-box-number" style="font-size:17px;">{{@$inactive_items}}</span>
       </div>
     </div>
-</div>
+</div>-->
 
             </div>
         </div>

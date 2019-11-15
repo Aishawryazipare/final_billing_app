@@ -620,6 +620,7 @@ class MasterController extends Controller
     
     public function addItem(Request $request) {
         $requestData = $request->all();
+        $requestData['item_date']=date('Y-m-d');
         if(Auth::guard('admin')->check()){
             $requestData['cid'] = $this->admin->rid;
         }

@@ -88,7 +88,7 @@
         </div>
         <!-- /.col -->
         <div class="col-xs-4">
-          <a href="{{url('admin-login')}}" class="btn btn-primary btn-block btn-flat">Login</a>
+          <a href="{{url('/')}}" class="btn btn-primary btn-block btn-flat">Login</a>
         </div>
         <!-- /.col -->
       </div>

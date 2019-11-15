@@ -110,7 +110,7 @@ class ClientController extends Controller
             'upload_logo' => $request['upload_logo']
         ]);
         Session::flash('alert-success','Register Successfully.');
-        return redirect('admin-login');
+        return redirect('/');
     }
     
 }

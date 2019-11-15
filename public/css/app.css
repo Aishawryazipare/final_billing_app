@@ -1,4 +1,25 @@
 @import url(https://fonts.googleapis.com/css?family=Nunito);
+@media print {
+     .item_name{
+        font-family: "Courier New";
+        font-size: 10pt;
+    }
+    .tbl_width_oveflow{
+        max-height:0px;
+        overflow: hidden;
+    }
+    .serial_no{
+        font-size: 20px;
+    }
+    .item_name
+{
+      font-family: Fake Reciept;
+}
+.clear_item
+{
+    display:none;
+}
+}
 
 /*!
  * Bootstrap v4.1.3 (https://getbootstrap.com/)

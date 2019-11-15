@@ -28,6 +28,8 @@ class HomeController extends Controller
       public function indexAdmin()
     {
         $date = date('Y-m-d');
+          $from_date = date($date . ' 00:00:00', time());
+         $to_date   = date($date . ' 22:00:40', time());
         if(Auth::guard('admin')->check()){
             $id = $this->admin->rid;
             $location = $this->admin->location;
@@ -86,7 +88,13 @@ class HomeController extends Controller
 //                echo "<pre>";
 //                print_r($items);
 //                exit;
-                return view('admin.home',['active_items'=>$active_items,'inactive_items'=>$inactive_items,'total_sales'=>$total_sales,'top_items'=>$top_items,'total_loc'=>$total_loc,'top_loc'=>$top_loc,'final_pie'=>$final_pie,'items'=>$items,'total_sales_amount'=>$total_sales_amount]);
+                  //today
+                   $today_active_items=Item::where(['item_date'=>$date,'cid'=>$id,'is_active'=>0])->count();
+                $today_inactive_items=Item::where(['item_date'=>$date,'cid'=>$id,'is_active'=>1])->count();
+                $today_total_sales= BillDetail::where('cid', '=', $id)->whereBetween('created_at_TIMESTAMP', [$from_date, $to_date])->count();
+                $today_total_sales_amount= BillDetail::where('cid', '=', $id)->whereBetween('created_at_TIMESTAMP', [$from_date, $to_date])->sum('item_totalrate');
+                return view('admin.home',['active_items'=>$active_items,'inactive_items'=>$inactive_items,'total_sales'=>$total_sales,'top_items'=>$top_items,'total_loc'=>$total_loc,'top_loc'=>$top_loc,'final_pie'=>$final_pie,'items'=>$items,'total_sales_amount'=>$total_sales_amount
+                         ,'today_active_items'=>$today_active_items,'today_inactive_items'=>$today_inactive_items,'today_total_sales'=>$today_total_sales,'today_total_sales_amount'=>$today_total_sales_amount]);
 //                echo "<pre>";
 //                print_r($final_pie);
 //                exit;
@@ -118,7 +126,14 @@ class HomeController extends Controller
                      ->orderby('orders','desc')
                      ->limit(4)
                      ->get();
-                return view('admin.home-single',['active_items'=>$active_items,'inactive_items'=>$inactive_items,'total_sales'=>$total_sales,'top_items'=>$top_items,'total_loc'=>$total_loc,'total_sales_amount'=>$total_sales_amount]);
+                
+                //today 
+                $today_active_items=Item::where(['item_date'=>$date,'cid'=>$id,'is_active'=>0])->count();
+                $today_inactive_items=Item::where(['item_date'=>$date,'cid'=>$id,'is_active'=>1])->count();
+                $today_total_sales= BillDetail::where('cid', '=', $id)->whereBetween('created_at_TIMESTAMP', [$from_date, $to_date])->count();
+                $today_total_sales_amount= BillDetail::where('cid', '=', $id)->whereBetween('created_at_TIMESTAMP', [$from_date, $to_date])->sum('item_totalrate');
+                return view('admin.home-single',['active_items'=>$active_items,'inactive_items'=>$inactive_items,'total_sales'=>$total_sales,'top_items'=>$top_items,'total_loc'=>$total_loc,'total_sales_amount'=>$total_sales_amount
+                        ,'today_active_items'=>$today_active_items,'today_inactive_items'=>$today_inactive_items,'today_total_sales'=>$today_total_sales,'today_total_sales_amount'=>$today_total_sales_amount]);
 //                return view('admin.home-single');
             }
             
