@@ -69,7 +69,7 @@
           <input type="file" id="reg_dealercode" name="upload_logo" class="form-control" placeholder="Upload Logo" >
         <span class="glyphicon glyphicon-folder-open form-control-feedback"></span>
       </div>
-      <div class="form-group">
+                    <div class="form-group" style="display:none;">
         <label class="">
           <div class="icheckbox_minimal-blue checked" aria-checked="false" aria-disabled="false" style="position: relative;">
               <input type="checkbox" class="minimal" name="permission[]" value="1" id="billing" style="position: absolute; opacity: 0;" required> Billing App

@@ -42,10 +42,10 @@
       <!-- Sidebar user panel -->
       <div class="user-panel">
         <div class="image" style="text-align: center;">
-          <img src="<?php if($logo != "") echo $logo; else echo "dist/img/logo.png"; ?>" class="" alt="User Image">
+          <img src="<?php  echo "dist/img/logo.png"; ?>" class="" alt="User Image">
         </div>
         <div class="pull-left info">
-            <p style="text-align:center;">{{$name}}</p>
+            <p style="text-align:center;"></p>
         </div>
       </div>
       <ul class="sidebar-menu" data-widget="tree">
@@ -108,6 +108,7 @@
            <li <?php if(Request::is('item_data')) { ?>class="active" <?php } ?>><a href="{{url('item_data')}}"><i class="fa fa-circle-o" style="color: #00ffc3;"></i>Item</a></li>
            <li <?php if(Request::is('customer_data')) { ?>class="active" <?php } ?>><a href="{{url('customer_data')}}"><i class="fa fa-circle-o" style="color: #00ffc3;"></i>Customer</a></li>
            <li <?php if(Request::is('supplier_data')) { ?>class="active" <?php } ?>><a href="{{url('supplier_data')}}"><i class="fa fa-circle-o" style="color: #00ffc3;"></i>Supplier</a></li>
+           <li <?php if(Request::is('payment_data')) { ?>class="active" <?php } ?>><a href="{{url('payment_data')}}"><i class="fa fa-circle-o" style="color: #00ffc3;"></i>Payment & POS</a></li>
            </ul>
            </li>
             <li class="treeview">
@@ -149,6 +150,7 @@
                 <li <?php if(Request::is('cancel_bill_report')) { ?>class="active" <?php } ?>><a href="{{url('cancel_bill_report')}}"><i class="fa fa-circle-o" style="color: #00ffc3;"></i>Delete Bill Report</a></li>
                 <li <?php if(Request::is('bill_tax_report')) { ?>class="active" <?php } ?>><a href="{{url('bill_tax_report')}}"><i class="fa fa-circle-o" style="color: #00ffc3;"></i>Bill Tax Report</a></li>
                 <li <?php if(Request::is('bill_detail_report')) { ?>class="active" <?php } ?>><a href="{{url('bill_detail_report')}}"><i class="fa fa-circle-o" style="color: #00ffc3;"></i>Bill Detail Report</a></li>
+                <li <?php if(Request::is('tax_slab_report')) { ?>class="active" <?php } ?>><a href="{{url('tax_slab_report')}}"><i class="fa fa-circle-o" style="color: #00ffc3;"></i>Tax Slab Report</a></li>
          </ul>
         </li>
         <li <?php if(Request::is('user-list')) { ?>class="active" <?php } ?>>

@@ -2288,13 +2288,13 @@ a:focus {
   background-color: #367fa9;
 }
 .btn-success {
-  background-color: #00a65a;
-  border-color: #008d4c;
+  background-color: #00e6b0;
+  border-color: #00c999;
 }
 .btn-success:hover,
 .btn-success:active,
 .btn-success.hover {
-  background-color: #008d4c;
+  background-color: #00e6b0;
 }
 .btn-info {
   background-color: #00c0ef;
@@ -2306,13 +2306,13 @@ a:focus {
   background-color: #00acd6;
 }
 .btn-danger {
-  background-color: #dd4b39;
-  border-color: #d73925;
+  background-color: #000000;
+  border-color: #000000;
 }
 .btn-danger:hover,
 .btn-danger:active,
 .btn-danger.hover {
-  background-color: #d73925;
+  background-color: #000000;
 }
 .btn-warning {
   background-color: #f39c12;

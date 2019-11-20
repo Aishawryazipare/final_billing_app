@@ -165,7 +165,7 @@ table.clear().draw();
             var r = new Array();
 // represent columns as array
                 r[++j] ='<tr><td>'+i+'</td></tr>';
-                r[++j] ='<tr><td>'+result[i].icode+'</td></tr>';
+                r[++j] ='<tr><td>'+result[key].icode+'</td></tr>';
                 r[++j] ='<tr><td>'+result[key].item_name+'</td></tr>';
                 r[++j] ='<tr><td>'+result[key].item_qty+'</td></tr>';
                 r[++j] ='<tr><td>'+result[key].item_rate+'</td></tr>';

@@ -30,6 +30,11 @@
    <div class="box">
             <div class="box-header">
               <h3 class="box-title">ITEM LIST</h3><a href="{{url('add_item')}}" class="panel-title" style="margin-left: 82%;color: #dc3d59;"><span class="fa fa-plus-square"></span> Add New Item</a>
+              <select class="form-control select2" style="width: 12%;" name="item_units" onchange="fetch_items(this.value);">
+                           <option value="ALL">ALL</option> 
+                           <option value="0">ACTIVE </option> 
+                           <option value="1">INACTIVE</option> 
+                                        </select>
             </div>
              <?php $x = 1; ?>
             <div class="box-body" style="overflow-x:auto;">
@@ -61,14 +66,25 @@
                             <td>{{$s->item_final_rate}}</td>
                             <?php
                             $category_data= \App\Category::select('*')->where(['cat_id'=>$s->item_category])->first();
-                            $unit_data= \App\Type::select('*')->where(['Unit_id'=>$s->item_units])->first();
-                            //echo "<pre/>";print_r($s->item_unit);exit;
+                        $unit_data= \App\Type::select('*')->where(['Unit_id'=>$s->item_units])->first();
+                            if($s->is_active==0)
+                          {
+                              $label="success";
+                              $msg="Active";
+                          }
+                          else
+                          {
+                               $label="danger";
+                              $msg="Inactive";
+                          }
                             ?>
-                            <td>{{$category_data->cat_name}}</td>
+                            <td>{{@$category_data->cat_name}}</td>
                             <td>{{@$unit_data->Unit_name}}</td>
                             <td>
+								<?php if($s->is_active==0) {?>
                                 <a href="{{ url('edit-item?item_id='.$s->item_id)}}"><span class="fa fa-edit"></span></a>
-                                <a href="{{ url('delete-item')}}/{{$s->item_id}}" style="color:red" class="delete"><span class="fa fa-trash"></span></a>
+								<?php } ?>
+                                <a href="{{ url('delete-item')}}/{{$s->item_id}}" style="color:red" class="delete"><small class="label label-{{$label}}">{{$msg}}</small></a>
                             </td>
                         </tr>
                         <?php $i++;?>
@@ -85,11 +101,12 @@
 <script src="bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
 <script src="js/sweetalert.min.js"></script>
 <script>
+    var i=1;
 $(document).ready(function(){
     $(".delete").on("click",function(){
-        return confirm('Are you sure to delete');
+        return confirm('Are you sure to Change Status');
     });
-    
+    $('.select2').select2();
 });
 $(function () {
     $('#example1').DataTable()
@@ -102,5 +119,62 @@ $(function () {
       'autoWidth'   : false
     })
   })
+  function fetch_items(x)
+  {
+      if(x=="ALL")
+      {
+          location.reload();
+      }
+      else
+      {
+         
+          $.ajax({
+                            url: 'get_items_filter',
+                            type: "GET",
+                            data: {filter:x},
+                              success: function(data) {
+                            console.log(data);
+                            var a=JSON.parse(data);
+                            var result=a;
+                             var table;
+         table = $('#example1').DataTable();    
+         table.clear().draw();
+         if(data!='') {               
+          for (var key=0, size=result.length; key<size; key++){
+            var j = -1;
+            var item_id=result[key].item_id;
+            var r = new Array();
+// represent columns as array
+                r[++j] ='<tr><td>'+i+'</td></tr>';
+                r[++j] ='<tr><td>'+result[key].item_id+'<input type="hidden" class="bill_no" value="'+result[key].bill_no+'"/></td></tr>';
+                r[++j] ='<tr><td>'+result[key].item_name+'</td></tr>';
+                r[++j] ='<tr><td>'+result[key].item_rate+'</td></tr>';
+                r[++j] ='<tr><td>'+result[key].item_tax+'</td></tr>';
+                r[++j] ='<tr><td>'+result[key].item_dis+'</td></tr>';
+                r[++j] ='<tr><td>'+result[key].item_final_rate+'</td></tr>';
+                r[++j] ='<tr><td>'+result[key].cat_name+'</td></tr>';
+                r[++j] ='<tr><td>'+result[key].Unit_Taxvalue+'</td></tr>';
+                var url = '{{ url("delete-item", ":id") }}';
+                url = url.replace('%3Aid', result[key].item_id);
+                if(x==0)
+                r[++j] ='<tr><td><a href="'+url+'"><small class="label label-success">Active</small></td></tr>';
+                else
+                r[++j] ='<tr><td><a href="'+url+'"><small class="label label-danger">Inctive</small></td></tr>';
+                rowNode = table.row.add(r);
+                i++;
+
+        }         
+         }
+         else {
+         $('#example1').html('<h3>No Data Avaliable</h3>');
+         }
+         table.draw();
+                             $('#amt').html("<h3>Total Amount:<span id='total_amt'>"+a.amount+"</span></h3>");
+                            $(".result").show();
+                            }
+                    }); 
+      }
+       
+  }
 </script>
 @endsection

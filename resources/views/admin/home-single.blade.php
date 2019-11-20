@@ -72,14 +72,17 @@ $a=0;
     </div> 
                     </div>
                     <div class="col-sm-4 col-md-2">
-                        <div class="info-box">
+                        <a href="item_data">
+                         <div class="info-box">
       <span class="info-box-icon bg-red" style="width:60px;"><i class="fa fa-fw fa-cubes" style="padding-top: 17px;"></i></span>
 
       <div class="info-box-content">
-          <span class="info-box-text"><b style="font-size:17px;">Active<br/>Items</b></span>
-        <span class="info-box-number" style="font-size:17px;">{{@$active_items}}</span>
+          <span class="info-box-text"><b style="font-size:17px;color:black;">Active<br/>Items</b></span>
+        <span class="info-box-number" style="font-size:17px;color:black;">{{@$active_items}}</span>
       </div>
-    </div>
+    </div>    
+                        </a>
+                       
                     </div>
                     <div class="col-sm-4 col-md-2">
                     <div class="info-box">
@@ -102,15 +105,18 @@ $a=0;
     </div>    
                     </div>
                     <div class="col-sm-4 col-md-2">
-                         <div class="info-box">
+                        <a href="item_data">
+                       <div class="info-box">
       <span class="info-box-icon bg-red" style='width:60px;'><i class="fa fa-fw fa-cubes" style="padding-top: 17px;"></i></span>
 
       <div class="info-box-content">
-          <span class="info-box-text"><b style="font-size:17px;">Inactive<br/>Items</b></span>
-        <span class="info-box-number" style="font-size:17px;">{{@$inactive_items}}</span>
+          <span class="info-box-text"><b style="font-size:17px;color:black;">Inactive<br/>Items</b></span>
+        <span class="info-box-number" style="font-size:17px;color:black;">{{@$inactive_items}}</span>
       </div>
     </div>
-                    </div>
+       
+                        </a>
+                                           </div>
                 </div>
 <!--<h1>Total Scenario</h1>
 <div class="col-md-3 col-sm-6 col-xs-12">

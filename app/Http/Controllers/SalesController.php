@@ -28,20 +28,23 @@ class SalesController extends Controller
          $category = DB::table('bil_category')
                 ->select('bil_category.*','bil_type.type_name')
                 ->leftjoin('bil_type','bil_type.type_id','=','bil_category.type_id')
-                ->where(['bil_category.is_active' => '1','bil_category.cid'=>$id])
+                ->where(['bil_category.is_active' => '0','bil_category.cid'=>$id])
                 ->orderBy('bil_category.cat_name', 'asc')
                 ->get();
           $hf_setting= \App\HeaderFooter::where(['cid'=>$id])->first();
           $bill_data = \App\BillMaster::select('bill_no')->where(['cid'=>$id])->orderBy('bill_no','desc')->first();
+          $payment_type = \App\PaymentType::select('*')->where(['cid'=>$id,'is_active'=>0])->get();
+          $point_of_data = \App\PointOfContact::select('*')->where(['cid'=>$id,'is_active'=>0])->get();
          }else if(Auth::guard('web')->check()){
              $category = DB::table('bil_category')
                 ->select('bil_category.*','bil_type.type_name')
                 ->leftjoin('bil_type','bil_type.type_id','=','bil_category.type_id')
-                ->where(['bil_category.is_active' => '1'])
+                ->where(['bil_category.is_active' => '0'])
                 ->orderBy('bil_category.cat_name', 'asc')
                 ->get();
           $hf_setting= \App\HeaderFooter::first();
           $bill_data = \App\BillMaster::select('bill_no')->orderBy('bill_no','desc')->first();
+          
          }else if(Auth::guard('employee')->check()){
              $cid = $this->employee->cid;
             $lid = $this->employee->lid;
@@ -55,11 +58,13 @@ class SalesController extends Controller
                 $category = DB::table('bil_category')
                 ->select('bil_category.*','bil_type.type_name')
                 ->leftjoin('bil_type','bil_type.type_id','=','bil_category.type_id')
-                ->where(['bil_category.is_active' => '1','bil_category.cid'=>$cid])
+                ->where(['bil_category.is_active' => '0','bil_category.cid'=>$cid])
                 ->orderBy('bil_category.cat_name', 'asc')
                 ->get();
           $hf_setting= \App\HeaderFooter::where(['cid'=>$cid])->first();
           $bill_data = \App\BillMaster::select('bill_no')->where(['cid'=>$cid])->orderBy('bill_no','desc')->first();
+           $payment_type = \App\PaymentType::select('*')->where(['cid'=>$cid])->get();
+          $point_of_data = \App\PointOfContact::select('*')->where(['cid'=>$cid])->get();
             }
             else if($client_data->location == "multiple" && $role == 2)
             {
@@ -70,7 +75,7 @@ class SalesController extends Controller
                     $category = DB::table('bil_category')
                             ->select('bil_category.*', 'bil_type.type_name')
                             ->leftjoin('bil_type', 'bil_type.type_id', '=', 'bil_category.type_id')
-                            ->where(['bil_category.is_active' => '1', 'bil_category.cid' => $cid, 'bil_category.lid' => $lid])
+                            ->where(['bil_category.is_active' => '0', 'bil_category.cid' => $cid, 'bil_category.lid' => $lid])
                             ->orWhere(['emp_id' => $sub_emp_id])
                             ->orWhere(['emp_id' => $emp_id])
                             ->orderBy('bil_category.cat_name', 'asc')
@@ -84,13 +89,22 @@ class SalesController extends Controller
                             ->orWhere(['emp_id' => $emp_id])
                             ->orderBy('bill_no', 'desc')
                             ->first();
+                     $payment_type = \App\PaymentType::select('*')->where(['cid' => $cid, 'lid' => $lid])
+                            ->orWhere(['emp_id' => $sub_emp_id])
+                            ->orWhere(['emp_id' => $emp_id])
+                             ->get();
+                    $point_of_data = \App\PointOfContact::select('*')
+                            ->where(['cid' => $cid, 'lid' => $lid])
+                            ->orWhere(['emp_id' => $sub_emp_id])
+                            ->orWhere(['emp_id' => $emp_id])
+                            ->get();
                 }
                 else
                 {
                     $category = DB::table('bil_category')
                             ->select('bil_category.*', 'bil_type.type_name')
                             ->leftjoin('bil_type', 'bil_type.type_id', '=', 'bil_category.type_id')
-                            ->where(['bil_category.is_active' => '1', 'bil_category.cid' => $cid, 'bil_category.lid' => $lid])
+                            ->where(['bil_category.is_active' => '0', 'bil_category.cid' => $cid, 'bil_category.lid' => $lid])
                             ->orderBy('bil_category.cat_name', 'asc')
                             ->get();
                     $hf_setting = \App\HeaderFooter::where(['cid' => $cid, 'lid' => $lid])
@@ -98,6 +112,8 @@ class SalesController extends Controller
                     $bill_data = \App\BillMaster::select('bill_no')->where(['cid' => $cid, 'lid' => $lid])
                             ->orderBy('bill_no', 'desc')
                             ->first();
+                     $payment_type = \App\PaymentType::select('*')->where(['cid' => $cid, 'lid' => $lid,'is_active'=>0])->get();
+                     $point_of_data = \App\PointOfContact::select('*')->where(['cid' => $cid, 'lid' => $lid,'is_active'=>0])->get();
                 }
             }
              else if($client_data->location == "multiple" && $role == 1)
@@ -105,7 +121,7 @@ class SalesController extends Controller
                   $category = DB::table('bil_category')
                             ->select('bil_category.*', 'bil_type.type_name')
                             ->leftjoin('bil_type', 'bil_type.type_id', '=', 'bil_category.type_id')
-                            ->where(['bil_category.is_active' => '1', 'bil_category.cid' => $cid, 'bil_category.lid' => $lid])
+                            ->where(['bil_category.is_active' => '0', 'bil_category.cid' => $cid, 'bil_category.lid' => $lid])
                             ->orderBy('bil_category.cat_name', 'asc')
                             ->get();
                     $hf_setting = \App\HeaderFooter::where(['cid' => $cid, 'lid' => $lid])
@@ -113,10 +129,12 @@ class SalesController extends Controller
                     $bill_data = \App\BillMaster::select('bill_no')->where(['cid' => $cid, 'lid' => $lid])
                             ->orderBy('bill_no', 'desc')
                             ->first();
+                      $payment_type = \App\PaymentType::select('*')->where(['cid' => $cid, 'lid' => $lid,'is_active'=>0])->get();
+                     $point_of_data = \App\PointOfContact::select('*')->where(['cid' => $cid, 'lid' => $lid,'is_active'=>0])->get();
              }
              
          }
-        return view('sales.thumbnail_form',['category_data'=>$category,'bill_data'=>$bill_data,'hf_setting'=>$hf_setting]);
+        return view('sales.thumbnail_form',['category_data'=>$category,'bill_data'=>$bill_data,'hf_setting'=>$hf_setting,'payment_type'=>$payment_type,'point_of_contact'=>$point_of_data]);
 //        return view('sales.autosearch',['category_data'=>$category,'bill_data'=>$bill_data,'hf_setting'=>$hf_setting]);
     }
     
@@ -241,8 +259,10 @@ class SalesController extends Controller
     public function saveBill(Request $request)
     {
          $requestData = $request->all();
+       //   echo "<pre/>";print_r($requestData); exit;
            if(Auth::guard('admin')->check()){
             $requestData['cid'] = $this->admin->rid;
+             $requestData['lid'] = NULL;
            }
            else if(Auth::guard('employee')->check()){
             $requestData['cid'] = $this->employee->cid;
@@ -259,6 +279,29 @@ class SalesController extends Controller
              $cust_data=\App\Customer::create($requestData);
              $requestData['cust_id']=$cust_data->cust_id;
          }
+         if(isset($requestData['payment_type']))
+         {
+             $payemnt_type_data= \App\PaymentType::select('payment_type')->where(['payment_type'=>$requestData['payment_type'],'lid'=>$requestData['lid'],'cid'=>$requestData['cid']])->first();
+             if(empty($payemnt_type_data))
+             $new_payemnt= \App\PaymentType::create($requestData);
+             $requestData['cash_or_credit']=$requestData['payment_type'];
+         }
+         if(isset($requestData['point_of_contact']))
+         {
+             $point_of_contact= \App\PointOfContact::select('*')->where(['point_of_contact'=>$requestData['point_of_contact'],'lid'=>$requestData['lid'],'cid'=>$requestData['cid']])->first();
+             if(empty($point_of_contact))
+             {
+                 $new_point_of_contact=  \App\PointOfContact::create($requestData);
+                 $requestData['point_of_contact'] = $new_point_of_contact->id;        
+             }
+ else {
+     $requestData['point_of_contact'] = $point_of_contact->id;        
+ }
+             
+             
+         }
+       //
+       //  echo "<pre/>";print_r($requestData); exit;
          $requestData['bill_date']=date('Y-m-d h:i:s');
 //         echo "<pre/>";print_r($requestData);exit;
          $bill_master=\App\BillMaster::create($requestData);
@@ -268,7 +311,7 @@ class SalesController extends Controller
              $requestData["bill_no"]=$bill_master->bill_no;
              $requestData["item_name"]=$data[1];
              $requestData["item_qty"]=$data[2];
-             $item_data = \App\Item::select('*')->where(['item_name'=>$requestData['item_name']])->first();
+             $item_data = \App\Item::select('*')->where('item_name', 'LIKE', '%'. $requestData["item_name"]. '%')->first();
              $updated_qty=$item_data->item_stock-$requestData["item_qty"];
              $item_data->update(['item_stock'=>$updated_qty]);
              //echo "<pre/>";print_r($item_data);
@@ -278,6 +321,7 @@ class SalesController extends Controller
              $requestData["item_totalrate"]=$data[6];
              $bill_detail=\App\BillDetail::create($requestData);
          }
+		// echo "<pre/>";print_r($bill_detail);exit;
          echo json_encode($bill_master);
          
     }
@@ -376,9 +420,14 @@ class SalesController extends Controller
     }
     public function getItems1()
     {
+		if(Auth::guard('admin')->check()){
+            
+        $cid = $this->admin->rid;
+		}
         $query=$_GET["query"];
         $data = DB::table('bil_AddItems')
         ->where('item_name', 'LIKE', "%{$query}%")
+		->where(['is_active' => '0','cid'=>$cid])
         ->get();
       $output = '<ul class="dropdown-menu" style="display:block; position:absulte;z-index:30 !important">';
       foreach($data as $row)
@@ -391,9 +440,12 @@ class SalesController extends Controller
     }
     public function search(Request $request)
     {
-          $search = $request->get('term');
-      
-          $result = \App\Item::orWhere('item_name', 'LIKE', '%'. $search. '%')
+          $search = $request->get('term'); 
+		if(Auth::guard('admin')->check()){
+        $cid = $this->admin->rid;
+		}
+          $result = \App\Item::where(['is_active' => '0','cid'=>$cid])
+                           ->where('item_name', 'LIKE', '%'. $search. '%')
                                ->orWhere('item_id', 'LIKE', '%'. $search. '%')
                                ->orWhere('item_barcode', 'LIKE', '%'. $search. '%')
                                 ->get();

@@ -1,7 +1,7 @@
 <?php if (count($bill_data) > 0) {
     ?>
 <table border="1">
-    <tr><td colspan="8"><h3>Sales Bill Report</h3></td><td style="text-align:center;"></td></tr>
+    <tr><td colspan="9"><h3>Sales Bill Report</h3></td><td style="text-align:center;"></td></tr>
         <tr> 
             <th style="text-align:center;">Sr.No.</th>
             <th style="text-align:center;">Date</th>
@@ -9,6 +9,7 @@
             <th style="text-align:center;">Customer Name</th>
             <th style="text-align:center;">Total Amount</th>
             <th style="text-align:center;">Cash/Credit</th>
+            <th style="text-align:center;">POS</th>
             <th style="text-align:center;">Location</th>
             <th style="text-align:center;">User</th>
         </tr>
@@ -28,6 +29,7 @@
                       else
                       $data->loc_name=$location_data->loc_name;
                       
+                      $point_of_data= \App\PointOfContact::select('*')->where(['id'=>$data->point_of_contact])->first();
                       $total_amt=$total_amt+$data->bill_totalamt;
                       //$total_cash=$total_cash+$data->cash_or_credit;
                       ?>
@@ -42,6 +44,7 @@
              <?php } ?>
             <td style="text-align:center;">{{$data->bill_totalamt}}</td>
             <td style="text-align:center;">{{$data->cash_or_credit}}</td>
+            <td style="text-align:center;">{{@$point_of_data->point_of_contact}}</td>
             <td style="text-align:center;">{{$data->loc_name}}</td>
             <td style="text-align:center;">{{$user_data->name}}</td>
             
@@ -56,6 +59,7 @@
             <td></td>
             <td style="text-align:center;">{{$total_amt}}</td>
             <td style="text-align:center;">{{$total_cash}}</td>
+            <td></td>
             <td></td>
             <td></td>
         </tr>
@@ -86,7 +90,7 @@
     $(document).ready(function () {
         swal({title: "Error", text: "No Report Available For This Date", type: "error", confirmButtonText: "Back"},
                 function () {
-                    location.href = 'sale_report';
+                    location.href = 'cancel_bill_report';
                 }
         );
     //    swal({ type: "success", title: "Good Job!", confirmButtonColor: "#292929", text: "Form Sumbmitted Successfully for line A", confirmButtonText: "Ok" });

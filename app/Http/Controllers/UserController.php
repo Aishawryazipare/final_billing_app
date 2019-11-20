@@ -122,7 +122,8 @@ class UserController extends Controller
     
     public function updateUser($id,Request $request)
     {
-        $requestData = $request->except('password');
+        $requestData = $request->all();
+		 $requestData['android_password'] =$requestData['password'];
 //        echo "<pre>";print_r($requestData);exit;
         if ($request->password)
             $requestData['password'] = bcrypt($request->password);
@@ -134,7 +135,9 @@ class UserController extends Controller
     
     public function deletUser($id)
     {
-        $query= \App\User::where('id', $id)->update(['is_active' => 1]);
+		
+        $query= \App\Employee::where('id', $id)->update(['is_active' => 1]);
+		//echo "<pre/>";print_r($query);exit;
         Session::flash('alert-success', 'Deleted Successfully.');
         return redirect('user-list');
     }

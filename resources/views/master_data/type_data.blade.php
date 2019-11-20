@@ -33,7 +33,7 @@
                 <tr>
                   <th style="width:50px;">Sr.No</th>
                   <th>Name</th>
-                  <th>Description</th>
+                  <th>Unit Code</th>
                   <th style="width: 100px;">Action</th>
                 </tr>
                 </thead>

@@ -27,6 +27,7 @@
         </tr>
               <?php
               $j=1; $i=1;
+              $total_sales=0;
                   foreach($bill_data as $data)
                   {
                       $j=1;
@@ -50,6 +51,7 @@
                  $item_data = App\Item::select('*')->where('item_name','LIKE',$dross->item_name)->first();
                   $total_dis_rate=$total_dis_rate+$item_data->item_disrate;
                     $total_tax_amt=$total_tax_amt+$item_data->item_taxvalue;
+                   
                  if ($j == 1) {
             ?>
             <td style="text-align:center;">{{$dross->item_name}}</td>
@@ -92,8 +94,23 @@
             <td></td>
         </tr>
                     <?php
+                     $total_sales=$total_sales+$data->bill_totalamt;
                   $i++;}
                   ?>
+        <tr>
+            <td></td>
+            <td style="text-align:center;"><b>Total Sales</b></td>
+            <td style="text-align:center;">{{$total_sales}}</td>
+            <td></td><td></td><td></td><td></td>
+            <td></td><td></td><td></td><td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td style="text-align:center;"><b>Total Bills</b></td>
+            <td style="text-align:center;">{{$i}}</td>
+             <td></td><td></td><td></td><td></td>
+            <td></td><td></td><td></td><td></td>
+        </tr>
        
         
 </table>
@@ -123,7 +140,7 @@ else {
     $(document).ready(function () {
         swal({title: "Error", text: "No Report Available For This Date", type: "error", confirmButtonText: "Back"},
                 function () {
-                    location.href = 'sale_report';
+                    location.href = 'bill_detail_report';
                 }
         );
     //    swal({ type: "success", title: "Good Job!", confirmButtonColor: "#292929", text: "Form Sumbmitted Successfully for line A", confirmButtonText: "Ok" });

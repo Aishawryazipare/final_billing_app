@@ -621,7 +621,7 @@ class TaxController extends Controller
                          $bill_data = DB::table('bil_AddBillMaster')
                      ->select('bil_AddBillMaster.*')
                      ->whereBetween('bil_AddBillMaster.bill_date', [$from_date, $to_date])
-                     ->where(['cid'=>$cid,'emp_id'=>$requestData['employee']])
+                     ->where(['cid'=>$cid,'emp_id'=>$requestData['employee'],'isactive'=>0])
                      ->get();
                       }
                       else
@@ -629,7 +629,7 @@ class TaxController extends Controller
                        $bill_data = DB::table('bil_AddBillMaster')
                      ->select('bil_AddBillMaster.*')
                      ->whereBetween('bil_AddBillMaster.bill_date', [$from_date, $to_date])
-                    ->where(['cid'=>$cid])
+                    ->where(['cid'=>$cid,'isactive'=>0])
                      ->get();
                       }
                       
@@ -638,7 +638,7 @@ class TaxController extends Controller
                       $bill_data = DB::table('bil_AddBillMaster')
                      ->select('bil_AddBillMaster.*')
                      ->whereBetween('bil_AddBillMaster.bill_date', [$from_date, $to_date])
-                    ->where(['cid'=>$cid,'lid'=>$lid])
+                    ->where(['cid'=>$cid,'lid'=>$lid,'isactive'=>0])
                      ->get();
                   }
               }
@@ -649,14 +649,14 @@ class TaxController extends Controller
                          $bill_data = DB::table('bil_AddBillMaster')
                      ->select('bil_AddBillMaster.*')
                      ->whereBetween('bil_AddBillMaster.bill_date', [$from_date, $to_date])
-             ->where(['cid'=>$cid,'emp_id'=>$requestData['employee']])
+             ->where(['cid'=>$cid,'emp_id'=>$requestData['employee'],'isactive'=>0])
                      ->get();
                   }
                   else{
                   $bill_data = DB::table('bil_AddBillMaster')
                      ->select('bil_AddBillMaster.*')
                      ->whereBetween('bil_AddBillMaster.bill_date', [$from_date, $to_date])
-                     ->where(['bil_AddBillMaster.cid'=>$cid])
+                     ->where(['bil_AddBillMaster.cid'=>$cid,'isactive'=>0])
                      ->get();
                   }
               }
@@ -679,7 +679,7 @@ class TaxController extends Controller
                 $bill_data = DB::table('bil_AddBillMaster')
                      ->select('bil_AddBillMaster.*')
                      ->whereBetween('bil_AddBillMaster.bill_date', [$from_date, $to_date])
-                    ->where(['cid'=>$cid])
+                    ->where(['cid'=>$cid,'isactive'=>0])
                      ->get();
             }
              else if($client_data->location == "multiple" && $role == 2)
@@ -689,7 +689,7 @@ class TaxController extends Controller
                      $bill_data = DB::table('bil_AddBillMaster')
                      ->select('bil_AddBillMaster.*')
                      ->whereBetween('bil_AddBillMaster.bill_date', [$from_date, $to_date])
-                     ->where(['cid'=>$cid,'lid'=>$lid])
+                     ->where(['cid'=>$cid,'lid'=>$lid,'isactive'=>0])
                      ->get();
                  }
                  else
@@ -697,7 +697,7 @@ class TaxController extends Controller
                  $bill_data = DB::table('bil_AddBillMaster')
                      ->select('bil_AddBillMaster.*')
                      ->whereBetween('bil_AddBillMaster.bill_date', [$from_date, $to_date])
-                      ->where(['cid'=>$cid,'lid'=>$lid])
+                      ->where(['cid'=>$cid,'lid'=>$lid,'isactive'=>0])
                      ->get();
                  }
              }
@@ -706,7 +706,7 @@ class TaxController extends Controller
                   $bill_data = DB::table('bil_AddBillMaster')
                      ->select('bil_AddBillMaster.*')
                      ->whereBetween('bil_AddBillMaster.bill_date', [$from_date, $to_date])
-                     ->where(['cid'=>$cid,'lid'=>$lid])
+                     ->where(['cid'=>$cid,'lid'=>$lid,'isactive'=>0])
                      ->get();
              }
     
@@ -716,95 +716,316 @@ class TaxController extends Controller
          
          return view('reports.tax.download_bill_report',['bill_data'=>$bill_data,'cid'=>$cid,'from_date'=>$requestData['from_date'],'to_date'=>$requestData['to_date']]);
     }
-      public function getItem()
+      public function getTaxSlab()
     {
-         if(Auth::guard('admin')->check()){
-            $id = $this->admin->rid;
-         $item_data = \App\Item::orderBy('item_name', 'asc')->where(['is_active' => '0','cid'=>$id])->get();
-         }else if(Auth::guard('web')->check()){
-             $item_data = \App\Item::orderBy('item_name', 'asc')->where(['is_active' => '0'])->get();
-         } else if(Auth::guard('employee')->check()){
-           $cid = $this->employee->cid;
-            $lid = $this->employee->lid;
-            $emp_id = $this->employee->id;
-            $role = $this->employee->role;
-            $sub_emp_id = $this->employee->sub_emp_id;
-            $client_data = \App\Admin::select('location')->where(['rid'=>$cid])->first();
-             if($client_data->location == "single" && $role == 2)
-            {
-                 $item_data = \App\Item::where(['is_active' => '0','cid'=>$cid])->orderBy('item_name', 'asc')->get();   
-             }
-             else if($client_data->location == "multiple" && $role == 2)
-            {
-               
-                if($sub_emp_id != "")
-                {
-                   $item_data = \App\Item::where(['is_active' => '0','cid'=>$cid,'lid'=>$lid])
-                                ->orWhere(['emp_id'=>$sub_emp_id])
-                                ->orWhere(['emp_id'=>$emp_id])
-                                ->orderBy('item_name', 'asc')
-                                ->get();    
-                }
-                else
-                {
-                          $item_data = \App\Item::where(['is_active' => '0','cid'=>$cid])
-                                ->orderBy('item_name', 'asc')
-                                ->get(); 
-                }
-            }
-            else if($client_data->location == "multiple" && $role == 1)
-            {
-                    $item_data = \App\Item::where(['is_active' => '0','cid'=>$cid])
-                                ->orderBy('item_name', 'asc')
-                                ->get(); 
-            }
-            }
-        return view('reports.item_report',['item_data'=>$item_data]);
+            $location_data=$employee_data='';
+        if(Auth::guard('admin')->check()){
+          $cid = $this->admin->rid;   
+          if($this->admin->location=="multiple")
+          {
+               $location_data= \App\EnquiryLocation::select('*')->where(['cid'=>$cid])->get();
+          }
+         
+          $employee_data= \App\Employee::select('*')->where(['cid'=>$cid])->get();
+        }
+        return view('reports.tax.tax_slab_report',['location_data'=>$location_data,'employee_data'=>$employee_data]);
     }
-    public function downloadItem(Request $request)
+     public function fetchTaxSlab(Request $request)
     {
+         $requestData = $request->all();
+        $from_date = $requestData["from_date"];
+        if(!empty($requestData["to_date"]))
+         $to_date = $requestData["to_date"];
+        else
+          $to_date = $from_date;
+        
+         $from_date = date($from_date . ' 00:00:00', time());
+         $to_date   = date($to_date . ' 22:00:40', time());
+         
          if(Auth::guard('admin')->check()){
-            $id = $this->admin->rid;
-         $item_data = \App\Item::orderBy('item_name', 'asc')->where(['is_active' => '0','cid'=>$id])->get();
-         }else if(Auth::guard('web')->check()){
-             $item_data = \App\Item::orderBy('item_name', 'asc')->where(['is_active' => '0'])->get();
-         }else if(Auth::guard('employee')->check()){
+            $cid = $this->admin->rid;
+               if(isset($requestData['location']))
+              {
+                 
+                  $lid=$requestData['location'];
+                 //  echo $lid;exit;
+                  if($lid=="all")
+                  {
+                      if(isset($requestData['employee']))
+                      {
+                    $bill_data = DB::table('bil_AddBillMaster')
+                     ->select('bil_AddBillDetail.discount')
+                      ->selectRaw('sum(bil_AddBillDetail.bill_tax) as tax_total')
+                     ->leftjoin('bil_AddBillDetail','bil_AddBillDetail.bill_no','=','bil_AddBillMaster.bill_no')
+                     ->groupBy('bil_AddBillDetail.discount')     
+                     ->whereBetween('bil_AddBillMaster.bill_date', [$from_date, $to_date])   
+                     ->where(['bil_AddBillMaster.cid'=>$cid,'bil_AddBillMaster.emp_id'=>$requestData['employee']])
+                     ->get();
+                      }
+                      else
+                      {
+                       $bill_data = DB::table('bil_AddBillMaster')
+                     ->select('bil_AddBillDetail.discount')
+                      ->selectRaw('sum(bil_AddBillDetail.bill_tax) as tax_total')
+                     ->leftjoin('bil_AddBillDetail','bil_AddBillDetail.bill_no','=','bil_AddBillMaster.bill_no')
+                     ->groupBy('bil_AddBillDetail.discount')     
+                     ->whereBetween('bil_AddBillMaster.bill_date', [$from_date, $to_date])
+                      ->where(['bil_AddBillMaster.cid'=>$cid])
+                     ->get();
+                      }
+                      
+                  }
+                  else {
+                      $bill_data = DB::table('bil_AddBillMaster')
+                     ->select('bil_AddBillDetail.discount')
+                      ->selectRaw('sum(bil_AddBillDetail.bill_tax) as tax_total')
+                     ->leftjoin('bil_AddBillDetail','bil_AddBillDetail.bill_no','=','bil_AddBillMaster.bill_no')
+                     ->groupBy('bil_AddBillDetail.discount')     
+                     ->whereBetween('bil_AddBillMaster.bill_date', [$from_date, $to_date])
+                    ->where(['bil_AddBillMaster.cid'=>$cid,'bil_AddBillMaster.lid'=>$lid])
+                     ->get();
+                  }
+              }
+              else
+              {
+            if(isset($requestData['employee']))
+                  {
+                   $bill_data = DB::table('bil_AddBillMaster')
+                     ->select('bil_AddBillDetail.discount')
+                      ->selectRaw('sum(bil_AddBillDetail.bill_tax) as tax_total')
+                     ->leftjoin('bil_AddBillDetail','bil_AddBillDetail.bill_no','=','bil_AddBillMaster.bill_no')
+                     ->groupBy('bil_AddBillDetail.discount')     
+                     ->whereBetween('bil_AddBillMaster.bill_date', [$from_date, $to_date])
+                     ->where(['bil_AddBillMaster.cid'=>$cid,'bil_AddBillMaster.emp_id'=>$requestData['employee']])
+                     ->get();
+                  }
+                  else{
+                 $bill_data = DB::table('bil_AddBillMaster')
+                     ->select('bil_AddBillDetail.discount')
+                      ->selectRaw('sum(bil_AddBillDetail.bill_tax) as tax_total')
+                     ->leftjoin('bil_AddBillDetail','bil_AddBillDetail.bill_no','=','bil_AddBillMaster.bill_no')
+                     ->groupBy('bil_AddBillDetail.discount')     
+                     ->whereBetween('bil_AddBillMaster.bill_date', [$from_date, $to_date])
+                     ->where(['bil_AddBillMaster.cid'=>$cid])
+                     ->get();
+                  }
+              }
+        }else if(Auth::guard('web')->check()){
+            $bill_data = DB::table('bil_AddBillMaster')
+                     ->select('bil_AddBillMaster.*')
+                     ->whereBetween('bil_AddBillMaster.bill_date', [$from_date, $to_date])
+                    ->get();
+        }
+        else if(Auth::guard('employee')->check()){
            $cid = $this->employee->cid;
             $lid = $this->employee->lid;
             $emp_id = $this->employee->id;
             $role = $this->employee->role;
             $sub_emp_id = $this->employee->sub_emp_id;
             $client_data = \App\Admin::select('location')->where(['rid'=>$cid])->first();
-             if($client_data->location == "single" && $role == 2)
+//            echo $client_data->location."&".$role;exit;
+            if($client_data->location == "single" && $role == 2)
             {
-                 $item_data = \App\Item::where(['is_active' => '0','cid'=>$cid])->orderBy('item_name', 'asc')->get();   
-             }
+                $bill_data = DB::table('bil_AddBillMaster')
+                     ->select('bil_AddBillDetail.discount')
+                      ->selectRaw('sum(bil_AddBillDetail.bill_tax) as tax_total')
+                     ->leftjoin('bil_AddBillDetail','bil_AddBillDetail.bill_no','=','bil_AddBillMaster.bill_no')
+                     ->groupBy('bil_AddBillDetail.discount')     
+                     ->whereBetween('bil_AddBillMaster.bill_date', [$from_date, $to_date])    
+                     ->where(['bil_AddBillMaster.cid'=>$cid])
+                     ->get();
+            }
              else if($client_data->location == "multiple" && $role == 2)
             {
-               
-                if($sub_emp_id != "")
+                 if($sub_emp_id != "")
                 {
-                   $item_data = \App\Item::where(['is_active' => '0','cid'=>$cid,'lid'=>$lid])
-                                ->orWhere(['emp_id'=>$sub_emp_id])
-                                ->orWhere(['emp_id'=>$emp_id])
-                                ->orderBy('item_name', 'asc')
-                                ->get();    
-                }
-                else
+                    $bill_data = DB::table('bil_AddBillMaster')
+                     ->select('bil_AddBillDetail.discount')
+                      ->selectRaw('sum(bil_AddBillDetail.bill_tax) as tax_total')
+                     ->leftjoin('bil_AddBillDetail','bil_AddBillDetail.bill_no','=','bil_AddBillMaster.bill_no')
+                     ->groupBy('bil_AddBillDetail.discount')     
+                     ->whereBetween('bil_AddBillMaster.bill_date', [$from_date, $to_date])
+                     ->where(['bil_AddBillMaster.cid'=>$cid,'bil_AddBillMaster.lid'=>$lid])
+                     ->get();
+                 }
+                 else
+                 {
+                $bill_data = DB::table('bil_AddBillMaster')
+                     ->select('bil_AddBillDetail.discount')
+                      ->selectRaw('sum(bil_AddBillDetail.bill_tax) as tax_total')
+                     ->leftjoin('bil_AddBillDetail','bil_AddBillDetail.bill_no','=','bil_AddBillMaster.bill_no')
+                     ->groupBy('bil_AddBillDetail.discount')     
+                     ->whereBetween('bil_AddBillMaster.bill_date', [$from_date, $to_date])
+                      ->where(['bil_AddBillMaster.cid'=>$cid,'bil_AddBillMaster.lid'=>$lid])
+                     ->get();
+                 }
+             }
+             else if($client_data->location == "multiple" && $role == 1)
                 {
-                          $item_data = \App\Item::where(['is_active' => '0','cid'=>$cid])
-                                ->orderBy('item_name', 'asc')
-                                ->get(); 
-                }
-            }
-            else if($client_data->location == "multiple" && $role == 1)
+              $bill_data = DB::table('bil_AddBillMaster')
+                     ->select('bil_AddBillDetail.discount')
+                      ->selectRaw('sum(bil_AddBillDetail.bill_tax) as tax_total')
+                     ->leftjoin('bil_AddBillDetail','bil_AddBillDetail.bill_no','=','bil_AddBillMaster.bill_no')
+                     ->groupBy('bil_AddBillDetail.discount')     
+                     ->whereBetween('bil_AddBillMaster.bill_date', [$from_date, $to_date])
+                     ->where(['bil_AddBillMaster.cid'=>$cid,'bil_AddBillMaster.lid'=>$lid])
+                     ->get();
+             }
+    
+            
+        }  
+//         echo "<pre/>";print_r($bill_data);exit;
+         
+         echo json_encode($bill_data);
+    }
+    
+      public function downloadTaxSlab(Request $request)
+    {
+         $requestData = $request->all();
+        $from_date = $requestData["from_date"];
+        if(!empty($requestData["to_date"]))
+         $to_date = $requestData["to_date"];
+        else
+          $to_date = $from_date;
+        
+         $from_date = date($from_date . ' 00:00:00', time());
+         $to_date   = date($to_date . ' 22:00:40', time());
+         
+         if(Auth::guard('admin')->check()){
+            $cid = $this->admin->rid;
+               if(isset($requestData['location']))
+              {
+                 
+                  $lid=$requestData['location'];
+                 //  echo $lid;exit;
+                  if($lid=="all")
+                  {
+                      if(isset($requestData['employee']))
+                      {
+                    $bill_data = DB::table('bil_AddBillMaster')
+                     ->select('bil_AddBillDetail.discount')
+                      ->selectRaw('sum(bil_AddBillDetail.bill_tax) as tax_total')
+                     ->leftjoin('bil_AddBillDetail','bil_AddBillDetail.bill_no','=','bil_AddBillMaster.bill_no')
+                     ->groupBy('bil_AddBillDetail.discount')     
+                     ->whereBetween('bil_AddBillMaster.bill_date', [$from_date, $to_date])   
+                     ->where(['bil_AddBillMaster.cid'=>$cid,'bil_AddBillMaster.emp_id'=>$requestData['employee']])
+                     ->get();
+                      }
+                      else
+                      {
+                       $bill_data = DB::table('bil_AddBillMaster')
+                     ->select('bil_AddBillDetail.discount')
+                      ->selectRaw('sum(bil_AddBillDetail.bill_tax) as tax_total')
+                     ->leftjoin('bil_AddBillDetail','bil_AddBillDetail.bill_no','=','bil_AddBillMaster.bill_no')
+                     ->groupBy('bil_AddBillDetail.discount')     
+                     ->whereBetween('bil_AddBillMaster.bill_date', [$from_date, $to_date])
+                      ->where(['bil_AddBillMaster.cid'=>$cid])
+                     ->get();
+                      }
+                      
+                  }
+                  else {
+                      $bill_data = DB::table('bil_AddBillMaster')
+                     ->select('bil_AddBillDetail.discount')
+                      ->selectRaw('sum(bil_AddBillDetail.bill_tax) as tax_total')
+                     ->leftjoin('bil_AddBillDetail','bil_AddBillDetail.bill_no','=','bil_AddBillMaster.bill_no')
+                     ->groupBy('bil_AddBillDetail.discount')     
+                     ->whereBetween('bil_AddBillMaster.bill_date', [$from_date, $to_date])
+                    ->where(['bil_AddBillMaster.cid'=>$cid,'bil_AddBillMaster.lid'=>$lid])
+                     ->get();
+                  }
+              }
+              else
+              {
+            if(isset($requestData['employee']))
+                  {
+                   $bill_data = DB::table('bil_AddBillMaster')
+                     ->select('bil_AddBillDetail.discount')
+                      ->selectRaw('sum(bil_AddBillDetail.bill_tax) as tax_total')
+                     ->leftjoin('bil_AddBillDetail','bil_AddBillDetail.bill_no','=','bil_AddBillMaster.bill_no')
+                     ->groupBy('bil_AddBillDetail.discount')     
+                     ->whereBetween('bil_AddBillMaster.bill_date', [$from_date, $to_date])
+                     ->where(['bil_AddBillMaster.cid'=>$cid,'bil_AddBillMaster.emp_id'=>$requestData['employee']])
+                     ->get();
+                  }
+                  else{
+                 $bill_data = DB::table('bil_AddBillMaster')
+                     ->select('bil_AddBillDetail.discount')
+                      ->selectRaw('sum(bil_AddBillDetail.bill_tax) as tax_total')
+                     ->leftjoin('bil_AddBillDetail','bil_AddBillDetail.bill_no','=','bil_AddBillMaster.bill_no')
+                     ->groupBy('bil_AddBillDetail.discount')     
+                     ->whereBetween('bil_AddBillMaster.bill_date', [$from_date, $to_date])
+                     ->where(['bil_AddBillMaster.cid'=>$cid])
+                     ->get();
+                  }
+              }
+        }else if(Auth::guard('web')->check()){
+            $bill_data = DB::table('bil_AddBillMaster')
+                     ->select('bil_AddBillMaster.*')
+                     ->whereBetween('bil_AddBillMaster.bill_date', [$from_date, $to_date])
+                    ->get();
+        }
+        else if(Auth::guard('employee')->check()){
+           $cid = $this->employee->cid;
+            $lid = $this->employee->lid;
+            $emp_id = $this->employee->id;
+            $role = $this->employee->role;
+            $sub_emp_id = $this->employee->sub_emp_id;
+            $client_data = \App\Admin::select('location')->where(['rid'=>$cid])->first();
+//            echo $client_data->location."&".$role;exit;
+            if($client_data->location == "single" && $role == 2)
             {
-                    $item_data = \App\Item::where(['is_active' => '0','cid'=>$cid])
-                                ->orderBy('item_name', 'asc')
-                                ->get(); 
+                $bill_data = DB::table('bil_AddBillMaster')
+                     ->select('bil_AddBillDetail.discount')
+                      ->selectRaw('sum(bil_AddBillDetail.bill_tax) as tax_total')
+                     ->leftjoin('bil_AddBillDetail','bil_AddBillDetail.bill_no','=','bil_AddBillMaster.bill_no')
+                     ->groupBy('bil_AddBillDetail.discount')     
+                     ->whereBetween('bil_AddBillMaster.bill_date', [$from_date, $to_date])    
+                     ->where(['bil_AddBillMaster.cid'=>$cid])
+                     ->get();
             }
-            }
-            return view('reports.download_item_report',['item_data'=>$item_data]);
+             else if($client_data->location == "multiple" && $role == 2)
+            {
+                 if($sub_emp_id != "")
+                {
+                    $bill_data = DB::table('bil_AddBillMaster')
+                     ->select('bil_AddBillDetail.discount')
+                      ->selectRaw('sum(bil_AddBillDetail.bill_tax) as tax_total')
+                     ->leftjoin('bil_AddBillDetail','bil_AddBillDetail.bill_no','=','bil_AddBillMaster.bill_no')
+                     ->groupBy('bil_AddBillDetail.discount')     
+                     ->whereBetween('bil_AddBillMaster.bill_date', [$from_date, $to_date])
+                     ->where(['bil_AddBillMaster.cid'=>$cid,'bil_AddBillMaster.lid'=>$lid])
+                     ->get();
+                 }
+                 else
+                 {
+                $bill_data = DB::table('bil_AddBillMaster')
+                     ->select('bil_AddBillDetail.discount')
+                      ->selectRaw('sum(bil_AddBillDetail.bill_tax) as tax_total')
+                     ->leftjoin('bil_AddBillDetail','bil_AddBillDetail.bill_no','=','bil_AddBillMaster.bill_no')
+                     ->groupBy('bil_AddBillDetail.discount')     
+                     ->whereBetween('bil_AddBillMaster.bill_date', [$from_date, $to_date])
+                      ->where(['bil_AddBillMaster.cid'=>$cid,'bil_AddBillMaster.lid'=>$lid])
+                     ->get();
+                 }
+             }
+             else if($client_data->location == "multiple" && $role == 1)
+                {
+              $bill_data = DB::table('bil_AddBillMaster')
+                     ->select('bil_AddBillDetail.discount')
+                      ->selectRaw('sum(bil_AddBillDetail.bill_tax) as tax_total')
+                     ->leftjoin('bil_AddBillDetail','bil_AddBillDetail.bill_no','=','bil_AddBillMaster.bill_no')
+                     ->groupBy('bil_AddBillDetail.discount')     
+                     ->whereBetween('bil_AddBillMaster.bill_date', [$from_date, $to_date])
+                     ->where(['bil_AddBillMaster.cid'=>$cid,'bil_AddBillMaster.lid'=>$lid])
+                     ->get();
+             }
+    
+            
+        }  
+//         echo "<pre/>";print_r($bill_data);exit;
+         
+         return view('reports.tax.download_tax_slab_report',['bill_data'=>$bill_data,'cid'=>$cid,'from_date'=>$requestData['from_date'],'to_date'=>$requestData['to_date']]);
     }
     
     public function getItemSale()

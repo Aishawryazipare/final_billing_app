@@ -1,5 +1,11 @@
 @extends('layouts.app')
 @section('content')
+<style>
+    .btn-success {
+        background-color: #00ffc3;
+    border-color: #00ffc3;
+    }
+</style>
 <section class="content-header">
     <h1>
       Add Item

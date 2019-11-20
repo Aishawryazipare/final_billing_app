@@ -90,7 +90,7 @@
                     <div class="box-footer">
                         <button type="button"  id="btnsubmit" class="btn btn-success"><i class="fa fa-fw fa-eye"></i>View</button>
                         <button type="submit"  id="download" class="btn btn-primary"><i class="fa fa-fw fa-download"></i>Download</button>
-                        <a href="{{url('enquiry-list')}}" class="btn btn-danger" >Cancel</a>
+                        <a href="{{url('bill_tax_report')}}" class="btn btn-danger" >Cancel</a>
                     </div>
                 </form>
             </div>

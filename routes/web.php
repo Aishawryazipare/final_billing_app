@@ -88,6 +88,7 @@ Route::get('delete-enquiry-status/{id}','EnquiryStatusController@deleteStatus');
 
 //Get masterdata
 Route::get('item_data','MasterController@getItemData');
+Route::get('get_items_filter','MasterController@getItemFilter');
 Route::get('add_item','MasterController@getItem');
 Route::post('add_item','MasterController@addItem');
 Route::get('edit-item','MasterController@editItem');
@@ -168,7 +169,20 @@ Route::get('edit-supplier','MasterController@editSupplier');
 Route::post('edit-supplier','MasterController@updateSupplier');
 Route::get('delete-supplier/{sup_id}','MasterController@deleteSupplier');
 
+//POS method
+Route::get('payment_data','MasterController@getPOSData');
+Route::get('add_payment','MasterController@addPayment');
+Route::post('add_payment_type','MasterController@savePayment');
 
+Route::get('edit-contact','MasterController@editContact');
+Route::get('edit-payment','MasterController@editPayment');
+
+Route::post('edit-contact','MasterController@UpdateContact');
+Route::post('edit-payment','MasterController@UpdatePayment');
+
+
+Route::get('delete-payment/{id}','MasterController@DeletePayment');
+Route::get('delete-contact/{id}','MasterController@DeleteContact');
 //check location
 Route::get('check_location','UserController@checkLocation');
 
@@ -231,9 +245,15 @@ Route::get('bill_detail_report','TaxController@getBillDetail');
 Route::post('bill_detail_report','TaxController@fetchBillDetail');
 Route::post('download_bill_detail_report','TaxController@downloadBillDetail');
 //Tax Bill report
+Route::get('tax_slab_report','TaxController@getTaxSlab');
+Route::post('tax_slab_report','TaxController@fetchTaxSlab');
+Route::post('download_tax_slab_report','TaxController@downloadTaxSlab');
+
 Route::get('cancel_bill_report','ReportController@getCancelSale');
 Route::post('cancel_bill_report','ReportController@fetchCancelSale');
 Route::post('download_cancel_bill_report','ReportController@downloadCancelSale');
+
+
 //inventory report
 Route::get('inventory_report','ReportController@getInventory');
 Route::post('inventory_report','ReportController@fetchInventory');

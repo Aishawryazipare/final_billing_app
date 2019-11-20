@@ -140,6 +140,8 @@ src: url('fake receipt.ttf')
     </ol> -->
 </section>
     <section class="content">
+          <form action="{{ url('add_bill') }}" method="POST" id="bill_form" class="form-horizontal" enctype="multipart/form-data">
+                {{ csrf_field() }}
         <div class="row">
             <div class="col-md-6">
                 <input type="text" name="search_code" id="search_code" class="form-control"  placeholder="Search By Name/Code/Barcode" />
@@ -147,38 +149,49 @@ src: url('fake receipt.ttf')
                  <div id="countryList">
     </div>
             </div>
-            <div class="col-md-3">
-                <input type="text" name="cust_name"  class="form-control"  onkeyup="assign_name(this.value)" placeholder="Client Name"/>
+            <div class="col-md-2">
+                <input type="text" name="cust_name"  class="form-control"  onkeyup="assign_name(this.value)" placeholder="Customer Name"/>
             </div>
             <div class="col-md-2">
-                <div class="form-group">
+<!--                <div class="form-group">
                     <label class="radio-inline">
       <input type="radio" name="cash_or_credit1" value="cash" checked>Card
     </label>
     <label class="radio-inline">
       <input type="radio" name="cash_or_credit1" value="cash">Cash
     </label>
-                </div>
-<!--                <div >
-                    <button type="button"  class="btn btn-success pull-right" id="clear_item"><i class="fa fa-credit-card"></i> Clear Item
-                </button>
                 </div>-->
+      <select class="form-control select2" style="width: 100%;" name="payment_type"  id="payment_type">
+      @foreach($payment_type as $d)
+      <option value="{{$d->payment_type}}">{{$d->payment_type}}</option>
+      @endforeach
+      </select>
+            </div>
+            <div class="col-md-2">
+             <!--<input list="point_of_contact" name="point_of_contact" class="form-control" placeholder="Point Of Sales">-->
+      <select class="form-control select2" style="width: 100%;" name="point_of_contact"  id="point_of_contact">
+  @foreach($point_of_contact as $d)
+      <option value="{{$d->point_of_contact}}">{{$d->point_of_contact}}</option>
+      @endforeach  
+      </select>
+
+   
             </div>
         </div>
         <div class="row">
              <div class="col-md-6">
-             <div class="box box-default" style="max-height:500px;overflow:auto;">
+             <div class="box box-default" style="max-height:600px;overflow:auto;">
 <!--            <div class="box-header with-border">
               <h3 class="box-title">Bill No:1</h3>
             </div>-->
            
               <div class="box-body">
                   <?php  foreach($category_data as $data){?>
-                    <button type="submit" class="btn btn-success btn-lg cat" id="btn_submit_<?php echo $data->cat_id;?>" name="btn_submit" style="background-color:#00ffc3;color:black;margin-bottom:5px;font-weight:bold;width:96px;overflow: hidden;text-overflow: ellipsis;white-space:normal;margin-right:-4px;height:50px;font-size:14px;" onclick="get_items(<?php echo $data->cat_id;?>,0)">{{$data->cat_name}}</button>
+                    <button type="button" class="btn btn-success btn-lg cat" id="btn_submit_<?php echo $data->cat_id;?>" name="btn_submit" style="background-color:#00ffc3;color:black;margin-bottom:5px;font-weight:bold;width:96px;overflow: hidden;text-overflow: ellipsis;white-space:normal;margin-right:-4px;height:50px;font-size:14px;" onclick="get_items(<?php echo $data->cat_id;?>,0)">{{$data->cat_name}}</button>
                     <span class="info-box-number cat_id" style="display:none;"><h2>{{$data->cat_id}}</h2></span>
                   
                   <?php }$all=0; ?>
-                    <button type="submit" class="btn btn-success btn-lg" id="btn_submit1" name="btn_submit" style="background-color:#00ffc3;color:black;margin-top: -5px;font-weight:bold;height:50px;font-size:14px;" onclick="get_items(<?php echo $all;?>),0">All Items</button>
+                    <button type="button" class="btn btn-success btn-lg" id="btn_submit1" name="btn_submit" style="background-color:#00ffc3;color:black;margin-top: -5px;font-weight:bold;height:50px;font-size:14px;" onclick="get_items(<?php echo $all;?>),0">All Items</button>
                     <br/>
                     <br/>
                    
@@ -189,8 +202,7 @@ src: url('fake receipt.ttf')
                  </div>
         </div>
              <div class="col-md-6 table-responsive" id="print_content">
-                 <form action="{{ url('add_bill') }}" method="POST" id="bill_form" class="form-horizontal" enctype="multipart/form-data">
-                {{ csrf_field() }}
+               
                  <div class="box box-default tbl_width_oveflow" >
                      <div class="box-body">
                       <div id="set_header">
@@ -273,50 +285,6 @@ src: url('fake receipt.ttf')
             </tbody>
                           
                       </table>
-<!--                      <table cellpadding="10" border="1" class="table"  cellspacing="0" align="center">
- <thead>
-            <tr>
-              <th>No</th>
-              <th>Item Name</th>
-              <th>Qty</th>
-              <th>Rate</th>
-              <th>Discount</th>
-              <th>Tax</th>
-              <th>Amount</th>
-            </tr>
-            </thead>-->
-<!--            <tbody id="bill_tbl">
-                         <tr class="row1">
-                    <td></td>
-                    <td></td>
-                    <td></td><td></td><td></td>
-                    <td style="font-weight: bold;">Total</td>
-                    <td style="font-weight: bold;"> <input type="text" name="bill_totalamt" class="bill_totalamt" id="bill_totalamt" style="border:none;width:50px;text-align:center;" value="0"/></td>
-                </tr>  
-            </tbody>-->
-<!--</table>-->
-<!--                       <table class="table table-striped" align="center"  border="1">
-            <thead>
-            <tr>
-              <th>No</th>
-              <th>Item Name</th>
-              <th>Qty</th>
-              <th>Rate</th>
-              <th>Discount</th>
-              <th>Tax</th>
-              <th>Amount</th>
-            </tr>
-            </thead>
-            <tbody id="bill_tbl">
-                         <tr class="row1">
-                    <td></td>
-                    <td></td>
-                    <td></td><td></td><td></td>
-                    <td style="font-weight: bold;">Total</td>
-                    <td style="font-weight: bold;"> <input type="text" name="bill_totalamt" class="bill_totalamt" id="bill_totalamt" style="border:none;width:50px;text-align:center;" value="0"/></td>
-                </tr>  
-            </tbody>
-          </table>  -->
                       <div id="set_footer">
              <hr>
               @if(!empty($hf_setting))
@@ -360,123 +328,16 @@ src: url('fake receipt.ttf')
          
                      </div>
                  </div>
-                  </form>
          
         </div>
         </div>
+          </form>
         <div class="row">
             <div  id="item_data" >
             
             </div>  
             </div>
         <input type="hidden" id="new_bill_no" name="new_bill_no">
-<!--        <div class="row">
-            <div id="print_content1">
-                hello
-        </div>
-        </div>-->
-<!--      <div class="row">
-        <div class="col-md-3"></div>
-        <div class="col-md-12">
-          <div class="box box-default">
-            <div class="box-header with-border">
-              <h3 class="box-title">Bill No:1</h3>
-            </div>
-              <form action="{{ url('add_inventory') }}" method="POST" id="inventory_form" class="form-horizontal" enctype="multipart/form-data">
-                {{ csrf_field() }}
-                <div class="box-body">
-                    <input type="text" name="search_code" id="search_code" class="form-control" onkeyup="get_code(this.value)"/>
-                  <?php  foreach($category_data as $data){?>
-                 <div class="col-md-3 col-sm-6 col-xs-12">
-          <div class="info-box bg-aqua cat">
-            <span class="info-box-icon"><i class="fa fa-bookmark-o"></i></span>
-
-            <div class="info-box-content">
-              <span class="info-box-text">{{$data->cat_name}}</span>
-              <span class="info-box-number category"><h2>{{$data->cat_name}}</h2></span>
-              <span class="info-box-number cat_id" style="display:none;"><h2>{{$data->cat_id}}</h2></span>
-
-             
-            </div>
-             /.info-box-content 
-          </div>
-           /.info-box 
-        </div>
-                  <?php } ?>
-                 
-                </div>
-                  
-             
-            </form>
-          </div>
-        </div>
-      </div>
-     <div class="row">
-         <div class="box box-default">
-             <div class="box-body" id="item_data">
-            
-             </div> 
-         </div>                
-     </div>
-        <div class="row">
-            <form action="{{ url('add_bill') }}" method="POST" id="inventory_form" class="form-horizontal" enctype="multipart/form-data">
-                {{ csrf_field() }}
-
-               <div class="box box-default">
-             <div class="box-body" id="">
-                                        <input type="hidden" name="bill_array" id="bill_data"/>
-                
-                 <div class="form-group">
-                        <label for="lbl_cat_name" class="col-sm-2 control-label">Customer Name</label>
-                        <div class="col-sm-4">
-                            <input type="text" class="form-control" id="cat_name" placeholder="Customer Name" name="cust_name" required>
-                        </div>
-                        <label for="lbl_cat_name" class="col-sm-2 control-label">Payment Type</label>
-                        <div class="col-sm-4">
-                                   <select class="form-control select2" style="width: 100%;" name="cash_or_credit" required>
-                         <option value="cash">Cash</option> 
-                         <option value="credit">Credit</option> 
-                        
-                    </select>
-                        </div>
-                    </div>
-                  <button type="submit" class="btn btn-block btn-primary btn-lg" id="total_bill">Primary</button>
-                 <br/>
-                 <br/>
-                     <div class="row">
-        <div class="col-xs-12 table-responsive">
-          <table class="table table-striped">
-            <thead>
-            <tr>
-              <th>No</th>
-              <th>Item Name</th>
-              <th>Qty</th>
-              <th>Rate</th>
-              <th>Amount</th>
-            </tr>
-            </thead>
-            <tbody id="bill_tbl">
-                         <tr class="row1">
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td style="font-weight: bold;">Total</td>
-                    <td style="font-weight: bold;"> <input type="text" name="bill_totalamt" class="bill_totalamt" id="bill_totalamt" style="border:none;"/></td>
-                </tr>  
-            </tbody>
-          </table>
-        </div>
-         
-         /.col 
-      </div>
-       <div class="box-footer">
-                <button type="button" class="btn btn-success pull-right" id="btn_submit" name="btn_submit"><i class="fa fa-credit-card"></i> Generate Bill</button>
-              </div>
-             </div> 
-     
-         </div>
-               </form>
-        </div>-->
     </section>
 <!--<script src="bower_components/jquery/dist/jquery.min.js"></script>-->
 <!--<script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>-->
@@ -488,6 +349,7 @@ var gst=$("#gst_sett").val();
 var i=1;
 $(document).ready(function(){
    $("#search_code").keydown(function (e) {
+       $('.focus_this').removeClass('focus_this');
  //  alert(e.which);
    if (e.which == 9)
    {
@@ -524,14 +386,16 @@ $(document).ready(function(){
     }
     
 });
+$('.item_qty').blur();
 if(flag==0)
 {
+    
     if(gst=="Yes")
     {
          $(".row1:last").before("<tr class='input_fields_wrap'>\n\
                     <td style='text-align:center;'><input type='text' value='"+i+"' class='form-control serial_no' style='width:60px;border:none;text-align:center;'></td>\n\
                     <td style='text-align:center;'><textarea name='stoppage[" + i + "][1]' class='form-control item_name print' cols='10' style='border:none;resize:none;width:200px;height:33px;background-color:#ffffff;' readonly>" + item + "</textarea></td>\n\
-                    <td style='text-align:center;'><input type='text' name='stoppage[" + i + "][2]' class='form-control item_qty print' id='item_qty_" + i + "'  value='" + qty + "' style='width:50px;text-align:center;' onkeyup='table_cal("+i+",event)' autofocus/></td>\n\
+                    <td style='text-align:center;'><input type='text' name='stoppage[" + i + "][2]' class='form-control item_qty print focus_this' id='item_qty_" + i + "'  value='" + qty + "' style='width:50px;text-align:center;' onkeyup='table_cal("+i+",event)'/></td>\n\
                     <td style='text-align:center;'><input type='text' name='stoppage[" + i + "][3]' class='form-control item_rate print' id='item_rate_" + i + "' value='" + rate + "' style='width:60px;text-align:center;' onkeyup='table_cal("+i+",event)'/></td>\n\
                     <td style='text-align:center;' class='gst'><input type='text' name='stoppage[" + i + "][4]' class='form-control item_disc print' id='item_disc_" + i + "' value='" + disc + "' style='border:none;width:50px;text-align:center;background-color:#ffffff;' readonly/></td>\n\
                     <td style='text-align:center;' class='gst'><input type='text' name='stoppage[" + i + "][5]' class='form-control item_tax print' id='item_tax_" + i + "' value='" + tax + "' style='border:none;width:50px;text-align:center;background-color:#ffffff;' readonly/></td>\n\
@@ -544,7 +408,7 @@ if(flag==0)
          $(".row1:last").before("<tr class='input_fields_wrap'>\n\
                     <td style='text-align:center;'><input type='text' value='"+i+"' class='form-control serial_no' style='width:60px;border:none;text-align:center;'></td>\n\
                     <td style='text-align:center;'><textarea name='stoppage[" + i + "][1]' class='form-control item_name print' cols='10' style='border:none;resize:none;width:200px;height:33px;background-color:#ffffff;' readonly>" + item + "</textarea></td>\n\
-                    <td style='text-align:center;'><input type='text' name='stoppage[" + i + "][2]' class='form-control item_qty print' id='item_qty_" + i + "'  value='" + qty + "' style='width:50px;text-align:center;' onkeyup='table_cal("+i+",event)' autofocus/></td>\n\
+                    <td style='text-align:center;'><input type='text' name='stoppage[" + i + "][2]' class='form-control item_qty print focus_this' id='item_qty_" + i + "'  value='" + qty + "' style='width:50px;text-align:center;' onkeyup='table_cal("+i+",event)'/></td>\n\
                     <td style='text-align:center;'><input type='text' name='stoppage[" + i + "][3]' class='form-control item_rate print' id='item_rate_" + i + "' value='" + rate + "' style='width:60px;text-align:center;' onkeyup='table_cal("+i+",event)'/></td>\n\
 \n\                  <td style='text-align:center;display:none;' class='gst'><input type='text' name='stoppage[" + i + "][4]' class='form-control item_disc print' id='item_disc_" + i + "' value='0' style='border:none;width:50px;text-align:center;background-color:#ffffff;' readonly/></td>\n\
                     <td style='text-align:center;display:none;' class='gst'><input type='text' name='stoppage[" + i + "][5]' class='form-control item_tax print' id='item_tax_" + i + "' value='0' style='border:none;width:50px;text-align:center;background-color:#ffffff;' readonly/></td>\n\
@@ -552,6 +416,9 @@ if(flag==0)
 \n\                 <td style='text-align:center;'><i class='fa fa-fw fa-times remove_field' style='color: red;'></i></td>\n\
             </tr>");
     }
+     $(".focus_this").focus();
+    $("#h_lost").find(".item_qty").last().focus();
+
      i++;
       var total=$('#bill_totalamt').val();
      total=parseFloat(total)+parseFloat(rate);
@@ -605,7 +472,7 @@ if(flag==0)
          $(".row1:last").before("<tr class='input_fields_wrap'>\n\
                     <td style='text-align:center;'><input type='text' value='"+i+"' class='form-control serial_no' style='width:60px;border:none;text-align:center;'></td>\n\
                     <td style='text-align:center;'><textarea name='stoppage[" + i + "][1]' class='form-control item_name print' cols='10' style='border:none;resize:none;width:200px;height:33px;background-color:#ffffff;' readonly>" + item + "</textarea></td>\n\
-                    <td style='text-align:center;'><input type='text' name='stoppage[" + i + "][2]' class='form-control item_qty print' id='item_qty_" + i + "'  value='" + qty + "' style='width:50px;text-align:center;' onkeyup='table_cal("+i+",event)' autofocus/></td>\n\
+                    <td style='text-align:center;'><input type='text' name='stoppage[" + i + "][2]' class='form-control item_qty print focus_this' id='item_qty_" + i + "'  value='" + qty + "' style='width:50px;text-align:center;' onkeyup='table_cal("+i+",event)'/></td>\n\
                     <td style='text-align:center;'><input type='text' name='stoppage[" + i + "][3]' class='form-control item_rate print' id='item_rate_" + i + "' value='" + rate + "' style='width:60px;text-align:center;' onkeyup='table_cal("+i+",event)'/></td>\n\
                     <td style='text-align:center;' class='gst'><input type='text' name='stoppage[" + i + "][4]' class='form-control item_disc print' id='item_disc_" + i + "' value='" + disc + "' style='border:none;width:50px;text-align:center;background-color:#ffffff;' readonly/></td>\n\
                     <td style='text-align:center;' class='gst'><input type='text' name='stoppage[" + i + "][5]' class='form-control item_tax print' id='item_tax_" + i + "' value='" + tax + "' style='border:none;width:50px;text-align:center;background-color:#ffffff;' readonly/></td>\n\
@@ -618,7 +485,7 @@ if(flag==0)
          $(".row1:last").before("<tr class='input_fields_wrap'>\n\
                     <td style='text-align:center;'><input type='text' value='"+i+"' class='form-control serial_no' style='width:60px;border:none;text-align:center;'></td>\n\
                     <td style='text-align:center;'><textarea name='stoppage[" + i + "][1]' class='form-control item_name print' cols='10' style='border:none;resize:none;width:200px;height:33px;background-color:#ffffff;' readonly>" + item + "</textarea></td>\n\
-                    <td style='text-align:center;'><input type='text' name='stoppage[" + i + "][2]' class='form-control item_qty print' id='item_qty_" + i + "'  value='" + qty + "' style='width:50px;text-align:center;' onkeyup='table_cal("+i+",event)' autofocus/></td>\n\
+                    <td style='text-align:center;'><input type='text' name='stoppage[" + i + "][2]' class='form-control item_qty print focus_this' id='item_qty_" + i + "'  value='" + qty + "' style='width:50px;text-align:center;' onkeyup='table_cal("+i+",event)'/></td>\n\
                     <td style='text-align:center;'><input type='text' name='stoppage[" + i + "][3]' class='form-control item_rate print' id='item_rate_" + i + "' value='" + rate + "' style='width:60px;text-align:center;' onkeyup='table_cal("+i+",event)'/></td>\n\
 \n\                  <td style='text-align:center;display:none;' class='gst'><input type='text' name='stoppage[" + i + "][4]' class='form-control item_disc print' id='item_disc_" + i + "' value='0' style='border:none;width:50px;text-align:center;background-color:#ffffff;' readonly/></td>\n\
                     <td style='text-align:center;display:none;' class='gst'><input type='text' name='stoppage[" + i + "][5]' class='form-control item_tax print' id='item_tax_" + i + "' value='0' style='border:none;width:50px;text-align:center;background-color:#ffffff;' readonly/></td>\n\
@@ -627,6 +494,7 @@ if(flag==0)
             </tr>");
     }
      i++;
+     $(".focus_this").focus();
       var total=$('#bill_totalamt').val();
      total=parseFloat(total)+parseFloat(rate);
     // alert(total)
@@ -680,7 +548,7 @@ else
   $("#print_bill").hide();
  $("#print_bill").click(function(){
         
-        var multi_print="<?php echo $hf_setting->multiple_print;?>";
+        var multi_print="<?php echo @$hf_setting->multiple_print;?>";
        
         
         $("#set_header").show(); 
@@ -757,13 +625,13 @@ else
                     });
         }
 		
-		var multi_print="<?php echo $hf_setting->multiple_print;?>";
+		var multi_print="<?php echo @$hf_setting->multiple_print;?>";
 		//alert(multi_print);
 		if(multi_print=="No")
         {
              //alert(multi_print);
              $("#print_bill").hide(); 
-			 location.reload();
+			 //location.reload();
         }
         else
         {

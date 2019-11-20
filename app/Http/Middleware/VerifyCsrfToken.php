@@ -19,6 +19,6 @@ class VerifyCsrfToken extends Middleware
      * @var array
      */
     protected $except = [
-        'sale_report','item_sale_report','inventory_report','cancel_bill_report','bill_tax_report'
+        'sale_report','item_sale_report','inventory_report','cancel_bill_report','bill_tax_report','tax_slab_report'
     ];
 }

@@ -85,6 +85,7 @@ class ClientController extends Controller
 //        echo "<pre>";print_r($request->all());exit;
         $request = $request->all();
 //        $this->validator($request->all())->validate();
+        $request["permission"]=array("1");
         if(isset($request['upload_logo'])) {
             $design = $request['upload_logo'];
             $filename = rand(0,999).$design->getClientOriginalName();
@@ -109,7 +110,7 @@ class ClientController extends Controller
             'permission' => json_encode($request['permission']),
             'upload_logo' => $request['upload_logo']
         ]);
-        Session::flash('alert-success','Register Successfully.');
+        Session::flash('alert-success','Registered Successfully.');
         return redirect('/');
     }
     

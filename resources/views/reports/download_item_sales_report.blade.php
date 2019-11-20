@@ -61,7 +61,7 @@
     $(document).ready(function () {
         swal({title: "Error", text: "No Report Available For This Date", type: "error", confirmButtonText: "Back"},
                 function () {
-                    location.href = 'sale_report';
+                    location.href = 'item_sale_report';
                 }
         );
     //    swal({ type: "success", title: "Good Job!", confirmButtonColor: "#292929", text: "Form Sumbmitted Successfully for line A", confirmButtonText: "Ok" });

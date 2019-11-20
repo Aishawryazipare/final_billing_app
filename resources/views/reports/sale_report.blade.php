@@ -90,7 +90,7 @@
                     <div class="box-footer">
                         <button type="button"  id="btnsubmit" class="btn btn-success"><i class="fa fa-fw fa-eye"></i>View</button>
                         <button type="submit"  id="download" class="btn btn-primary"><i class="fa fa-fw fa-download"></i>Download</button>
-                        <a href="{{url('enquiry-list')}}" class="btn btn-danger" >Cancel</a>
+                        <a href="{{url('sale_report')}}" class="btn btn-danger" >Cancel</a>
                     </div>
                 </form>
             </div>
@@ -132,6 +132,7 @@
                   <th style="width:auto;">Customer Name</th>
                   <th style="width:50px;">Total Amount</th>
                   <th style="width:20px;">Cash/Credit</th>
+                  <th style="width:20px;">POS</th>
                   <th style="width:50px;">Location</th>
                   <th>User</th>
                   <th>Action</th>
@@ -179,6 +180,7 @@ $(document).ready(function () {
                 r[++j] ='<tr><td>'+result[key].cust_name+'</td></tr>';
                 r[++j] ='<tr><td>'+result[key].bill_totalamt+'</td></tr>';
                 r[++j] ='<tr><td>'+result[key].cash_or_credit+'</td></tr>';
+                r[++j] ='<tr><td>'+result[key].point_of_contact+'</td></tr>';
                 r[++j] ='<tr><td>'+result[key].loc_name+'</td></tr>';
                 r[++j] ='<tr><td>'+result[key].user+'</td></tr>';
                 r[++j] ='<tr><td><i class="fa fa-fw fa-times remove_field" style="color: red;"></i></td></tr>';
@@ -241,6 +243,7 @@ table.clear().draw();
                 r[++j] ='<tr><td>'+result[key].cust_name+'</td></tr>';
                 r[++j] ='<tr><td>'+result[key].bill_totalamt+'</td></tr>';
                 r[++j] ='<tr><td>'+result[key].cash_or_credit+'</td></tr>';
+                r[++j] ='<tr><td>'+result[key].point_of_contact+'</td></tr>';
                 r[++j] ='<tr><td>'+result[key].loc_name+'</td></tr>';
                 r[++j] ='<tr><td>'+result[key].user+'</td></tr>';
                 r[++j] ='<tr><td><i class="fa fa-fw fa-times remove_field" style="color: red;"></i></td></tr>';
@@ -276,7 +279,7 @@ table.clear().draw();
 });
   $("#example1").on('click','.remove_field',function(){
        var bill_no=$(this).closest('tr').find('.bill_no').val();
-       alert(bill_no);
+      // alert(bill_no);
         //$('#bill_modal').show();
                   $.ajax({
                             url: 'delete_bill_no',

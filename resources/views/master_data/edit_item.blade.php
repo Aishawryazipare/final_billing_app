@@ -37,23 +37,23 @@
                         </div>
                          <label for="lbl_cat_desc" class="col-sm-2 control-label">Discount Rate</label>
                         <div class="col-sm-4">
-                            <input type="text" class="form-control" id="disc_rate" placeholder="Disc Rate" name="item_disrate" value="{{$item_data->item_disrate}}" required>
+                            <input type="text" class="form-control rate_cal" id="disc_rate" placeholder="Disc Rate" name="item_disrate" value="{{$item_data->item_disrate}}" required>
                         </div>
                     </div>
                      <div class="form-group">
                         <label for="lbl_cat_desc" class="col-sm-2 control-label">Tax<span style="color:#ff0000;">*</span></label>
                         <div class="col-sm-4">
-                            <input type="text" class="form-control" id="tax" placeholder="Tax" name="item_tax" value="{{$item_data->item_tax}}" required>
+                            <input type="text" class="form-control rate_cal" id="tax" placeholder="Tax" name="item_tax" value="{{$item_data->item_tax}}" required>
                         </div>
                          <label for="lbl_cat_desc" class="col-sm-2 control-label">Tax Value</label>
                         <div class="col-sm-4">
-                            <input type="text" class="form-control" id="tax_value" placeholder="Tax value" name="item_taxvalue" value="{{$item_data->item_taxvalue}}" required>
+                            <input type="text" class="form-control rate_cal" id="tax_value" placeholder="Tax value" name="item_taxvalue" value="{{$item_data->item_taxvalue}}" required>
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="lbl_cat_desc" class="col-sm-2 control-label">Final Rate</label>
                         <div class="col-sm-4">
-                            <input type="text" class="form-control" id="final_rate" placeholder="Final Rate" name="item_final_rate" value="{{$item_data->item_final_rate}}" required>
+                            <input type="text" class="form-control" id="final_rate" placeholder="Final Rate" name="item_final_rate" value="{{$item_data->item_final_rate}}" readonly required>
                         </div>
                          <label for="lbl_cat_desc" class="col-sm-2 control-label">Unit</label>
                         <div class="col-sm-4">
@@ -62,7 +62,6 @@
                         @foreach($unit_data as $u)
                         <option value="{{$u->Unit_Id}}" <?php if($u->Unit_Id==$item_data->item_units) echo "selected";?>>{{$u->Unit_name}}</option>
                         @endforeach
-                    </select>
                     </select>
                         </div>
                     </div>

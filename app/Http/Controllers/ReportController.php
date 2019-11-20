@@ -203,7 +203,7 @@ class ReportController extends Controller
           }
             $i=1;
             $result_final=array();
-           // echo "<pre/>";print_r($bill_data);exit;
+          // echo "<pre/>";print_r($bill_data);exit;
          foreach($bill_data as $data)
          {
              $total_amount = $total_amount + $data->bill_totalamt;
@@ -216,6 +216,14 @@ class ReportController extends Controller
             
              $result_data['bill_totalamt']=$data->bill_totalamt;
              $result_data['cash_or_credit']=$data->cash_or_credit;
+             //echo $data->point_of_contact;
+             $point_of_data= \App\PointOfContact::select('*')->where(['id'=>$data->point_of_contact])->first();
+           
+             if(!empty($point_of_data))
+              $result_data['point_of_contact']=$point_of_data->point_of_contact;
+             else
+               $result_data['point_of_contact']='';
+             // echo "<pre/>";            print_r($result_data);
              if(isset($requestData['location']))
              {
              $location_data= \App\EnquiryLocation::select('*')->where(['loc_id'=>$data->lid])->first();
@@ -1437,6 +1445,13 @@ class ReportController extends Controller
             
              $result_data['bill_totalamt']=$data->bill_totalamt;
              $result_data['cash_or_credit']=$data->cash_or_credit;
+             
+             $point_of_data= \App\PointOfContact::select('*')->where(['id'=>$data->point_of_contact])->first();
+           
+             if(!empty($point_of_data))
+              $result_data['point_of_contact']=$point_of_data->point_of_contact;
+             else
+               $result_data['point_of_contact']='';
              if(isset($requestData['location']))
              {
              $location_data= \App\EnquiryLocation::select('*')->where(['loc_id'=>$data->lid])->first();
