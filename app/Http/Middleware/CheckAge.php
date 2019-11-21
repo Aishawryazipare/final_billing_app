@@ -15,14 +15,14 @@ class CheckAge
      */
     public function handle($request, Closure $next)
     {
-         if(!Auth::guard('admin')->check())
+         if(!Auth::guard('admin')->check()  && !Auth::guard('employee')->check())
        {
-           return redirect('admin-login');
+           return redirect('/');
        }
-       if(!Auth::guard('employee')->check())
+       /*if(!Auth::guard('employee')->check())
        {
            return redirect('employee-login');
-       }
+       }*/
        
        return $next($request);
     }

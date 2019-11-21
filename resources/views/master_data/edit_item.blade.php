@@ -115,17 +115,17 @@
 <script>
  $(document).ready(function(){
     $('.select2').select2() 
-    $( ".rate_cal" ).keyup(function() {
+     $( ".rate_cal" ).keyup(function() {
     var rate=$('#rate').val();
     var disc=$('#disc').val();
     var tax=$('#tax').val();
     var disc_r=(rate*disc)/100;
     var disc_rate=rate-disc_r
     var tax_value=(tax*disc_rate)/100;
-    var final_rate=(tax*tax_value)/100;
+    var final_rate=(tax_value+disc_rate);
     $('#disc_rate').val(disc_rate);
     $('#tax_value').val(tax_value);
-    $('#final_rate').val(final_rate);
+    $('#final_rate').val(final_rate.toFixed(2));
     
 });
 });

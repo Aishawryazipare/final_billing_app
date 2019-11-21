@@ -3,6 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/D:/xampp/htdocs/billing_web_app_new/resources/views/master_data/add_item.blade.php</file>
+            <file>file:/D:/xampp/htdocs/billing_web_app_new/resources/views/reports/sale_report.blade.php</file>
+            <file>file:/D:/xampp/htdocs/billing_web_app_new/app/Http/Controllers/SalesController.php</file>
+            <file>file:/D:/xampp/htdocs/billing_web_app_new/app/BillMaster.php</file>
             <file>file:/D:/xampp/htdocs/billing_web_app_new/resources/views/sales/thumbnail_form.blade.php</file>
         </group>
     </open-files>

@@ -1,5 +1,21 @@
 @extends('layouts.app')
 @section('content')
+<style>
+    .example-modal .modal {
+      position: relative;
+      top: auto;
+      bottom: auto;
+      right: auto;
+      left: auto;
+      display: block;
+      z-index: 1;
+    }
+
+    .example-modal .modal {
+      background: transparent !important;
+    }
+  </style>
+
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
   <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
@@ -114,6 +130,10 @@ src: url('fake receipt.ttf')
                 font-family: Fake Reciept;
                 font-size: 10px !important;
             }
+             html, body{
+      height:100%;
+      width:100%;
+    }
 }
 
 </style>
@@ -152,7 +172,7 @@ src: url('fake receipt.ttf')
             <div class="col-md-2">
                 <input type="text" name="cust_name"  class="form-control"  onkeyup="assign_name(this.value)" placeholder="Customer Name"/>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-2" style="width:13%;">
 <!--                <div class="form-group">
                     <label class="radio-inline">
       <input type="radio" name="cash_or_credit1" value="cash" checked>Card
@@ -167,7 +187,11 @@ src: url('fake receipt.ttf')
       @endforeach
       </select>
             </div>
-            <div class="col-md-2">
+           <div class="col-md-1" style="width: 4px;margin-left: -15px;margin-top: 10px;">
+                <i class="fa fa-fw fa-credit-card remove_field" data-toggle="modal" data-target="#bill_modal" style="color: black;"></i>
+            </div>
+            <div class="col-md-1" style="width:176px;">
+                
              <!--<input list="point_of_contact" name="point_of_contact" class="form-control" placeholder="Point Of Sales">-->
       <select class="form-control select2" style="width: 100%;" name="point_of_contact"  id="point_of_contact">
   @foreach($point_of_contact as $d)
@@ -319,9 +343,9 @@ src: url('fake receipt.ttf')
 <!--          <a href="{{ url('download_bill?bill_no='.$b_no)}}"><button type="button" id="dwn_pdf" class="btn btn-success pull-right" style="margin-right: 5px;">
             <i class="fa fa-download"></i> Download Bill
           </button></a>-->
-                    <button type="button"  class="btn btn-success clear_item" id="clear_item"><i class="fa fa-credit-card"></i> Clear Item
+                    <button type="button"  class="btn btn-danger clear_item" id="clear_item"><i class="fa fa-credit-card"></i> Clear Item
                 </button>
-          <button type="button" class="btn btn-primary pull-right" id="save_bill" style="margin-right: 5px;">
+          <button type="button" class="btn btn-success pull-right" id="save_bill" style="margin-right: 5px;">
             <i class="fa fa-download"></i> Generate Bill
           </button>
         
@@ -331,6 +355,54 @@ src: url('fake receipt.ttf')
          
         </div>
         </div>
+                
+                <div class="modal fade" id="bill_modal" role="dialog">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Payment & Order Details</h4>
+        </div>
+        <div class="modal-body">
+                
+                <div class="form-group">
+                        <label for="lbl_cat_name" class="col-sm-2 control-label">Transaction ID</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" id="cat_name" placeholder="Transaction ID" name="payment_details[0]">
+                        </div>
+                        <label for="lbl_cat_name" class="col-sm-2 control-label">Transaction Status</label>
+                        <div class="col-sm-4">
+                        <select class="form-control select2" style="width: 100%;" name="payment_details[1]"  id="payment_details">
+                            <option value="">--Transaction Status--</option>
+                            <option value="Success">Success</option>
+                            <option value="Fail">Fail</option>
+                            <option value="Processing">Processing</option>
+                        </select>
+                            <!--<input type="text" class="form-control rate_cal" id="rate" placeholder="Transaction Status" name="payment_details[1]">-->
+                        </div>
+                    </div>
+                <div class="form-group">
+                    <label for="lbl_cat_name" class="col-sm-2 control-label">Transaction<br/>Details</label>
+                        <div class="col-sm-4">
+                            <textarea class="form-control" rows="3" name="payment_details[2]"></textarea>
+                        </div> 
+                </div>
+                  <div class="form-group">
+                    <label for="lbl_cat_name" class="col-sm-2 control-label">Order<br/>Details</label>
+                        <div class="col-sm-4">
+                            <textarea class="form-control" rows="3" name="order_details[0]"></textarea>
+                        </div> 
+                </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
           </form>
         <div class="row">
             <div  id="item_data" >
@@ -668,7 +740,7 @@ else
  $( "#download_bill" ).click(function() {
     
     var bill_no=$('#bil_no').val();
-    alert(bill_no);
+   // alert(bill_no);
     $.ajax({
                 url: 'download_bill',
                 type: "GET",
@@ -900,10 +972,7 @@ if(flag==0)
     },
     minLength: 1
  });
-// function print_click()
-// {
-//     alert("print");
-// }
+ 
 </script>
 @endsection
 

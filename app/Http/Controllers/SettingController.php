@@ -18,6 +18,7 @@ class SettingController extends Controller
 {
     public function __construct()
     {
+       $this->middleware('auth.basic');
        $this->middleware(function ($request, $next) {
             $this->user= Auth::user();
             $this->admin = Auth::guard('admin')->user();

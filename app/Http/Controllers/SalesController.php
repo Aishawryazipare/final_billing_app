@@ -14,6 +14,7 @@ class SalesController extends Controller
 {
     public function __construct()
     {
+       $this->middleware('auth.basic');
        $this->middleware(function ($request, $next) {
             $this->user= Auth::user();
             $this->admin = Auth::guard('admin')->user();
@@ -300,6 +301,12 @@ class SalesController extends Controller
              
              
          }
+         if(isset($requestData['payment_details']))
+         {
+             $requestData['payment_details']=json_encode($requestData['payment_details']);
+         }
+         if(isset($requestData['order_details']))
+         $requestData['order_details']=json_encode($requestData['order_details']);
        //
        //  echo "<pre/>";print_r($requestData); exit;
          $requestData['bill_date']=date('Y-m-d h:i:s');
@@ -311,7 +318,7 @@ class SalesController extends Controller
              $requestData["bill_no"]=$bill_master->bill_no;
              $requestData["item_name"]=$data[1];
              $requestData["item_qty"]=$data[2];
-             $item_data = \App\Item::select('*')->where('item_name', 'LIKE', '%'. $requestData["item_name"]. '%')->first();
+             $item_data = \App\Item::select('*')->where(['is_active'=>0,'lid'=>$requestData['lid'],'cid'=>$requestData['cid']])->where('item_name', '=',$requestData["item_name"])->first();
              $updated_qty=$item_data->item_stock-$requestData["item_qty"];
              $item_data->update(['item_stock'=>$updated_qty]);
              //echo "<pre/>";print_r($item_data);
